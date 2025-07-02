@@ -12,7 +12,8 @@ class SnteldaController extends Controller
      */
     public function index()
     {
-        //
+        $allsntelda = sntelda::all();
+        return view('supportNeeded.sntelda', compact('allsntelda'));
     }
 
     /**
@@ -20,7 +21,7 @@ class SnteldaController extends Controller
      */
     public function create()
     {
-        //
+        return view('sntelda.create');
     }
 
     /**
@@ -28,7 +29,16 @@ class SnteldaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validate
+        $validatedData = $request->validate([
+             'Event' => 'required|max:255',
+        ]);
+
+        //simpan
+        sntelda::create($validatedData);
+
+        //redirect
+        return redirect()->route('supportNeeded.sntelda');
     }
 
     /**
@@ -36,7 +46,7 @@ class SnteldaController extends Controller
      */
     public function show(sntelda $sntelda)
     {
-        //
+        return view('sntelda.show',compact('sntelda'));
     }
 
     /**
@@ -44,7 +54,7 @@ class SnteldaController extends Controller
      */
     public function edit(sntelda $sntelda)
     {
-        //
+        return view('sntelda.edit',compact('sntelda'));
     }
 
     /**
@@ -52,7 +62,16 @@ class SnteldaController extends Controller
      */
     public function update(Request $request, sntelda $sntelda)
     {
-        //
+        // validate
+        $validatedData = $request->validate([
+             'Event' => 'required|max:255',
+        ]);
+
+        //simpan
+        $sntelda->update($validatedData);
+
+        //redirect
+        return redirect()->route('supportNeeded.sntelda');
     }
 
     /**
@@ -60,6 +79,7 @@ class SnteldaController extends Controller
      */
     public function destroy(sntelda $sntelda)
     {
-        //
+        $sntelda->delete();
+        return redirect()->route('supportNeeded.sntelda');
     }
 }
