@@ -13,3 +13,7 @@ Route::get('/dashboard', function () {
 Route::get('/warroom', function () {
     return view('warroom');
 });
+
+Route::get('/summary', function () {
+    return view('summary');
+});

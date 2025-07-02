@@ -23,7 +23,9 @@
         </div>
 
         <div class="nav-section">
-            <div class="nav-item">Summary</div>
+            <a href="{{ url('/summary') }}" class="nav-item {{ Request::is('summary') ? 'active' : '' }}">
+                <span class="nav-text">Summary</span>
+            </a>
         </div>
         <div class="nav-section">
             <div class="nav-item">SN UNIT</div>
