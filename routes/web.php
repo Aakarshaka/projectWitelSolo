@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('dashboard');
 });
 
 Route::get('/dashboard', function () {
@@ -14,6 +14,34 @@ Route::get('/warroom', function () {
     return view('warroom');
 });
 
-Route::get('/summary', function () {
-    return view('summary');
+Route::get('supportNeeded/summary', function () {
+    return view('supportNeeded.summary');
+});
+
+Route::get('supportNeeded/snunit', function () {
+    return view('supportNeeded.snunit');
+});
+
+Route::get('supportNeeded/sntelda', function () {
+    return view('supportNeeded.sntelda');
+});
+
+Route::get('supportNeeded/snam', function () {
+    return view('supportNeeded.snam');
+});
+
+Route::get('eskalasi/gsd', function () {
+    return view('eskalasi.gsd');
+});
+
+Route::get('eskalasi/tifta', function () {
+    return view('eskalasi.tifta');
+});
+
+Route::get('eskalasi/treg', function () {
+    return view('eskalasi.treg');
+});
+
+Route::get('eskalasi/tsel', function () {
+    return view('eskalasi.tsel');
 });

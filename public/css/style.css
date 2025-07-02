@@ -31,12 +31,12 @@ body {
   font-size: 28px;
   font-weight: bold;
   margin: 0;
-  color: white;
+  color: #00BFFF;
 }
 
 .logo-sub {
   font-size: 20px;
-  color: #00BFFF;
+  color: yellow;
   margin-left: 5px;
 }
 

@@ -1,6 +1,6 @@
 <div class="sidebar">
     <div class="sidebar-header">
-        <h2 class="logo">BiSA<span class="logo-sub">g</span></h2>
+        <h2 class="logo">GIAT<span class="logo-sub">CORE</span></h2>
     </div>
 
     <nav class="sidebar-nav">
@@ -23,18 +23,24 @@
         </div>
 
         <div class="nav-section">
-            <a href="{{ url('/summary') }}" class="nav-item {{ Request::is('summary') ? 'active' : '' }}">
+            <a href="{{ url('supportNeeded/summary') }}" class="nav-item {{ Request::is('supportNeeded/summary') ? 'active' : '' }}">
                 <span class="nav-text">Summary</span>
             </a>
         </div>
         <div class="nav-section">
-            <div class="nav-item">SN UNIT</div>
+            <a href="{{ url('supportNeeded/snunit') }}" class="nav-item {{ Request::is('supportNeeded/snunit') ? 'active' : '' }}">
+                <span class="nav-text">SN UNIT</span>
+            </a>
         </div>
         <div class="nav-section">
-            <div class="nav-item">SN TELDA</div>
+            <a href="{{ url('supportNeeded/sntelda') }}" class="nav-item {{ Request::is('supportNeeded/sntelda') ? 'active' : '' }}">
+                <span class="nav-text">SN TELDA</span>
+            </a>
         </div>
         <div class="nav-section">
-            <div class="nav-item">SN AM</div>
+            <a href="{{ url('supportNeeded/snam') }}" class="nav-item {{ Request::is('supportNeeded/snam') ? 'active' : '' }}">
+                <span class="nav-text">SN AM</span>
+            </a>
         </div>
 
         <div class="nav-section-header">
@@ -42,16 +48,24 @@
         </div>
 
         <div class="nav-section">
-            <div class="nav-item">to TREG</div>
+            <a href="{{ url('eskalasi/treg') }}" class="nav-item {{ Request::is('eskalasi/treg') ? 'active' : '' }}">
+                <span class="nav-text">to TREG</span>
+            </a>
         </div>
         <div class="nav-section">
-            <div class="nav-item">to TIF_TA</div>
+            <a href="{{ url('eskalasi/tifta') }}" class="nav-item {{ Request::is('eskalasi/tifta') ? 'active' : '' }}">
+                <span class="nav-text">to TIF_TA</span>
+            </a>
         </div>
         <div class="nav-section">
-            <div class="nav-item">to TSEL</div>
+            <a href="{{ url('eskalasi/tsel') }}" class="nav-item {{ Request::is('eskalasi/tsel') ? 'active' : '' }}">
+                <span class="nav-text">to TSEL</span>
+            </a>
         </div>
         <div class="nav-section">
-            <div class="nav-item">to GSD</div>
+            <a href="{{ url('eskalasi/gsd') }}" class="nav-item {{ Request::is('eskalasi/gsd') ? 'active' : '' }}">
+                <span class="nav-text">to GSD</span>
+            </a>
         </div>
     </nav>
 </div>
