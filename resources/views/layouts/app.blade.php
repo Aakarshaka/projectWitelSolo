@@ -5,7 +5,7 @@
     <title>@yield('title')</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/tablestyle.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/crudstyle.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/formstyle.css') }}">
 </head>
 <body>
 

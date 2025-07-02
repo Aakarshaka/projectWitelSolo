@@ -1,0 +1,86 @@
+/* FORM CONTAINER */
+.collab-form-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+/* FORM TITLE */
+.collab-form-container h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4A0E4E;
+    margin-bottom: 25px;
+}
+
+/* FORM LABEL */
+.collab-form-container .form-label {
+    font-weight: 600;
+    color: #4A0E4E;
+    font-size: 14px;
+}
+
+/* FORM INPUT */
+.collab-form-container .form-control,
+.collab-form-container .form-select,
+.collab-form-container textarea {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 13px;
+    padding: 10px 12px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.collab-form-container .form-control:focus,
+.collab-form-container .form-select:focus,
+.collab-form-container textarea:focus {
+    border-color: #8B0000;
+    box-shadow: 0 0 5px rgba(139, 0, 0, 0.3);
+}
+
+/* BUTTON PRIMARY */
+.collab-form-container .btn-primary {
+    background: linear-gradient(135deg, #8B0000, #4A0E4E);
+    border: none;
+    padding: 10px 20px;
+    font-size: 13px;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.collab-form-container .btn-primary:hover {
+    background: linear-gradient(135deg, #4A0E4E, #8B0000);
+}
+
+/* BUTTON SECONDARY */
+.collab-form-container .btn-secondary {
+    background: #ddd;
+    border: none;
+    padding: 10px 20px;
+    font-size: 13px;
+    border-radius: 6px;
+    color: #333;
+    font-weight: bold;
+    margin-left: 10px;
+    transition: background 0.3s;
+}
+
+.collab-form-container .btn-secondary:hover {
+    background: #ccc;
+}
+
+/* SPACING & RESPONSIVE */
+@media (max-width: 768px) {
+    .collab-form-container {
+        padding: 20px;
+    }
+
+    .collab-form-container h2 {
+        font-size: 20px;
+    }
+}
