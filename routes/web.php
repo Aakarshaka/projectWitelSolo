@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SnunitController;
+use App\Http\Controllers\SnamController;
+use App\Http\Controllers\SnteldaController;
+use App\Http\Controllers\TiftaController;
+use App\Http\Controllers\TselController;
+use App\Http\Controllers\TregController;
+use App\Http\Controllers\GsdController;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -48,7 +54,14 @@ Route::get('eskalasi/tsel', function () {
 });
 
 Route::get('crud/createtelda', function () {
-    return view('crude.createtelda');
+    return view('crud.createtelda');
 });
 
 Route::resource('snunit', SnunitController::class);
+Route::resource('snunit', SnunitController::class);
+Route::resource('snam', SnamController::class);
+Route::resource('sntelda', SnteldaController::class);
+Route::resource('tifta', TiftaController::class);
+Route::resource('treg', TregController::class);
+Route::resource('tsel', TselController::class);
+Route::resource('gsd', GsdController::class);
