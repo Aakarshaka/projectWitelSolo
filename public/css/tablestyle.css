@@ -1,12 +1,14 @@
-/* SN TELDA Page Styles */
-.telda-container {
+/* Collaboration & Escalation Styles */
+.collab-container {
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     overflow: hidden;
+    margin-bottom: 20px;
 }
 
-.telda-header {
+/* Header */
+.collab-header {
     background: linear-gradient(135deg, #8B0000 0%, #4A0E4E 100%);
     color: white;
     padding: 20px 25px;
@@ -19,10 +21,10 @@
     font-size: 24px;
     font-weight: bold;
     margin: 0;
-    color: #FDD835; /* amber soft accent */
+    color: #FDD835;
 }
 
-.header-stats {
+.collab-header-stats {
     display: flex;
     gap: 30px;
     align-items: center;
@@ -48,32 +50,33 @@
 }
 
 .total-stat {
-    background: #6A1B9A; /* deep purple */
+    background: #6A1B9A;
     color: white;
 }
 
 .close-stat {
-    background: #AD1457; /* maroon pinkish */
+    background: #AD1457;
     color: white;
 }
 
 .progress-stat {
-    background: #FDD835; /* amber soft */
+    background: #FDD835;
     color: #4A0E4E;
 }
 
-.table-container {
+/* Table */
+.collab-table-container {
     overflow-x: auto;
     overflow-y: auto;
 }
 
-.telda-table {
+.collab-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 12px;
 }
 
-.telda-table th {
+.collab-table th {
     background: #4A0E4E;
     color: white;
     padding: 12px 8px;
@@ -86,18 +89,18 @@
     font-size: 11px;
 }
 
-.telda-table td {
+.collab-table td {
     padding: 10px 8px;
     border: 1px solid #ddd;
     vertical-align: top;
     background: white;
 }
 
-.telda-table tbody tr:nth-child(even) {
+.collab-table tbody tr:nth-child(even) {
     background: #f9f1f6;
 }
 
-.telda-table tbody tr:hover {
+.collab-table tbody tr:hover {
     background: #fbe9f0;
 }
 
@@ -116,7 +119,7 @@
 
 /* Status Badges */
 .status-done {
-    background: #43A047; /* elegant green */
+    background: #43A047;
     color: white;
     padding: 4px 8px;
     border-radius: 4px;
@@ -125,7 +128,7 @@
 }
 
 .status-eskalasi {
-    background: #EF6C00; /* deep amber orange */
+    background: #EF6C00;
     color: white;
     padding: 4px 8px;
     border-radius: 4px;
@@ -134,7 +137,7 @@
 }
 
 .status-progress {
-    background: #039BE5; /* vibrant blue */
+    background: #039BE5;
     color: white;
     padding: 4px 8px;
     border-radius: 4px;
@@ -170,45 +173,42 @@
     font-weight: bold;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 1200px) {
-    .telda-table {
+    .collab-table {
         font-size: 11px;
     }
-
-    .telda-table th,
-    .telda-table td {
+    .collab-table th,
+    .collab-table td {
         padding: 8px 6px;
     }
 }
 
 @media (max-width: 768px) {
-    .telda-header {
+    .collab-header {
         flex-direction: column;
         gap: 15px;
         text-align: center;
     }
-
-    .header-stats {
+    .collab-header-stats {
         justify-content: center;
         gap: 15px;
     }
-
     .stat-value {
         min-width: 60px;
         font-size: 14px;
     }
 }
 
-.telda-table td:nth-child(1),
-.telda-table td:nth-child(2),
-.telda-table td:nth-child(3),
-.telda-table td:nth-child(4),
-.telda-table td:nth-child(5),
-.telda-table td:nth-child(7),
-.telda-table td:nth-child(8),
-.telda-table td:nth-child(9),
-.telda-table td:nth-child(10) {
+.collab-table td:nth-child(1),
+.collab-table td:nth-child(2),
+.collab-table td:nth-child(3),
+.collab-table td:nth-child(4),
+.collab-table td:nth-child(5),
+.collab-table td:nth-child(7),
+.collab-table td:nth-child(8),
+.collab-table td:nth-child(9),
+.collab-table td:nth-child(10) {
     text-align: center;
     vertical-align: middle;
 }
