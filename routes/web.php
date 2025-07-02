@@ -48,7 +48,7 @@ Route::get('eskalasi/tsel', function () {
 });
 
 Route::get('crud/createtelda', function () {
-    return view('crud.createtelda');
+    return view('crude.createtelda');
 });
 
 Route::resource('snunit', SnunitController::class);
