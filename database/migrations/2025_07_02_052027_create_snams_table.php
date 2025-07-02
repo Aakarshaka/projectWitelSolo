@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('snams', function (Blueprint $table) {
             $table->id();
-            $table->string('Event');
-            $table->string('Unit/TELDA');
-            $table->date('Start Date');
-            $table->date('End Date');
-            $table->string('Notes To Follow Up');
-            $table->string('UIC');
-            $table->string('Unit Collaborator');
-            $table->integer('%Complete');
-            $table->string('Status');
-            $table->string('Respon UIC');
+            $table->string('event');
+            $table->string('unit');
+            $table->date('start_date');
+            $table->date('end_date')->nullable();
+            $table->text('notes')->nullable();
+            $table->string('uic');
+            $table->string('unit_collab')->nullable();
+            $table->integer('complete');
+            $table->string('status');
+            $table->text('respond')->nullable();
             $table->timestamps();
         });
     }
