@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SnunitController;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -45,3 +46,5 @@ Route::get('eskalasi/treg', function () {
 Route::get('eskalasi/tsel', function () {
     return view('eskalasi.tsel');
 });
+
+Route::resource('snunit', SnunitController::class);
