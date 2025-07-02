@@ -21,7 +21,7 @@ class SnteldaController extends Controller
      */
     public function create()
     {
-        return view('sntelda.create');
+        return view('form.createtelda');
     }
 
     /**
