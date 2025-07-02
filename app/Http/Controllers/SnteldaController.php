@@ -47,7 +47,7 @@ class SnteldaController extends Controller
         sntelda::create($validatedData);
 
         //redirect
-        return redirect()->route('supportNeeded.sntelda');
+        return redirect()->route('sntelda.index');
     }
 
     /**
