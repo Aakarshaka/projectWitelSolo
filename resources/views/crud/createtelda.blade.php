@@ -6,7 +6,7 @@
 <div class="collab-form-container">
     <h2 class="mb-4 page-title">Tambah Data Support Needed TELDA</h2>
 
-    <form action="{{ route('telda.store') }}" method="POST">
+    <form method="POST">
         @csrf
 
         <div class="mb-3">
@@ -67,8 +67,8 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <a href="{{ route('telda.index') }}" class="btn btn-secondary me-2">Kembali</a>
-            <button type="submit" class="btn btn-primary">Simpan</button>
+            <a href="#" class="btn btn-secondary me-2">Kembali</a>
+            <button type="button" class="btn btn-primary">Simpan</button>
         </div>
     </form>
 </div>
