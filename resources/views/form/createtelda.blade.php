@@ -3,10 +3,10 @@
 @section('title', 'Create Data Support Needed TELDA')
 
 @section('content')
-<div class="collab-form-container">
+<div class="collab-form-container p-4">
     <h2 class="mb-4 page-title">Tambah Data Support Needed TELDA</h2>
 
-    <form method="POST">
+    <form action="{{ route('sntelda.store') }}" method="POST">
         @csrf
 
         <div class="mb-3">
@@ -32,7 +32,7 @@
 
         <div class="mb-3">
             <label class="form-label">Notes to Follow Up</label>
-            <textarea name="notes" class="form-control" rows="3" placeholder="Masukkan catatan atau tindak lanjut" required></textarea>
+            <textarea name="notes" class="form-control" rows="3" placeholder="Masukkan catatan atau tindak lanjut"></textarea>
         </div>
 
         <div class="row mb-3">
@@ -67,8 +67,8 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <a href="#" class="btn btn-secondary me-2">Kembali</a>
-            <button type="button" class="btn btn-primary">Simpan</button>
+            <a href="{{ route('sntelda.index') }}" class="btn btn-secondary me-2">Kembali</a>
+            <button type="submit" class="btn btn-primary">Simpan</button>
         </div>
     </form>
 </div>
