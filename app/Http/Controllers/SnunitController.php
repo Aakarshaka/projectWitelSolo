@@ -12,8 +12,19 @@ class SnunitController extends Controller
      */
     public function index()
     {
-        $allsnunit = snunit::all();
-        return view('supportNeeded.snunit', compact('allsnunit'));
+        $allsnunit = Snunit::all();
+
+        $total = $allsnunit->count();
+
+        $close = $allsnunit->where('status', 'Done')->count();
+
+        $open = $total - $close;
+
+        $closePercentage = $open > 0 ? round(($close / $total) * 100, 1) : 0;
+
+        $actualProgress = $allsnunit->avg('complete');  // Laravel Collection method
+
+        return view('supportNeeded.snunit', compact('allsnunit', 'total', 'close', 'closePercentage', 'actualProgress'));
 
     }
 
@@ -33,16 +44,28 @@ class SnunitController extends Controller
         // validate
         $validatedData = $request->validate([
             'event' => 'required|max:255',
-            'unit' => 'required|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date',
+            'unit' => 'nullable|max:255',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'notes' => 'nullable|string',
-            'uic' => 'required|max:255',
+            'uic' => 'nullable|max:255',
             'unit_collab' => 'nullable|max:255',
-            'complete' => 'required|integer|min:0|max:100',
-            'status' => 'required|max:255',
+            'complete' => 'nullable|integer|min:0|max:100',
+            'status' => 'nullable|max:255',
             'respond' => 'nullable|string'
         ]);
+
+        $validatedData['status'] = $validatedData['status'] ?? null;
+
+        // Validasi kalau complete = 100, status harus Done
+        if ($validatedData['complete'] == 100 && $validatedData['status'] != 'Done') {
+            return back()->withErrors(['status' => 'Jika progress 100%, status harus Done'])->withInput();
+        }
+
+        // Validasi kalau complete = 0, status harus kosong/null
+        if ($validatedData['complete'] == 0 && $validatedData['status'] != null) {
+            return back()->withErrors(['status' => 'Jika progress 0%, status wajib kosong.'])->withInput();
+        }
 
         //simpan
         snunit::create($validatedData);
@@ -75,16 +98,28 @@ class SnunitController extends Controller
         // validate
         $validatedData = $request->validate([
             'event' => 'required|max:255',
-            'unit' => 'required|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date',
+            'unit' => 'nullable|max:255',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'notes' => 'nullable|string',
-            'uic' => 'required|max:255',
+            'uic' => 'nullable|max:255',
             'unit_collab' => 'nullable|max:255',
-            'complete' => 'required|integer|min:0|max:100',
-            'status' => 'required|max:255',
+            'complete' => 'nullable|integer|min:0|max:100',
+            'status' => 'nullable|max:255',
             'respond' => 'nullable|string'
         ]);
+
+        $validatedData['status'] = $validatedData['status'] ?? null;
+
+        // Validasi kalau complete = 100, status harus Done
+        if ($validatedData['complete'] == 100 && $validatedData['status'] != 'Done') {
+            return back()->withErrors(['status' => 'Jika progress 100%, status harus Done'])->withInput();
+        }
+
+        // Validasi kalau complete = 0, status harus kosong/null
+        if ($validatedData['complete'] == 0 && $validatedData['status'] != null) {
+            return back()->withErrors(['status' => 'Jika progress 0%, status wajib kosong.'])->withInput();
+        }
 
         //simpan
         $snunit->update($validatedData);

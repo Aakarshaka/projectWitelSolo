@@ -12,8 +12,19 @@ class GsdController extends Controller
      */
     public function index()
     {
-        $allgsd = gsd::all();
-        return view('eskalasi.gsd', compact('allgsd'));
+        $allgsd = Gsd::all();
+
+        $total = $allgsd->count();
+
+        $close = $allgsd->where('status', 'Done')->count();
+
+        $open = $total - $close;
+
+        $closePercentage = $open > 0 ? round(($close / $total) * 100, 1) : 0;
+
+        $actualProgress = $allgsd->avg('complete');  // Laravel Collection method
+
+        return view('eskalasi.gsd', compact('allgsd', 'total', 'close', 'closePercentage', 'actualProgress'));
     }
 
     /**
@@ -32,16 +43,28 @@ class GsdController extends Controller
         // validate
         $validatedData = $request->validate([
             'event' => 'required|max:255',
-            'unit' => 'required|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date',
+            'unit' => 'nullable|max:255',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'notes' => 'nullable|string',
-            'uic' => 'required|max:255',
+            'uic' => 'nullable|max:255',
             'unit_collab' => 'nullable|max:255',
-            'complete' => 'required|integer|min:0|max:100',
-            'status' => 'required|max:255',
+            'complete' => 'nullable|integer|min:0|max:100',
+            'status' => 'nullable|max:255',
             'respond' => 'nullable|string'
         ]);
+
+        $validatedData['status'] = $validatedData['status'] ?? null;
+
+        // Validasi kalau complete = 100, status harus Done
+        if ($validatedData['complete'] == 100 && $validatedData['status'] != 'Done') {
+            return back()->withErrors(['status' => 'Jika progress 100%, status harus Done'])->withInput();
+        }
+
+        // Validasi kalau complete = 0, status harus kosong/null
+        if ($validatedData['complete'] == 0 && $validatedData['status'] != null) {
+            return back()->withErrors(['status' => 'Jika progress 0%, status wajib kosong.'])->withInput();
+        }
 
         //simpan
         gsd::create($validatedData);
@@ -74,16 +97,28 @@ class GsdController extends Controller
         // validate
         $validatedData = $request->validate([
             'event' => 'required|max:255',
-            'unit' => 'required|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date',
+            'unit' => 'nullable|max:255',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'notes' => 'nullable|string',
-            'uic' => 'required|max:255',
+            'uic' => 'nullable|max:255',
             'unit_collab' => 'nullable|max:255',
-            'complete' => 'required|integer|min:0|max:100',
-            'status' => 'required|max:255',
+            'complete' => 'nullable|integer|min:0|max:100',
+            'status' => 'nullable|max:255',
             'respond' => 'nullable|string'
         ]);
+
+        $validatedData['status'] = $validatedData['status'] ?? null;
+
+        // Validasi kalau complete = 100, status harus Done
+        if ($validatedData['complete'] == 100 && $validatedData['status'] != 'Done') {
+            return back()->withErrors(['status' => 'Jika progress 100%, status harus Done'])->withInput();
+        }
+
+        // Validasi kalau complete = 0, status harus kosong/null
+        if ($validatedData['complete'] == 0 && $validatedData['status'] != null) {
+            return back()->withErrors(['status' => 'Jika progress 0%, status wajib kosong.'])->withInput();
+        }
 
         //simpan
         $gsd->update($validatedData);

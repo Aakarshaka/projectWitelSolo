@@ -43,13 +43,13 @@ class SnteldaController extends Controller
         // validate
         $validatedData = $request->validate([
             'event' => 'required|max:255',
-            'unit' => 'required|max:255',
-            'start_date' => 'required|date',
+            'unit' => 'nullable|max:255',
+            'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'notes' => 'nullable|string',
-            'uic' => 'required|max:255',
+            'uic' => 'nullable|max:255',
             'unit_collab' => 'nullable|max:255',
-            'complete' => 'required|integer|min:0|max:100',
+            'complete' => 'nullable|integer|min:0|max:100',
             'status' => 'nullable|max:255',
             'respond' => 'nullable|string'
         ]);
@@ -98,13 +98,13 @@ class SnteldaController extends Controller
         // validate
         $validatedData = $request->validate([
             'event' => 'required|max:255',
-            'unit' => 'required|max:255',
-            'start_date' => 'required|date',
+            'unit' => 'nullable|max:255',
+            'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'notes' => 'nullable|string',
-            'uic' => 'required|max:255',
+            'uic' => 'nullable|max:255',
             'unit_collab' => 'nullable|max:255',
-            'complete' => 'required|integer|min:0|max:100',
+            'complete' => 'nullable|integer|min:0|max:100',
             'status' => 'nullable|max:255',
             'respond' => 'nullable|string'
         ]);

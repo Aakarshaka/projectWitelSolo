@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('snteldas', function (Blueprint $table) {
             $table->id();
             $table->string('event');
-            $table->string('unit');
-            $table->date('start_date');
+            $table->string('unit')->nullable();
+            $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->text('notes')->nullable();
-            $table->string('uic');
+            $table->string('uic')->nullable();
             $table->string('unit_collab')->nullable();
-            $table->integer('complete');
+            $table->integer('complete')->nullable();
             $table->string('status')->nullable();
             $table->text('respond')->nullable();
             $table->timestamps();
