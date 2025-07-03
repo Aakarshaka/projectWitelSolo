@@ -12,7 +12,8 @@ class GsdController extends Controller
      */
     public function index()
     {
-        //
+        $allgsd = gsd::all();
+        return view('eskalasi.gsd', compact('allgsd'));
     }
 
     /**
@@ -20,7 +21,7 @@ class GsdController extends Controller
      */
     public function create()
     {
-        //
+        return view('gsd.create');
     }
 
     /**
@@ -28,7 +29,25 @@ class GsdController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validate
+        $validatedData = $request->validate([
+            'event' => 'required|max:255',
+            'unit' => 'required|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date',
+            'notes' => 'nullable|string',
+            'uic' => 'required|max:255',
+            'unit_collab' => 'nullable|max:255',
+            'complete' => 'required|integer|min:0|max:100',
+            'status' => 'required|max:255',
+            'respond' => 'nullable|string'
+        ]);
+
+        //simpan
+        gsd::create($validatedData);
+
+        //redirect
+        return redirect()->route('gsd.index');
     }
 
     /**
@@ -36,7 +55,7 @@ class GsdController extends Controller
      */
     public function show(gsd $gsd)
     {
-        //
+        return view('gsd.show',compact('gsd'));
     }
 
     /**
@@ -44,7 +63,7 @@ class GsdController extends Controller
      */
     public function edit(gsd $gsd)
     {
-        //
+        return view('gsd.edit',compact('gsd'));
     }
 
     /**
@@ -52,7 +71,25 @@ class GsdController extends Controller
      */
     public function update(Request $request, gsd $gsd)
     {
-        //
+        // validate
+        $validatedData = $request->validate([
+            'event' => 'required|max:255',
+            'unit' => 'required|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date',
+            'notes' => 'nullable|string',
+            'uic' => 'required|max:255',
+            'unit_collab' => 'nullable|max:255',
+            'complete' => 'required|integer|min:0|max:100',
+            'status' => 'required|max:255',
+            'respond' => 'nullable|string'
+        ]);
+
+        //simpan
+        $gsd->update($validatedData);
+
+        //redirect
+        return redirect()->route('gsd.index');
     }
 
     /**
@@ -60,6 +97,7 @@ class GsdController extends Controller
      */
     public function destroy(gsd $gsd)
     {
-        //
+        $gsd->delete();
+        return redirect()->route('eskalasi.gsd');
     }
 }

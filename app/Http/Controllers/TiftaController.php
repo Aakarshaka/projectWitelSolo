@@ -12,7 +12,8 @@ class TiftaController extends Controller
      */
     public function index()
     {
-        //
+        $alltifta = tifta::all();
+        return view('eskalasi.tifta', compact('alltifta'));
     }
 
     /**
@@ -20,7 +21,7 @@ class TiftaController extends Controller
      */
     public function create()
     {
-        //
+        return view('tifta.create');
     }
 
     /**
@@ -28,7 +29,25 @@ class TiftaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validate
+        $validatedData = $request->validate([
+            'event' => 'required|max:255',
+            'unit' => 'required|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date',
+            'notes' => 'nullable|string',
+            'uic' => 'required|max:255',
+            'unit_collab' => 'nullable|max:255',
+            'complete' => 'required|integer|min:0|max:100',
+            'status' => 'required|max:255',
+            'respond' => 'nullable|string'
+        ]);
+
+        //simpan
+        tifta::create($validatedData);
+
+        //redirect
+        return redirect()->route('tifta.index');
     }
 
     /**
@@ -36,7 +55,7 @@ class TiftaController extends Controller
      */
     public function show(tifta $tifta)
     {
-        //
+        return view('tifta.show',compact('tifta'));
     }
 
     /**
@@ -44,7 +63,7 @@ class TiftaController extends Controller
      */
     public function edit(tifta $tifta)
     {
-        //
+        return view('tifta.edit',compact('tifta'));
     }
 
     /**
@@ -52,7 +71,25 @@ class TiftaController extends Controller
      */
     public function update(Request $request, tifta $tifta)
     {
-        //
+        // validate
+        $validatedData = $request->validate([
+            'event' => 'required|max:255',
+            'unit' => 'required|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date',
+            'notes' => 'nullable|string',
+            'uic' => 'required|max:255',
+            'unit_collab' => 'nullable|max:255',
+            'complete' => 'required|integer|min:0|max:100',
+            'status' => 'required|max:255',
+            'respond' => 'nullable|string'
+        ]);
+
+        //simpan
+        $tifta->update($validatedData);
+
+        //redirect
+        return redirect()->route('tifta.index');
     }
 
     /**
@@ -60,6 +97,7 @@ class TiftaController extends Controller
      */
     public function destroy(tifta $tifta)
     {
-        //
+        $tifta->delete();
+        return redirect()->route('eskalasi.tifta');
     }
 }

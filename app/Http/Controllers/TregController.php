@@ -12,7 +12,8 @@ class TregController extends Controller
      */
     public function index()
     {
-        //
+        $alltreg = treg::all();
+        return view('eskalasi.treg', compact('alltreg'));
     }
 
     /**
@@ -20,7 +21,7 @@ class TregController extends Controller
      */
     public function create()
     {
-        //
+        return view('treg.create');
     }
 
     /**
@@ -28,7 +29,25 @@ class TregController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validate
+        $validatedData = $request->validate([
+            'event' => 'required|max:255',
+            'unit' => 'required|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date',
+            'notes' => 'nullable|string',
+            'uic' => 'required|max:255',
+            'unit_collab' => 'nullable|max:255',
+            'complete' => 'required|integer|min:0|max:100',
+            'status' => 'required|max:255',
+            'respond' => 'nullable|string'
+        ]);
+
+        //simpan
+        treg::create($validatedData);
+
+        //redirect
+        return redirect()->route('treg.index');
     }
 
     /**
@@ -36,7 +55,7 @@ class TregController extends Controller
      */
     public function show(treg $treg)
     {
-        //
+        return view('treg.show',compact('treg'));
     }
 
     /**
@@ -44,7 +63,7 @@ class TregController extends Controller
      */
     public function edit(treg $treg)
     {
-        //
+        return view('treg.edit',compact('treg'));
     }
 
     /**
@@ -52,7 +71,25 @@ class TregController extends Controller
      */
     public function update(Request $request, treg $treg)
     {
-        //
+        // validate
+        $validatedData = $request->validate([
+            'event' => 'required|max:255',
+            'unit' => 'required|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date',
+            'notes' => 'nullable|string',
+            'uic' => 'required|max:255',
+            'unit_collab' => 'nullable|max:255',
+            'complete' => 'required|integer|min:0|max:100',
+            'status' => 'required|max:255',
+            'respond' => 'nullable|string'
+        ]);
+
+        //simpan
+        $treg->update($validatedData);
+
+        //redirect
+        return redirect()->route('treg.index');
     }
 
     /**
@@ -60,6 +97,7 @@ class TregController extends Controller
      */
     public function destroy(treg $treg)
     {
-        //
+        $treg->delete();
+        return redirect()->route('eskalasi.treg');
     }
 }
