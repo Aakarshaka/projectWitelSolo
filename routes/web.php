@@ -29,10 +29,6 @@ Route::get('supportNeeded/snunit', function () {
     return view('supportNeeded.snunit');
 });
 
-Route::get('supportNeeded/sntelda', function () {
-    return view('supportNeeded.sntelda');
-});
-
 Route::get('supportNeeded/snam', function () {
     return view('supportNeeded.snam');
 });
@@ -57,7 +53,8 @@ Route::get('form/createtelda', function () {
     return view('form.createtelda');
 });
 
-Route::resource('snunit', SnunitController::class);
+Route::get('supportNeeded/sntelda', [SnteldaController::class, 'index'])->name('sntelda.index');
+
 Route::resource('snunit', SnunitController::class);
 Route::resource('snam', SnamController::class);
 Route::resource('sntelda', SnteldaController::class);

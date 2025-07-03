@@ -98,6 +98,6 @@ class SnteldaController extends Controller
     public function destroy(sntelda $sntelda)
     {
         $sntelda->delete();
-        return redirect()->route('supportNeeded.sntelda');
+        return redirect()->route('sntelda.index');
     }
 }
