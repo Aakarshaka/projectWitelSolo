@@ -151,6 +151,8 @@
                                     <option value="Done">Done</option>
                                     <option value="Eskalasi">Eskalasi</option>
                                     <option value="Progress">Progress</option>
+                                    <option value="Need Discussion">Need Discussion</option>
+                                    <option value="Open">Open</option>
                                 </select>
                             </div>
 
@@ -230,6 +232,8 @@
                                     <option value="Done">Done</option>
                                     <option value="Eskalasi">Eskalasi</option>
                                     <option value="Progress">Progress</option>
+                                    <option value="Need Discussion">Need Discussion</option>
+                                    <option value="Open">Open</option>
                                 </select>
                             </div>
 
