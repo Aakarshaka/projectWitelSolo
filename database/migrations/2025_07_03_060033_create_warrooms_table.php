@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('warrooms', function (Blueprint $table) {
         $table->id();
         $table->date('tgl')->nullable();
-        $table->string('agenda')->nullable();
+        $table->string('agenda')->nullable();   
         $table->text('peserta')->nullable();
         $table->text('pembahasan')->nullable();
         $table->text('action_plan')->nullable();
