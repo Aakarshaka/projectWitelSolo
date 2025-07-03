@@ -12,8 +12,19 @@ class SnteldaController extends Controller
      */
     public function index()
     {
-        $allsntelda = sntelda::all();
-        return view('supportNeeded.sntelda', compact('allsntelda'));
+        $allsntelda = Sntelda::all();
+
+        $total = $allsntelda->count();
+
+        $close = $allsntelda->where('status', 'Done')->count();
+
+        $open = $total - $close;
+
+        $closePercentage = $open > 0 ? round(($close / $total) * 100, 1) : 0;
+
+        $actualProgress = $allsntelda->avg('complete');  // Laravel Collection method
+
+        return view('supportNeeded.sntelda', compact('allsntelda', 'total', 'close', 'closePercentage', 'actualProgress'));
     }
 
     /**
@@ -34,14 +45,27 @@ class SnteldaController extends Controller
             'event' => 'required|max:255',
             'unit' => 'required|max:255',
             'start_date' => 'required|date',
-            'end_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'notes' => 'nullable|string',
             'uic' => 'required|max:255',
             'unit_collab' => 'nullable|max:255',
             'complete' => 'required|integer|min:0|max:100',
-            'status' => 'required|max:255',
+            'status' => 'nullable|max:255',
             'respond' => 'nullable|string'
         ]);
+
+        $validatedData['status'] = $validatedData['status'] ?? null;
+
+        // Validasi kalau complete = 100, status harus Done
+        if ($validatedData['complete'] == 100 && $validatedData['status'] != 'Done') {
+            return back()->withErrors(['status' => 'Jika progress 100%, status harus Done'])->withInput();
+        }
+
+        // Validasi kalau complete = 0, status harus kosong/null
+        if ($validatedData['complete'] == 0 && $validatedData['status'] != null) {
+            return back()->withErrors(['status' => 'Jika progress 0%, status wajib kosong.'])->withInput();
+        }
+
 
         //simpan
         sntelda::create($validatedData);
@@ -55,7 +79,7 @@ class SnteldaController extends Controller
      */
     public function show(sntelda $sntelda)
     {
-        return view('sntelda.show',compact('sntelda'));
+        return view('sntelda.show', compact('sntelda'));
     }
 
     /**
@@ -63,7 +87,7 @@ class SnteldaController extends Controller
      */
     public function edit(sntelda $sntelda)
     {
-        return view('sntelda.edit',compact('sntelda'));
+        return view('sntelda.edit', compact('sntelda'));
     }
 
     /**
@@ -76,14 +100,26 @@ class SnteldaController extends Controller
             'event' => 'required|max:255',
             'unit' => 'required|max:255',
             'start_date' => 'required|date',
-            'end_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'notes' => 'nullable|string',
             'uic' => 'required|max:255',
             'unit_collab' => 'nullable|max:255',
             'complete' => 'required|integer|min:0|max:100',
-            'status' => 'required|max:255',
+            'status' => 'nullable|max:255',
             'respond' => 'nullable|string'
         ]);
+
+        // Validasi kalau complete = 100, status harus Done
+        if ($validatedData['complete'] == 100 && $validatedData['status'] != 'Done') {
+            return back()->withErrors(['status' => 'Jika progress 100%, status harus Done'])->withInput();
+        }
+
+        // Validasi kalau complete = 0, status harus kosong/null
+        if ($validatedData['complete'] == 0 && $validatedData['status'] != null) {
+            return back()->withErrors(['status' => 'Jika progress 0%, status wajib kosong.'])->withInput();
+        }
+
+        $validatedData['status'] = $validatedData['status'] ?? null;
 
         //simpan
         $sntelda->update($validatedData);

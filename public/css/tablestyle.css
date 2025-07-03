@@ -67,6 +67,7 @@
     text-decoration: none;
     border-radius: 6px;
     font-weight: bold;
+    font-size: 21px;
     text-align: center;
 }
 
@@ -265,7 +266,8 @@
 .collab-table td:nth-child(7),
 .collab-table td:nth-child(8),
 .collab-table td:nth-child(9),
-.collab-table td:nth-child(10) {
+.collab-table td:nth-child(10),
+.collab-table td:nth-child(12) {
     text-align: center;
     vertical-align: middle;
 }

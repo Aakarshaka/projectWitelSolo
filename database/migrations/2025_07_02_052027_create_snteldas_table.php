@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('uic');
             $table->string('unit_collab')->nullable();
             $table->integer('complete');
-            $table->string('status');
+            $table->string('status')->nullable();
             $table->text('respond')->nullable();
             $table->timestamps();
         });
