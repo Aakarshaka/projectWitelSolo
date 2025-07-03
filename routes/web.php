@@ -9,6 +9,7 @@ use App\Http\Controllers\TselController;
 use App\Http\Controllers\TregController;
 use App\Http\Controllers\GsdController;
 use App\Http\Controllers\WarroomController;
+use App\Http\Controllers\SummaryController;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -53,6 +54,7 @@ Route::get('eskalasi/treg', [TregController::class, 'index'])->name('treg.index'
 Route::get('eskalasi/tsel', [TselController::class, 'index'])->name('tsel.index');
 Route::get('eskalasi/tifta', [TiftaController::class, 'index'])->name('tifta.index');
 Route::get('eskalasi/gsd', [GsdController::class, 'index'])->name('gsd.index');
+Route::get('supportNeeded/summary', [SummaryController::class, 'index'])->name('summary.index');
 
 Route::resource('snunit', SnunitController::class);
 Route::resource('snam', SnamController::class);
