@@ -134,7 +134,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">% Complete</label>
-                                <input type="number" name="complete" id="editComplete" class="form-control" min="0" max="100" required oninput="checkComplete(this, 'editStatus')">
+                                <input type="number" name="complete" id="editComplete" class="form-control" min="0" max="100" oninput="checkComplete(this, 'editStatus')">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Status</label>
@@ -178,13 +178,13 @@
 
                             <div class="mb-3">
                                 <label class="form-label">Unit/Telda</label>
-                                <input type="text" name="unit" class="form-control" placeholder="Masukkan unit atau Telda" required>
+                                <input type="text" name="unit" class="form-control" placeholder="Masukkan unit atau Telda" >
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col">
                                     <label class="form-label">Start Date</label>
-                                    <input type="date" name="start_date" class="form-control" required>
+                                    <input type="date" name="start_date" class="form-control" >
                                 </div>
                                 <div class="col">
                                     <label class="form-label">End Date</label>
@@ -200,7 +200,7 @@
                             <div class="row mb-3">
                                 <div class="col">
                                     <label class="form-label">UIC</label>
-                                    <input type="text" name="uic" class="form-control" placeholder="Masukkan UIC" required>
+                                    <input type="text" name="uic" class="form-control" placeholder="Masukkan UIC" >
                                 </div>
                                 <div class="col">
                                     <label class="form-label">Unit Collaborator</label>
@@ -210,7 +210,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label">% Complete</label>
-                                <input type="number" name="complete" class="form-control" id="addComplete" min="0" max="100" placeholder="Masukkan progress" required oninput="checkComplete(this, 'addStatus')">
+                                <input type="number" name="complete" class="form-control" id="addComplete" min="0" max="100" placeholder="Masukkan progress" oninput="checkComplete(this, 'addStatus')">
                             </div>
 
                             <div class="mb-3">
