@@ -73,14 +73,23 @@ class SnteldaController extends Controller
     {
         // validate
         $validatedData = $request->validate([
-            'Event' => 'required|max:255',
+            'event' => 'required|max:255',
+            'unit' => 'required|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date',
+            'notes' => 'nullable|string',
+            'uic' => 'required|max:255',
+            'unit_collab' => 'nullable|max:255',
+            'complete' => 'required|integer|min:0|max:100',
+            'status' => 'required|max:255',
+            'respond' => 'nullable|string'
         ]);
 
         //simpan
         $sntelda->update($validatedData);
 
         //redirect
-        return redirect()->route('supportNeeded.sntelda');
+        return redirect()->route('sntelda.index');
     }
 
     /**
