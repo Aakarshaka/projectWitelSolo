@@ -98,6 +98,6 @@ class TselController extends Controller
     public function destroy(tsel $tsel)
     {
         $tsel->delete();
-        return redirect()->route('eskalasi.tsel');
+        return redirect()->route('tsel.index');
     }
 }

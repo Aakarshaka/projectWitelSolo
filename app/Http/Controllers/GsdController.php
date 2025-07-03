@@ -98,6 +98,6 @@ class GsdController extends Controller
     public function destroy(gsd $gsd)
     {
         $gsd->delete();
-        return redirect()->route('eskalasi.gsd');
+        return redirect()->route('gsd.index');
     }
 }

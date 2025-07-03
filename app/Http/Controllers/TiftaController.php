@@ -98,6 +98,6 @@ class TiftaController extends Controller
     public function destroy(tifta $tifta)
     {
         $tifta->delete();
-        return redirect()->route('eskalasi.tifta');
+        return redirect()->route('tifta.index');
     }
 }

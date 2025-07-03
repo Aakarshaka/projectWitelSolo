@@ -98,6 +98,6 @@ class SnamController extends Controller
     public function destroy(snam $snam)
     {
         $snam->delete();
-        return redirect()->route('eskalasi.snam');
+        return redirect()->route('snam.index');
     }
 }

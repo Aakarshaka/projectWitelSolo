@@ -98,6 +98,6 @@ class TregController extends Controller
     public function destroy(treg $treg)
     {
         $treg->delete();
-        return redirect()->route('eskalasi.treg');
+        return redirect()->route('treg.index');
     }
 }

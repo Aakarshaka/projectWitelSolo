@@ -99,6 +99,6 @@ class SnunitController extends Controller
     public function destroy(snunit $snunit)
     {
         $snunit->delete();
-        return redirect()->route('supportNeeded.snunit');
+        return redirect()->route('snunit.index');
     }
 }
