@@ -8,6 +8,7 @@ use App\Http\Controllers\TiftaController;
 use App\Http\Controllers\TselController;
 use App\Http\Controllers\TregController;
 use App\Http\Controllers\GsdController;
+use App\Http\Controllers\WarroomController;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -62,3 +63,4 @@ Route::resource('tifta', TiftaController::class);
 Route::resource('treg', TregController::class);
 Route::resource('tsel', TselController::class);
 Route::resource('gsd', GsdController::class);
+Route::resource('warroom', WarroomController::class);
