@@ -53,7 +53,6 @@ Route::get('form/createtelda', function () {
 Route::get('supportNeeded/sntelda', [SnteldaController::class, 'index'])->name('sntelda.index');
 Route::get('supportNeeded/snunit', [SnunitController::class, 'index'])->name('snunit.index');
 
-
 Route::resource('snunit', SnunitController::class);
 Route::resource('snam', SnamController::class);
 Route::resource('sntelda', SnteldaController::class);

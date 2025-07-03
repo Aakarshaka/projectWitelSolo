@@ -1,7 +1,8 @@
 // Buka Edit Modal + isi data
 function openEditModal(button) {
     let id = button.getAttribute("data-id");
-    document.getElementById("editForm").action = "/sntelda/" + id;
+    let route = button.getAttribute("data-route"); // ambil base route-nya
+    document.getElementById("editForm").action = "/" + route + "/" + id;
 
     document.getElementById("editEvent").value = button.getAttribute("data-event");
     document.getElementById("editUnit").value = button.getAttribute("data-unit");

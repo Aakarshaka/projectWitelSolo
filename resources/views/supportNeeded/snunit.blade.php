@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'TELDA')
+@section('title', 'UNIT')
 
 @section('content')
 <div class="collab-container">
@@ -64,6 +64,7 @@
                     <td>
                         <a href="#" class="action-button action-edit"
                             data-id="{{ $item->id }}"
+                            data-route="snunit"
                             data-event="{{ $item->event }}"
                             data-unit="{{ $item->unit }}"
                             data-start="{{ $item->start_date }}"
@@ -92,7 +93,7 @@
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
-                    <form id="editForm" method="POST" onsubmit="return validateEditForm()">
+                    <form id="editForm" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="modal-header" style="background-color: #4A0E4E; color: #fff;">
@@ -100,42 +101,49 @@
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+
                             <div class="mb-3">
                                 <label class="form-label">Event</label>
                                 <input type="text" name="event" id="editEvent" class="form-control" required>
                             </div>
+
                             <div class="mb-3">
                                 <label class="form-label">Unit/Telda</label>
-                                <input type="text" name="unit" id="editUnit" class="form-control" required>
+                                <input type="text" name="unit" id="editUnit" class="form-control">
                             </div>
+
                             <div class="row mb-3">
                                 <div class="col">
                                     <label class="form-label">Start Date</label>
-                                    <input type="date" name="start_date" id="editStartDate" class="form-control" required>
+                                    <input type="date" name="start_date" id="editStartDate" class="form-control">
                                 </div>
                                 <div class="col">
                                     <label class="form-label">End Date</label>
                                     <input type="date" name="end_date" id="editEndDate" class="form-control" onchange="validateDate(this)">
                                 </div>
                             </div>
+
                             <div class="mb-3">
                                 <label class="form-label">Notes</label>
                                 <textarea name="notes" id="editNotes" class="form-control" rows="3"></textarea>
                             </div>
+
                             <div class="row mb-3">
                                 <div class="col">
                                     <label class="form-label">UIC</label>
-                                    <input type="text" name="uic" id="editUIC" class="form-control" required>
+                                    <input type="text" name="uic" id="editUIC" class="form-control">
                                 </div>
                                 <div class="col">
                                     <label class="form-label">Unit Collaborator</label>
                                     <input type="text" name="unit_collab" id="editUnitCollab" class="form-control">
                                 </div>
                             </div>
+
                             <div class="mb-3">
                                 <label class="form-label">% Complete</label>
                                 <input type="number" name="complete" id="editComplete" class="form-control" min="0" max="100" oninput="checkComplete(this, 'editStatus')">
                             </div>
+
                             <div class="mb-3">
                                 <label class="form-label">Status</label>
                                 <select name="status" id="editStatus" class="form-select" onchange="checkStatus(this, 'editComplete')">
@@ -145,10 +153,12 @@
                                     <option value="Progress">Progress</option>
                                 </select>
                             </div>
+
                             <div class="mb-3">
                                 <label class="form-label">Respond UIC</label>
                                 <textarea name="respond" id="editRespond" class="form-control" rows="3"></textarea>
                             </div>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -178,13 +188,13 @@
 
                             <div class="mb-3">
                                 <label class="form-label">Unit/Telda</label>
-                                <input type="text" name="unit" class="form-control" placeholder="Masukkan unit atau Telda" >
+                                <input type="text" name="unit" class="form-control" placeholder="Masukkan unit atau Telda">
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col">
                                     <label class="form-label">Start Date</label>
-                                    <input type="date" name="start_date" class="form-control" >
+                                    <input type="date" name="start_date" class="form-control">
                                 </div>
                                 <div class="col">
                                     <label class="form-label">End Date</label>
@@ -200,7 +210,7 @@
                             <div class="row mb-3">
                                 <div class="col">
                                     <label class="form-label">UIC</label>
-                                    <input type="text" name="uic" class="form-control" placeholder="Masukkan UIC" >
+                                    <input type="text" name="uic" class="form-control" placeholder="Masukkan UIC">
                                 </div>
                                 <div class="col">
                                     <label class="form-label">Unit Collaborator</label>
