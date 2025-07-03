@@ -26,10 +26,6 @@ Route::get('supportNeeded/summary', function () {
     return view('supportNeeded.summary');
 });
 
-Route::get('supportNeeded/snam', function () {
-    return view('supportNeeded.snam');
-});
-
 Route::get('eskalasi/gsd', function () {
     return view('eskalasi.gsd');
 });
@@ -52,6 +48,11 @@ Route::get('form/createtelda', function () {
 
 Route::get('supportNeeded/sntelda', [SnteldaController::class, 'index'])->name('sntelda.index');
 Route::get('supportNeeded/snunit', [SnunitController::class, 'index'])->name('snunit.index');
+Route::get('supportNeeded/snam', [SnamController::class, 'index'])->name('snam.index');
+Route::get('eskalasi/treg', [TregController::class, 'index'])->name('treg.index');
+Route::get('eskalasi/tsel', [TselController::class, 'index'])->name('tsel.index');
+Route::get('eskalasi/tifta', [TiftaController::class, 'index'])->name('tifta.index');
+Route::get('eskalasi/gsd', [GsdController::class, 'index'])->name('gsd.index');
 
 Route::resource('snunit', SnunitController::class);
 Route::resource('snam', SnamController::class);

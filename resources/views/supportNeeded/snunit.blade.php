@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'UNIT')
+@section('title', 'SUPPORT NEEDED UNI')
 
 @section('content')
 <div class="collab-container">

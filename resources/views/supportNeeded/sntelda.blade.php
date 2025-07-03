@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'TELDA')
+@section('title', 'SUPPORT NEEDED TELDA')
 
 @section('content')
 <div class="collab-container">
