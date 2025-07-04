@@ -59,7 +59,9 @@ Route::get('supportNeeded/summary', [SummaryController::class, 'index'])->name('
 Route::resource('snunit', SnunitController::class);
 Route::resource('snam', SnamController::class);
 Route::resource('sntelda', SnteldaController::class);
-Route::resource('tifta', TiftaController::class);
+Route::resource('tifta', TiftaController::class)->parameters([
+    'tifta' => 'tifta'  // pastikan singular yang benar
+]);
 Route::resource('treg', TregController::class);
 Route::resource('tsel', TselController::class);
 Route::resource('gsd', GsdController::class);
