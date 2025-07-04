@@ -141,7 +141,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label">% Complete</label>
-                                <input type="number" name="complete" id="editComplete" class="form-control" min="0" max="100" oninput="checkComplete(this, 'editStatus')">
+                                <input type="number" name="complete" id="editComplete" class="form-control" value ="0" min="0" max="100" oninput="checkComplete(this, 'editStatus')" onblur="setZeroIfEmpty(this)">
                             </div>
 
                             <div class="mb-3">
@@ -222,7 +222,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label">% Complete</label>
-                                <input type="number" name="complete" class="form-control" id="addComplete" min="0" max="100" placeholder="Masukkan progress" oninput="checkComplete(this, 'addStatus')">
+                                <input type="number" name="complete" class="form-control" id="addComplete" value ="0" min="0" max="100" placeholder="Masukkan progress" oninput="checkComplete(this, 'addStatus')" onblur="setZeroIfEmpty(this)">
                             </div>
 
                             <div class="mb-3">

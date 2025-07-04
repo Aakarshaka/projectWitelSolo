@@ -23,30 +23,6 @@ Route::get('/warroom', function () {
     return view('warroom');
 });
 
-Route::get('supportNeeded/summary', function () {
-    return view('supportNeeded.summary');
-});
-
-Route::get('eskalasi/gsd', function () {
-    return view('eskalasi.gsd');
-});
-
-Route::get('eskalasi/tifta', function () {
-    return view('eskalasi.tifta');
-});
-
-Route::get('eskalasi/treg', function () {
-    return view('eskalasi.treg');
-});
-
-Route::get('eskalasi/tsel', function () {
-    return view('eskalasi.tsel');
-});
-
-Route::get('form/createtelda', function () {
-    return view('form.createtelda');
-});
-
 Route::get('supportNeeded/sntelda', [SnteldaController::class, 'index'])->name('sntelda.index');
 Route::get('supportNeeded/snunit', [SnunitController::class, 'index'])->name('snunit.index');
 Route::get('supportNeeded/snam', [SnamController::class, 'index'])->name('snam.index');
