@@ -1,43 +1,42 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SnunitController;
-use App\Http\Controllers\SnamController;
-use App\Http\Controllers\SnteldaController;
-use App\Http\Controllers\TiftaController;
-use App\Http\Controllers\TselController;
-use App\Http\Controllers\TregController;
-use App\Http\Controllers\GsdController;
-use App\Http\Controllers\WarroomController;
-use App\Http\Controllers\SummaryController;
+use App\Http\Controllers\{
+    SnunitController,
+    SnamController,
+    SnteldaController,
+    TiftaController,
+    TselController,
+    TregController,
+    GsdController,
+    WarroomController,
+    SummaryController
+};
 
-Route::get('/', function () {
-    return view('dashboard');
-});
+// ==================
+// Auth Routes
+// ==================
+Route::view('/', 'auth.login');
+Route::view('/auth/login', 'auth.login')->name('login');
+Route::view('/auth/register', 'auth.register')->name('register');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-});
+// ==================
+// Dashboard
+// ==================
+Route::view('/dashboard', 'dashboard')->name('dashboard');
 
-Route::get('/warroom', function () {
-    return view('warroom');
-});
-
-Route::get('supportNeeded/sntelda', [SnteldaController::class, 'index'])->name('sntelda.index');
-Route::get('supportNeeded/snunit', [SnunitController::class, 'index'])->name('snunit.index');
-Route::get('supportNeeded/snam', [SnamController::class, 'index'])->name('snam.index');
-Route::get('eskalasi/treg', [TregController::class, 'index'])->name('treg.index');
-Route::get('eskalasi/tsel', [TselController::class, 'index'])->name('tsel.index');
-Route::get('eskalasi/tifta', [TiftaController::class, 'index'])->name('tifta.index');
-Route::get('eskalasi/gsd', [GsdController::class, 'index'])->name('gsd.index');
+// ==================
+// Support Needed
+// ==================
 Route::get('supportNeeded/summary', [SummaryController::class, 'index'])->name('summary.index');
 
+// ==================
+// Resource Controllers (CRUD)
+// ==================
 Route::resource('snunit', SnunitController::class);
 Route::resource('snam', SnamController::class);
 Route::resource('sntelda', SnteldaController::class);
-Route::resource('tifta', TiftaController::class)->parameters([
-    'tifta' => 'tifta'  // pastikan singular yang benar
-]);
+Route::resource('tifta', TiftaController::class)->parameters(['tifta' => 'tifta']);
 Route::resource('treg', TregController::class);
 Route::resource('tsel', TselController::class);
 Route::resource('gsd', GsdController::class);

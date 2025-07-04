@@ -1,0 +1,58 @@
+.main-content {
+    margin-left: 200px;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, #4a0e4e 0%, #8b0000 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #fdd835;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.dashboard-subtitle {
+    font-size: 16px;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+.quick-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.quick-stat {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.quick-stat-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fdd835;
+    margin-bottom: 5px;
+}
+
+.quick-stat-label {
+    font-size: 11px;
+    color: #ddd;
+    text-transform: uppercase;
+}

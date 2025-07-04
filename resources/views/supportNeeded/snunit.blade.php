@@ -223,7 +223,7 @@
                             <div class="mb-3">
                                 <label class="form-label">% Complete</label>
                                 <input type="number" name="complete" class="form-control" id="addComplete" value ="0" min="0" max="100" placeholder="Masukkan progress" oninput="checkComplete(this, 'addStatus')" onblur="setZeroIfEmpty(this)">
-                            </div>>
+                            </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Status</label>
