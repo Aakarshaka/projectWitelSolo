@@ -4,16 +4,25 @@ function openEditModal(button) {
     let route = button.getAttribute("data-route"); // ambil base route-nya
     document.getElementById("editForm").action = "/" + route + "/" + id;
 
-    document.getElementById("editEvent").value = button.getAttribute("data-event");
-    document.getElementById("editUnit").value = button.getAttribute("data-unit");
-    document.getElementById("editStartDate").value = button.getAttribute("data-start");
-    document.getElementById("editEndDate").value = button.getAttribute("data-end");
-    document.getElementById("editNotes").value = button.getAttribute("data-notes");
+    document.getElementById("editEvent").value =
+        button.getAttribute("data-event");
+    document.getElementById("editUnit").value =
+        button.getAttribute("data-unit");
+    document.getElementById("editStartDate").value =
+        button.getAttribute("data-start");
+    document.getElementById("editEndDate").value =
+        button.getAttribute("data-end");
+    document.getElementById("editNotes").value =
+        button.getAttribute("data-notes");
     document.getElementById("editUIC").value = button.getAttribute("data-uic");
-    document.getElementById("editUnitCollab").value = button.getAttribute("data-unitcollab");
-    document.getElementById("editComplete").value = button.getAttribute("data-complete");
-    document.getElementById("editStatus").value = button.getAttribute("data-status");
-    document.getElementById("editRespond").value = button.getAttribute("data-respond");
+    document.getElementById("editUnitCollab").value =
+        button.getAttribute("data-unitcollab");
+    document.getElementById("editComplete").value =
+        button.getAttribute("data-complete");
+    document.getElementById("editStatus").value =
+        button.getAttribute("data-status");
+    document.getElementById("editRespond").value =
+        button.getAttribute("data-respond");
 
     checkComplete(document.getElementById("editComplete"), "editStatus");
 
@@ -56,9 +65,12 @@ function validateAddForm() {
     const endDate = document.querySelector(
         '#addModal input[name="end_date"]'
     ).value;
-    const complete = parseInt(
-        document.querySelector('#addModal input[name="complete"]').value
-    );
+
+    let complete = document.querySelector(
+        '#addModal input[name="complete"]'
+    ).value;
+    complete = complete === "" ? 0 : parseInt(complete);
+
     const status = document.getElementById("addStatus").value;
 
     if (endDate && startDate && endDate < startDate) {
@@ -83,7 +95,10 @@ function validateAddForm() {
 function validateEditForm() {
     const startDate = document.getElementById("editStartDate").value;
     const endDate = document.getElementById("editEndDate").value;
-    const complete = parseInt(document.getElementById("editComplete").value);
+
+    let complete = document.getElementById("editComplete").value;
+    complete = complete === "" ? 0 : parseInt(complete);
+
     const status = document.getElementById("editStatus").value;
 
     if (endDate && startDate && endDate < startDate) {
@@ -111,5 +126,11 @@ function checkStatus(selectElement, completeInputId) {
         completeInput.readOnly = true;
     } else {
         completeInput.readOnly = false;
+    }
+}
+
+function setZeroIfEmpty(input) {
+    if (input.value === "") {
+        input.value = 0;
     }
 }
