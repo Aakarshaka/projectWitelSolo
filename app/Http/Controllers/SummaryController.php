@@ -10,6 +10,7 @@ use App\Models\gsd;
 use App\Models\tsel;
 use App\Models\treg;
 use App\Models\tifta;
+use App\Models\witel;
 
 class SummaryController extends Controller
 {
@@ -95,18 +96,28 @@ class SummaryController extends Controller
         $data_tsel_percent_close = $data_tsel_count > 0 ? round(($data_tsel_done / $data_tsel_count) * 100) : 0;
         $data_tsel_avg_progress = number_format($data_tsel->pluck('complete')->avg() ?? 0, 2);
 
+        $data_witel = witel::all();
+        $data_witel_count = $data_witel->count();
+        $data_witel_done = $data_witel->where('status', 'Done')->count();
+        $data_witel_progress = $data_witel->where('status', 'Progress')->count();
+        $data_witel_eskalasi = $data_witel->where('status', 'Eskalasi')->count();
+        $data_witel_discuss = $data_witel->where('status', 'Need Discuss')->count();
+        $data_witel_percent_close = $data_witel_count > 0 ? round(($data_witel_done / $data_witel_count) * 100) : 0;
+        $data_witel_avg_progress = number_format($data_witel->pluck('complete')->avg() ?? 0, 2);
+
         // --- Eskalasi TOTAL ---
-        $total_eskalasi = $data_treg_count + $data_tifta_count + $data_gsd_count + $data_tsel_count;
-        $close_eskalasi = $data_treg_done + $data_tifta_done + $data_gsd_done + $data_tsel_done;
-        $progress_eskalasi = $data_treg_progress + $data_tifta_progress + $data_gsd_progress + $data_tsel_progress;
-        $eskalasi_eskalasi = $data_treg_eskalasi + $data_tifta_eskalasi + $data_gsd_eskalasi + $data_tsel_eskalasi;
-        $discuss_eskalasi = $data_treg_discuss + $data_tifta_discuss + $data_gsd_discuss + $data_tsel_discuss;
+        $total_eskalasi = $data_treg_count + $data_tifta_count + $data_gsd_count + $data_tsel_count + $data_witel_count;
+        $close_eskalasi = $data_treg_done + $data_tifta_done + $data_gsd_done + $data_tsel_done + $data_witel_done;
+        $progress_eskalasi = $data_treg_progress + $data_tifta_progress + $data_gsd_progress + $data_tsel_progress + $data_witel_progress;
+        $eskalasi_eskalasi = $data_treg_eskalasi + $data_tifta_eskalasi + $data_gsd_eskalasi + $data_tsel_eskalasi + $data_witel_eskalasi;
+        $discuss_eskalasi = $data_treg_discuss + $data_tifta_discuss + $data_gsd_discuss + $data_tsel_discuss + $data_witel_discuss;
         $percent_close_eskalasi = $total_eskalasi > 0 ? round(($close_eskalasi / $total_eskalasi) * 100) : 0;
         $avg_progress_eskalasi = number_format(collect([
             $data_treg_avg_progress,
             $data_tifta_avg_progress,
             $data_gsd_avg_progress,
-            $data_tsel_avg_progress
+            $data_tsel_avg_progress,
+            $data_witel_avg_progress
         ])->avg() ?? 0, 2);
 
         // --- Total Summary ---
@@ -127,6 +138,7 @@ class SummaryController extends Controller
             'data_tifta_count', 'data_tifta_done', 'data_tifta_progress', 'data_tifta_eskalasi', 'data_tifta_discuss', 'data_tifta_percent_close', 'data_tifta_avg_progress',
             'data_gsd_count', 'data_gsd_done', 'data_gsd_progress', 'data_gsd_eskalasi', 'data_gsd_discuss', 'data_gsd_percent_close', 'data_gsd_avg_progress',
             'data_tsel_count', 'data_tsel_done', 'data_tsel_progress', 'data_tsel_eskalasi', 'data_tsel_discuss', 'data_tsel_percent_close', 'data_tsel_avg_progress',
+            'data_witel_count', 'data_witel_done', 'data_witel_progress', 'data_witel_eskalasi', 'data_witel_discuss', 'data_witel_percent_close', 'data_witel_avg_progress',
             'total_eskalasi', 'close_eskalasi', 'progress_eskalasi', 'eskalasi_eskalasi', 'discuss_eskalasi', 'percent_close_eskalasi', 'avg_progress_eskalasi',
             'total_all', 'close_all', 'progress_all', 'eskalasi_all', 'discuss_all', 'percent_close_all', 'avg_progress_all'
         ));

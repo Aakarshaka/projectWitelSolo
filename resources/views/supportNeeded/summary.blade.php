@@ -100,7 +100,7 @@
                     <thead>
                         <tr>
                             <th>to TREG</th><th>to TIF_TA</th><th>to TSEL</th>
-                            <th>to GSD</th><th>Others</th><th>Total</th>
+                            <th>to GSD</th><th>to Witel</th><th>Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -109,7 +109,7 @@
                             <td class="bg-danger text-white fw-bold">{{ $data_tifta_count }}</td>
                             <td class="bg-danger text-white fw-bold">{{ $data_tsel_count }}</td>
                             <td class="bg-danger text-white fw-bold">{{ $data_gsd_count }}</td>
-                            <td class="bg-danger text-white fw-bold">0</td>
+                            <td class="bg-danger text-white fw-bold">{{ $data_witel_count }}</td>
                             <td class="bg-danger text-white fw-bold">{{ $total_eskalasi }}</td>
                         </tr>
                         <tr>
@@ -117,7 +117,7 @@
                             <td>{{ $data_tifta_done }}</td>
                             <td>{{ $data_tsel_done }}</td>
                             <td>{{ $data_gsd_done }}</td>
-                            <td>0</td>
+                            <td>{{ $data_witel_done }}</td>
                             <td>{{ $close_eskalasi }}</td>
                         </tr>
                         <tr>
@@ -125,7 +125,7 @@
                             <td>{{ $data_tifta_progress }}</td>
                             <td>{{ $data_tsel_progress }}</td>
                             <td>{{ $data_gsd_progress }}</td>
-                            <td>0</td>
+                            <td>{{ $data_witel_progress }}</td>
                             <td>{{ $progress_eskalasi }}</td>
                         </tr>
                         <tr>
@@ -133,7 +133,7 @@
                             <td>{{ $data_tifta_discuss }}</td>
                             <td>{{ $data_tsel_discuss }}</td>
                             <td>{{ $data_gsd_discuss }}</td>
-                            <td>0</td>
+                            <td>{{ $data_witel_discuss }}</td>
                             <td>{{ $discuss_eskalasi }}</td>
                         </tr>
                         <tr>
@@ -141,7 +141,7 @@
                             <td>{{ $data_tifta_eskalasi }}</td>
                             <td>{{ $data_tsel_eskalasi }}</td>
                             <td>{{ $data_gsd_eskalasi }}</td>
-                            <td>0</td>
+                            <td>{{ $data_witel_eskalasi }}</td>
                             <td>{{ $eskalasi_eskalasi }}</td>
                         </tr>
                         <tr class="bg-info-subtle">
@@ -149,7 +149,7 @@
                             <td>{{ $data_tifta_percent_close }}%</td>
                             <td>{{ $data_tsel_percent_close }}%</td>
                             <td>{{ $data_gsd_percent_close }}%</td>
-                            <td>0%</td>
+                            <td>{{ $data_witel_percent_close }}%</td>
                             <td>{{ $percent_close_eskalasi }}%</td>
                         </tr>
                         <tr class="bg-warning-subtle">
@@ -157,7 +157,7 @@
                             <td>{{ $data_tifta_avg_progress }}%</td>
                             <td>{{ $data_tsel_avg_progress }}%</td>
                             <td>{{ $data_gsd_avg_progress }}%</td>
-                            <td>0%</td>
+                            <td>{{ $data_witel_avg_progress }}%</td>
                             <td>{{ $avg_progress_eskalasi }}%</td>
                         </tr>
                     </tbody>
