@@ -3,39 +3,24 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class treg extends Model
+class Treg extends Model
 {
-    //
     protected $guarded = [];
 
-    public function snam(): HasMany
+    public function sntelda(): BelongsTo
     {
-        return $this->HasMany(snam::class);
+        return $this->belongsTo(Sntelda::class);
     }
 
-    public function sntelda(): HasMany
+    public function snam(): BelongsTo
     {
-        return $this->HasMany(sntelda::class);
+        return $this->belongsTo(Snam::class);
     }
 
-    public function tifta(): HasMany
+public function snunit(): BelongsTo
     {
-        return $this->HasMany(tifta::class);
-    }
-
-    public function snunit(): HasMany
-    {
-        return $this->HasMany(treg::class);
-    }
-
-    public function tsel(): HasMany
-    {
-        return $this->HasMany(tsel::class);
-    }
-
-    public function gsd(): HasMany
-    {
-        return $this->HasMany(gsd::class);
+        return $this->belongsTo(Snunit::class);
     }
 }

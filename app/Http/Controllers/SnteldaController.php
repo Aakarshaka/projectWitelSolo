@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\sntelda;
+use App\Models\Sntelda;
+use App\Models\Gsd;
+use App\Models\Tsel;
+use App\Models\Treg;
+use App\Models\Tifta;
+use App\Models\Witel;
 use Illuminate\Http\Request;
 
 class SnteldaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $allsntelda = Sntelda::all();
@@ -17,78 +19,70 @@ class SnteldaController extends Controller
         $total = $allsntelda->count();
         $close = $allsntelda->where('status', 'Done')->count();
         $open = $total - $close;
-        $closePercentage = $open > 0 ? round(($close / $total) * 100, 1) : 0;
+        $closePercentage = $total > 0 ? round(($close / $total) * 100, 1) : 0;
         $actualProgress = $allsntelda->avg('complete');
 
         return view('supportNeeded.sntelda', compact('allsntelda', 'total', 'close', 'closePercentage', 'actualProgress'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('form.createtelda');
+        return view('sntelda.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        // validasi input
-        $validatedData = $request->validate([
-            'event' => 'required|max:255',
-            'unit' => 'nullable|max:255',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'notes' => 'nullable|string',
-            'uic' => 'nullable|max:255',
-            'unit_collab' => 'nullable|max:255',
-            'status' => 'nullable|max:255',
-            'respond' => 'nullable|string'
-        ]);
+        $validatedData = $this->validateInput($request);
 
-        // mapping nilai complete berdasarkan status
-        $statusCompleteMap = [
-            'Open' => 0,
-            'Need Discuss' => 25,
-            'Eskalasi' => 50,
-            'Progress' => 75,
-            'Done' => 100
-        ];
+        // Mapping nilai progress dari status
+        $validatedData['complete'] = $this->mapStatusToComplete($validatedData['status']);
 
-        $validatedData['complete'] = $statusCompleteMap[$validatedData['status']] ?? 0;
+        $data = Sntelda::create($validatedData);
 
-        // simpan ke database
-        Sntelda::create($validatedData);
+        if (strtolower($validatedData['status']) === 'eskalasi') {
+            $this->dispatchEskalasi($data);
+        }
 
         return redirect()->route('sntelda.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(sntelda $sntelda)
+    public function update(Request $request, Sntelda $sntelda)
+    {
+        $validatedData = $this->validateInput($request);
+        $validatedData['complete'] = $this->mapStatusToComplete($validatedData['status']);
+
+        $sntelda->update($validatedData);
+
+        if (strtolower($validatedData['status']) === 'eskalasi') {
+            $this->syncEskalasi($sntelda);
+        }
+
+        return redirect()->route('sntelda.index');
+    }
+
+    public function destroy(Sntelda $sntelda)
+    {
+        $sntelda->delete();
+        return redirect()->route('sntelda.index');
+    }
+
+    public function show(Sntelda $sntelda)
     {
         return view('sntelda.show', compact('sntelda'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(sntelda $sntelda)
+    public function edit(Sntelda $sntelda)
     {
         return view('sntelda.edit', compact('sntelda'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, sntelda $sntelda)
+    /** -----------------------------
+     *  Helper Functions
+     *  ----------------------------- */
+
+    private function validateInput(Request $request)
     {
-        // validasi input
-        $validatedData = $request->validate([
+        return $request->validate([
             'event' => 'required|max:255',
             'unit' => 'nullable|max:255',
             'start_date' => 'nullable|date',
@@ -97,32 +91,56 @@ class SnteldaController extends Controller
             'uic' => 'nullable|max:255',
             'unit_collab' => 'nullable|max:255',
             'status' => 'nullable|max:255',
-            'respond' => 'nullable|string'
+            'respond' => 'nullable|string',
         ]);
-
-        // mapping nilai complete berdasarkan status
-        $statusCompleteMap = [
-            'Open' => 0,
-            'Need Discuss' => 25,
-            'Eskalasi' => 50,
-            'Progress' => 75,
-            'Done' => 100
-        ];
-
-        $validatedData['complete'] = $statusCompleteMap[$validatedData['status']] ?? 0;
-
-        // update data ke database
-        $sntelda->update($validatedData);
-
-        return redirect()->route('sntelda.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(sntelda $sntelda)
+    private function mapStatusToComplete($status)
     {
-        $sntelda->delete();
-        return redirect()->route('sntelda.index');
+        $map = [
+            'open' => 0,
+            'need discuss' => 25,
+            'eskalasi' => 50,
+            'progress' => 75,
+            'done' => 100,
+        ];
+
+        return $map[strtolower($status)] ?? 0;
+    }
+
+    private function dispatchEskalasi($data)
+    {
+        $uic = strtoupper($data->uic ?? $data->unit_collab);
+        $payload = $data->toArray();
+
+        // Hindari konflik primary key
+        unset($payload['id'], $payload['created_at'], $payload['updated_at']);
+        $payload['sntelda_id'] = $data->id;
+
+        $toWitel = ['BS', 'GS', 'RLEGS', 'RSO', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
+        $toTreg  = ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS'];
+
+        if (in_array($uic, $toWitel)) Witel::create($payload);
+        if (in_array($uic, $toTreg))  Treg::create($payload);
+        if ($uic === 'TIF_TA')        Tifta::create($payload);
+        if ($uic === 'TSEL')          Tsel::create($payload);
+        if ($uic === 'GSD')           Gsd::create($payload);
+    }
+
+    private function syncEskalasi($data)
+    {
+        $uic = strtoupper($data->uic ?? $data->unit_collab);
+        $payload = $data->toArray();
+        unset($payload['id'], $payload['created_at'], $payload['updated_at']);
+        $key = ['sntelda_id' => $data->id];
+
+        $toWitel = ['BS', 'GS', 'RLEGS', 'RSO', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
+        $toTreg  = ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS'];
+
+        if (in_array($uic, $toWitel)) Witel::updateOrCreate($key, $payload);
+        if (in_array($uic, $toTreg))  Treg::updateOrCreate($key, $payload);
+        if ($uic === 'TIF_TA')        Tifta::updateOrCreate($key, $payload);
+        if ($uic === 'TSEL')          Tsel::updateOrCreate($key, $payload);
+        if ($uic === 'GSD')           Gsd::updateOrCreate($key, $payload);
     }
 }

@@ -6,36 +6,30 @@ use Illuminate\Database\Eloquent\Model;
 
 class snam extends Model
 {
-    //
     protected $guarded = [];
 
-    public function snunit(): HasMany
+    public function tsel(): HasOne
     {
-        return $this->HasMany(snam::class);
+        return $this->hasOne(Tsel::class);
     }
 
-    public function sntelda(): HasMany
+    public function tifta(): HasOne
     {
-        return $this->HasMany(sntelda::class);
+        return $this->hasOne(Tifta::class);
     }
 
-    public function tifta(): HasMany
+    public function treg(): HasOne
     {
-        return $this->HasMany(tifta::class);
+        return $this->hasOne(Treg::class);
     }
 
-    public function treg(): HasMany
+    public function gsd(): HasOne
     {
-        return $this->HasMany(treg::class);
+        return $this->hasOne(Gsd::class);
     }
 
-    public function tsel(): HasMany
+    public function witel(): HasOne
     {
-        return $this->HasMany(tsel::class);
-    }
-
-    public function gsd(): HasMany
-    {
-        return $this->HasMany(gsd::class);
+        return $this->hasOne(Witel::class);
     }
 }
