@@ -53,7 +53,7 @@
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item->event }}</td>
                     <td>{{ $item->unit }}</td>
-                    <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-M-y') }}</td>
+                    <td>{{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d-M-y') : '-' }}</td>
                     <td>{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d-M-y') : '-' }}</td>
                     <td>{!! nl2br(e($item->notes)) !!}</td>
                     <td>{{ $item->uic }}</td>
@@ -109,8 +109,22 @@
 
                             <div class="mb-3">
                                 <label class="form-label">Unit/Telda</label>
-                                <input type="text" name="unit" id="editUnit" class="form-control">
+                                <select name="unit" id="editUnit" class="form-select">
+                                    <option value="" disabled >-- Pilih Unit/Telda --</option>
+                                    <option value="TELDA BLORA">TELDA BLORA</option>
+                                    <option value="TELDA BOYOLALI">TELDA BOYOLALI</option>
+                                    <option value="TELDA JEPARA">TELDA JEPARA</option>
+                                    <option value="TELDA KLATEN">TELDA KLATEN</option>
+                                    <option value="TELDA KUDUS">TELDA KUDUS</option>
+                                    <option value="MEA SOLO">MEA SOLO</option>
+                                    <option value="TELDA PATI">TELDA PATI</option>
+                                    <option value="TELDA PURWODADI">TELDA PURWODADI</option>
+                                    <option value="TELDA REMBANG">TELDA REMBANG</option>
+                                    <option value="TELDA SRAGEN">TELDA SRAGEN</option>
+                                    <option value="TELDA WONOGIRI">TELDA WONOGIRI</option>
+                                </select>
                             </div>
+
 
                             <div class="row mb-3">
                                 <div class="col">
@@ -129,9 +143,32 @@
                             </div>
 
                             <div class="row mb-3">
-                                <div class="col">
+                                <div class="mb-3">
                                     <label class="form-label">UIC</label>
-                                    <input type="text" name="uic" id="editUIC" class="form-control">
+                                    <select name="uic" id="editUIC" class="form-select">
+                                        <option value="" disabled>-- Pilih UIC --</option>
+                                        <optgroup label="WITEL">
+                                            <option value="BS">BS</option>
+                                            <option value="GS">GS</option>
+                                            <option value="RLEGS">RLEGS</option>
+                                            <option value="RSO">RSO</option>
+                                            <option value="SSGS">SSGS</option>
+                                            <option value="PRQ">PRQ</option>
+                                        </optgroup>
+                                        <optgroup label="TREG">
+                                            <option value="RSMES">RSMES</option>
+                                            <option value="RLEGS">RLEGS</option>
+                                            <option value="BPPLP">BPPLP</option>
+                                            <option value="RSO">RSO</option>
+                                            <option value="SSS">SSS</option>
+                                        </optgroup>
+                                        <optgroup label="TSEL">
+                                            <option value="TSEL">TSEL</option>
+                                        </optgroup>
+                                        <optgroup label="TIF_TA">
+                                            <option value="TIF_TA">TIF_TA</option>
+                                        </optgroup>
+                                    </select>
                                 </div>
                                 <div class="col">
                                     <label class="form-label">Unit Collaborator</label>
@@ -141,18 +178,18 @@
 
                             <div class="mb-3">
                                 <label class="form-label">% Complete</label>
-                                <input type="number" name="complete" id="editComplete" class="form-control" value ="0" min="0" max="100" oninput="checkComplete(this, 'editStatus')" onblur="setZeroIfEmpty(this)">
+                                <input type="number" name="complete" id="editComplete" class="form-control" value="0" min="0" max="100" readonly>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Status</label>
                                 <select name="status" id="editStatus" class="form-select" onchange="checkStatus(this, 'editComplete')">
                                     <option value="">-- Pilih Status --</option>
-                                    <option value="Done">Done</option>
+                                    <option value="Open">Open</option>
+                                    <option value="Need Discuss">Need Discuss</option>
                                     <option value="Eskalasi">Eskalasi</option>
                                     <option value="Progress">Progress</option>
-                                    <option value="Need Discuss">Need Discuss</option>
-                                    <option value="Open">Open</option>
+                                    <option value="Done">Done</option>
                                 </select>
                             </div>
 
@@ -190,13 +227,26 @@
 
                             <div class="mb-3">
                                 <label class="form-label">Unit/Telda</label>
-                                <input type="text" name="unit" class="form-control" placeholder="Masukkan unit atau Telda">
+                                <select name="unit" class="form-select">
+                                    <option value="" disabled selected>-- Pilih Unit/Telda --</option>
+                                    <option value="TELDA BLORA">TELDA BLORA</option>
+                                    <option value="TELDA BOYOLALI">TELDA BOYOLALI</option>
+                                    <option value="TELDA JEPARA">TELDA JEPARA</option>
+                                    <option value="TELDA KLATEN">TELDA KLATEN</option>
+                                    <option value="TELDA KUDUS">TELDA KUDUS</option>
+                                    <option value="MEA SOLO">MEA SOLO</option>
+                                    <option value="TELDA PATI">TELDA PATI</option>
+                                    <option value="TELDA PURWODADI">TELDA PURWODADI</option>
+                                    <option value="TELDA REMBANG">TELDA REMBANG</option>
+                                    <option value="TELDA SRAGEN">TELDA SRAGEN</option>
+                                    <option value="TELDA WONOGIRI">TELDA WONOGIRI</option>
+                                </select>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col">
                                     <label class="form-label">Start Date</label>
-                                    <input type="date" name="start_date" class="form-control">
+                                    <input type="date" name="start_date" class="form-control" autocomplete="off">
                                 </div>
                                 <div class="col">
                                     <label class="form-label">End Date</label>
@@ -210,9 +260,32 @@
                             </div>
 
                             <div class="row mb-3">
-                                <div class="col">
+                                <div class="mb-3">
                                     <label class="form-label">UIC</label>
-                                    <input type="text" name="uic" class="form-control" placeholder="Masukkan UIC">
+                                    <select name="uic" class="form-select">
+                                        <option value="" disabled selected>-- Pilih UIC --</option>
+                                        <optgroup label="WITEL">
+                                            <option value="BS">BS</option>
+                                            <option value="GS">GS</option>
+                                            <option value="RLEGS">RLEGS</option>
+                                            <option value="RSO">RSO</option>
+                                            <option value="SSGS">SSGS</option>
+                                            <option value="PRQ">PRQ</option>
+                                        </optgroup>
+                                        <optgroup label="TREG">
+                                            <option value="RSMES">RSMES</option>
+                                            <option value="RLEGS">RLEGS</option>
+                                            <option value="BPPLP">BPPLP</option>
+                                            <option value="RSO">RSO</option>
+                                            <option value="SSS">SSS</option>
+                                        </optgroup>
+                                        <optgroup label="TSEL">
+                                            <option value="TSEL">TSEL</option>
+                                        </optgroup>
+                                        <optgroup label="TIF_TA">
+                                            <option value="TIF_TA">TIF_TA</option>
+                                        </optgroup>
+                                    </select>
                                 </div>
                                 <div class="col">
                                     <label class="form-label">Unit Collaborator</label>
@@ -222,18 +295,18 @@
 
                             <div class="mb-3">
                                 <label class="form-label">% Complete</label>
-                                <input type="number" name="complete" class="form-control" id="addComplete" value ="0" min="0" max="100" placeholder="Masukkan progress" oninput="checkComplete(this, 'addStatus')" onblur="setZeroIfEmpty(this)">
+                                <input type="number" name="complete" id="addComplete" class="form-control" value="0" min="0" max="100" readonly>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Status</label>
                                 <select name="status" class="form-select" id="addStatus" onchange="checkStatus(this, 'addComplete')">
                                     <option value="" selected disabled>-- Pilih Status --</option>
-                                    <option value="Done">Done</option>
+                                    <option value="Open">Open</option>
+                                    <option value="Need Discuss">Need Discuss</option>
                                     <option value="Eskalasi">Eskalasi</option>
                                     <option value="Progress">Progress</option>
-                                    <option value="Need Discuss">Need Discuss</option>
-                                    <option value="Open">Open</option>
+                                    <option value="Done">Done</option>
                                 </select>
                             </div>
 
