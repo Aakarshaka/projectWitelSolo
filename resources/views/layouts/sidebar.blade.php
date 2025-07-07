@@ -18,15 +18,16 @@
             </a>
         </div>
 
-        <div class="nav-section-header">
-            <span class="section-title">Support Needed</span>
-        </div>
-
         <div class="nav-section">
             <a href="{{ route('summary.index') }}" class="nav-item {{ Request::routeIs('summary.index') ? 'active' : '' }}">
                 <span class="nav-text">Summary</span>
             </a>
         </div>
+
+        <div class="nav-section-header">
+            <span class="section-title">Support Needed</span>
+        </div>
+
         <div class="nav-section">
             <a href="{{ route('snunit.index') }}" class="nav-item {{ Request::routeIs('snunit.index') ? 'active' : '' }}">
                 <span class="nav-text">SN UNIT</span>
