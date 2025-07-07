@@ -1,0 +1,180 @@
+body {
+    font-family: "Arial", sans-serif;
+    background-color: #f0f0f0;
+}
+
+.main-content {
+    margin-left: 200px;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+/* WARROOM CONTAINER */
+.warroom-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+/* HEADER */
+.warroom-header {
+    background: linear-gradient(135deg, #8b0000 0%, #4a0e4e 100%);
+    color: white;
+    padding: 25px 30px;
+    text-align: center;
+}
+
+.warroom-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #fdd835;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.warroom-subtitle {
+    font-size: 14px;
+    color: #ddd;
+    margin-top: 5px;
+}
+
+/* SUMMARY SECTION */
+.summary-section {
+    padding: 25px 30px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 3px solid #4a0e4e;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.forum-info {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #00078b;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.forum-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #4a0e4e;
+    margin-bottom: 15px;
+}
+
+.forum-date {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.agenda-list {
+    list-style: none;
+    padding: 0;
+}
+
+.agenda-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.agenda-item:last-child {
+    border-bottom: none;
+}
+
+.agenda-number {
+    font-weight: bold;
+    color: #8b0000;
+    margin-right: 8px;
+}
+
+.stats-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.stat-card {
+    background: white;
+    padding: 14px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #4a0e4e;
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: bold;
+    color: #8b0000;
+}
+
+.stat-label-wr {
+    font-size: 12px;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* FILTER SECTION */
+.filter-section {
+    padding: 20px 30px;
+    background: linear-gradient(135deg, #8b0000 0%, #4a0e4e 100%);
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.filter-label {
+    font-weight: bold;
+    color: #fdd835;
+    font-size: 20px;
+}
+
+.filter-select {
+    padding: 8px 15px;
+    border: 2px solid #4a0e4e;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #4a0e4e;
+    background: white;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #8b0000;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+    .summary-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    .filter-section {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
