@@ -68,6 +68,12 @@
             </a>
         </div>
 
+        <div class="nav-section">
+            <a href="{{ route('gsd.index') }}" class="nav-item {{ Request::routeIs('gsd.index') ? 'active' : '' }}">
+                <span class="nav-text">to UNIT WITEL</span>
+            </a>
+        </div>
+
         <div class="nav-section-header"></div>
 
         <div class="nav-section">

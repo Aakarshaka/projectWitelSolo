@@ -10,7 +10,8 @@ use App\Http\Controllers\{
     TregController,
     GsdController,
     WarroomController,
-    SummaryController
+    SummaryController,
+    WitelController
 };
 
 // ==================
@@ -41,3 +42,4 @@ Route::resource('treg', TregController::class);
 Route::resource('tsel', TselController::class);
 Route::resource('gsd', GsdController::class);
 Route::resource('warroom', WarroomController::class);
+Route::resource('witel', WitelController::class);
