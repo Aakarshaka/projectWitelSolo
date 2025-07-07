@@ -2,137 +2,83 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\witel;
+use App\Models\Witel;
 use Illuminate\Http\Request;
 
 class WitelController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $allwitel = witel::all();
-
+        $allwitel = Witel::all();
         $total = $allwitel->count();
-
         $close = $allwitel->where('status', 'Done')->count();
-
         $open = $total - $close;
+        $closePercentage = $total > 0 ? round(($close / $total) * 100, 1) : 0;
+        $actualProgress = $allwitel->avg('complete');
 
-        $closePercentage = $open > 0 ? round(($close / $total) * 100, 1) : 0;
-
-        $actualProgress = $allwitel->avg('complete');  // Laravel Collection method
-
-        return view('eskalasi.tsel', compact('allwitel', 'total', 'close', 'closePercentage', 'actualProgress'));
+        return view('eskalasi.witel', compact('allwitel', 'total', 'close', 'closePercentage', 'actualProgress'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('witel.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        // validate
-        $validatedData = $request->validate([
-            'event' => 'required|max:255',
-            'unit' => 'nullable|max:255',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'notes' => 'nullable|string',
-            'uic' => 'nullable|max:255',
-            'unit_collab' => 'nullable|max:255',
-            'complete' => 'nullable|integer|min:0|max:100',
-            'status' => 'nullable|max:255',
-            'respond' => 'nullable|string'
-        ]);
-
-        $validatedData['status'] = $validatedData['status'] ?? null;
-
-        // Validasi kalau complete = 100, status harus Done
-        if ($validatedData['complete'] == 100 && $validatedData['status'] != 'Done') {
-            return back()->withErrors(['status' => 'Jika progress 100%, status harus Done'])->withInput();
-        }
-
-        // Validasi kalau complete = 0, status harus kosong/null
-        if ($validatedData['complete'] == 0 && $validatedData['status'] != null) {
-            return back()->withErrors(['status' => 'Jika progress 0%, status wajib kosong.'])->withInput();
-        }
-
-        //simpan
-        witel::create($validatedData);
-
-        //redirect
+        $validated = $this->validateInput($request);
+        $validated['complete'] = $this->mapStatusToComplete($validated['status']);
+        Witel::create($validated);
         return redirect()->route('witel.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(witel $witel)
+    public function update(Request $request, Witel $witel)
     {
-        return view('witel.show',compact('witel'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(witel $witel)
-    {
-        return view('witel.edit',compact('witel'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, witel $witel)
-    {
-        // validate
-        $validatedData = $request->validate([
-            'event' => 'required|max:255',
-            'unit' => 'nullable|max:255',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'notes' => 'nullable|string',
-            'uic' => 'nullable|max:255',
-            'unit_collab' => 'nullable|max:255',
-            'complete' => 'nullable|integer|min:0|max:100',
-            'status' => 'nullable|max:255',
-            'respond' => 'nullable|string'
-        ]);
-
-        $validatedData['status'] = $validatedData['status'] ?? null;
-
-        // Validasi kalau complete = 100, status harus Done
-        if ($validatedData['complete'] == 100 && $validatedData['status'] != 'Done') {
-            return back()->withErrors(['status' => 'Jika progress 100%, status harus Done'])->withInput();
-        }
-
-        // Validasi kalau complete = 0, status harus kosong/null
-        if ($validatedData['complete'] == 0 && $validatedData['status'] != null) {
-            return back()->withErrors(['status' => 'Jika progress 0%, status wajib kosong.'])->withInput();
-        }
-
-        //simpan
-        $witel->update($validatedData);
-
-        //redirect
+        $validated = $this->validateInput($request);
+        $validated['complete'] = $this->mapStatusToComplete($validated['status']);
+        $witel->update($validated);
         return redirect()->route('witel.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(witel $witel)
+    public function destroy(Witel $witel)
     {
         $witel->delete();
         return redirect()->route('witel.index');
+    }
+
+    public function show(Witel $witel)
+    {
+        return view('witel.show', compact('witel'));
+    }
+
+    public function edit(Witel $witel)
+    {
+        return view('witel.edit', compact('witel'));
+    }
+
+    private function validateInput(Request $request)
+    {
+        return $request->validate([
+            'event' => 'required|max:255',
+            'unit' => 'nullable|max:255',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'notes' => 'nullable|string',
+            'uic' => 'nullable|max:255',
+            'unit_collab' => 'nullable|max:255',
+            'status' => 'nullable|max:255',
+            'respond' => 'nullable|string'
+        ]);
+    }
+
+    private function mapStatusToComplete($status)
+    {
+        return [
+            'open' => 0,
+            'need discuss' => 25,
+            'eskalasi' => 50,
+            'progress' => 75,
+            'done' => 100,
+        ][strtolower($status)] ?? 0;
     }
 }

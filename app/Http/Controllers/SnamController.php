@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Snam, Gsd, Tsel, Treg, Tifta, Witel};
+use App\Models\Snam;
+use App\Models\Gsd;
+use App\Models\Tsel;
+use App\Models\Treg;
+use App\Models\Tifta;
+use App\Models\Witel;
 use Illuminate\Http\Request;
 
 class SnamController extends Controller
@@ -27,102 +32,26 @@ class SnamController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'event' => 'required|max:255',
-            'unit' => 'nullable|max:255',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'notes' => 'nullable|string',
-            'uic' => 'nullable|max:255',
-            'unit_collab' => 'nullable|max:255',
-            'status' => 'nullable|max:255',
-            'respond' => 'nullable|string'
-        ]);
-
-        $statusCompleteMap = [
-            'Open' => 0,
-            'Need Discuss' => 25,
-            'Eskalasi' => 50,
-            'Progress' => 75,
-            'Done' => 100
-        ];
-
-        $validatedData['complete'] = $statusCompleteMap[$validatedData['status']] ?? 0;
+        $validatedData = $this->validateInput($request);
+        $validatedData['complete'] = $this->mapStatusToComplete($validatedData['status']);
 
         $data = Snam::create($validatedData);
 
-        if ($validatedData['status'] === 'Eskalasi') {
+        if (strtolower($validatedData['status']) === 'eskalasi') {
             $this->dispatchEskalasi($data);
         }
 
         return redirect()->route('snam.index');
     }
 
-    private function dispatchEskalasi($data)
-    {
-        $uic = strtoupper($data->uic ?? $data->unit_collab);
-        $payload = $data->toArray();
-        unset($payload['id']);
-        $payload['snam_id'] = $data->id;
-
-        $toWitel = ['BS', 'GS', 'RLEGS', 'RSO', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
-        $toTreg = ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS'];
-
-        if (in_array($uic, $toWitel)) Witel::create($payload);
-        if (in_array($uic, $toTreg)) Treg::create($payload);
-        if ($uic === 'TIF_TA') Tifta::create($payload);
-        if ($uic === 'TSEL') Tsel::create($payload);
-        if ($uic === 'GSD') Gsd::create($payload);
-    }
-
-    private function syncEskalasi($data)
-    {
-        $uic = strtoupper($data->uic ?? $data->unit_collab);
-        $payload = $data->toArray();
-        $id = $data->id;
-
-        $toWitel = ['BS', 'GS', 'RLEGS', 'RSO', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
-        $toTreg = ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS'];
-
-        if (in_array($uic, $toWitel)) Witel::updateOrCreate(['snam_id' => $id], $payload);
-        if (in_array($uic, $toTreg)) Treg::updateOrCreate(['snam_id' => $id], $payload);
-        if ($uic === 'TIF_TA') Tifta::updateOrCreate(['snam_id' => $id], $payload);
-        if ($uic === 'TSEL') Tsel::updateOrCreate(['snam_id' => $id], $payload);
-        if ($uic === 'GSD') Gsd::updateOrCreate(['snam_id' => $id], $payload);
-    }
-
-    public function edit(Snam $snam)
-    {
-        return view('snam.edit', compact('snam'));
-    }
-
     public function update(Request $request, Snam $snam)
     {
-        $validatedData = $request->validate([
-            'event' => 'required|max:255',
-            'unit' => 'nullable|max:255',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'notes' => 'nullable|string',
-            'uic' => 'nullable|max:255',
-            'unit_collab' => 'nullable|max:255',
-            'status' => 'nullable|max:255',
-            'respond' => 'nullable|string'
-        ]);
-
-        $statusCompleteMap = [
-            'Open' => 0,
-            'Need Discuss' => 25,
-            'Eskalasi' => 50,
-            'Progress' => 75,
-            'Done' => 100
-        ];
-
-        $validatedData['complete'] = $statusCompleteMap[$validatedData['status']] ?? 0;
+        $validatedData = $this->validateInput($request);
+        $validatedData['complete'] = $this->mapStatusToComplete($validatedData['status']);
 
         $snam->update($validatedData);
 
-        if ($validatedData['status'] === 'Eskalasi') {
+        if (strtolower($validatedData['status']) === 'eskalasi') {
             $this->syncEskalasi($snam);
         }
 
@@ -134,6 +63,75 @@ class SnamController extends Controller
         $snam->delete();
         return redirect()->route('snam.index');
     }
-}
 
-// Untuk SnunitController, tinggal ganti semua `Snam` menjadi `Snunit`, dan tambahkan use `use App\Models\Snunit;`
+    public function show(Snam $snam)
+    {
+        return view('snam.show', compact('snam'));
+    }
+
+    public function edit(Snam $snam)
+    {
+        return view('snam.edit', compact('snam'));
+    }
+
+    private function validateInput(Request $request)
+    {
+        return $request->validate([
+            'event' => 'required|max:255',
+            'unit' => 'nullable|max:255',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'notes' => 'nullable|string',
+            'uic' => 'nullable|max:255',
+            'unit_collab' => 'nullable|max:255',
+            'status' => 'nullable|max:255',
+            'respond' => 'nullable|string',
+        ]);
+    }
+
+    private function mapStatusToComplete($status)
+    {
+        $map = [
+            'open' => 0,
+            'need discuss' => 25,
+            'eskalasi' => 50,
+            'progress' => 75,
+            'done' => 100,
+        ];
+        return $map[strtolower($status)] ?? 0;
+    }
+
+    private function dispatchEskalasi($data)
+    {
+        $uic = strtoupper($data->uic ?? $data->unit_collab);
+        $payload = $data->toArray();
+        unset($payload['id'], $payload['created_at'], $payload['updated_at']);
+        $payload['snam_id'] = $data->id;
+
+        $toWitel = ['BS', 'GS', 'RLEGS', 'RSO', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
+        $toTreg  = ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS'];
+
+        if (in_array($uic, $toWitel)) Witel::create($payload);
+        if (in_array($uic, $toTreg))  Treg::create($payload);
+        if ($uic === 'TIF_TA')        Tifta::create($payload);
+        if ($uic === 'TSEL')          Tsel::create($payload);
+        if ($uic === 'GSD')           Gsd::create($payload);
+    }
+
+    private function syncEskalasi($data)
+    {
+        $uic = strtoupper($data->uic ?? $data->unit_collab);
+        $payload = $data->toArray();
+        unset($payload['id'], $payload['created_at'], $payload['updated_at']);
+        $key = ['snam_id' => $data->id];
+
+        $toWitel = ['BS', 'GS', 'RLEGS', 'RSO', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
+        $toTreg  = ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS'];
+
+        if (in_array($uic, $toWitel)) Witel::updateOrCreate($key, $payload);
+        if (in_array($uic, $toTreg))  Treg::updateOrCreate($key, $payload);
+        if ($uic === 'TIF_TA')        Tifta::updateOrCreate($key, $payload);
+        if ($uic === 'TSEL')          Tsel::updateOrCreate($key, $payload);
+        if ($uic === 'GSD')           Gsd::updateOrCreate($key, $payload);
+    }
+}

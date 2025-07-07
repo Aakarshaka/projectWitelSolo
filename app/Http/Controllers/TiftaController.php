@@ -2,137 +2,83 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\tifta;
+use App\Models\Tifta;
 use Illuminate\Http\Request;
 
 class TiftaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $alltifta = Tifta::all();
-
         $total = $alltifta->count();
-
         $close = $alltifta->where('status', 'Done')->count();
-
         $open = $total - $close;
-
-        $closePercentage = $open > 0 ? round(($close / $total) * 100, 1) : 0;
-
-        $actualProgress = $alltifta->avg('complete');  // Laravel Collection method
+        $closePercentage = $total > 0 ? round(($close / $total) * 100, 1) : 0;
+        $actualProgress = $alltifta->avg('complete');
 
         return view('eskalasi.tifta', compact('alltifta', 'total', 'close', 'closePercentage', 'actualProgress'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('tifta.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        // validate
-        $validatedData = $request->validate([
-            'event' => 'required|max:255',
-            'unit' => 'nullable|max:255',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'notes' => 'nullable|string',
-            'uic' => 'nullable|max:255',
-            'unit_collab' => 'nullable|max:255',
-            'complete' => 'nullable|integer|min:0|max:100',
-            'status' => 'nullable|max:255',
-            'respond' => 'nullable|string'
-        ]);
-
-        $validatedData['status'] = $validatedData['status'] ?? null;
-
-        // Validasi kalau complete = 100, status harus Done
-        if ($validatedData['complete'] == 100 && $validatedData['status'] != 'Done') {
-            return back()->withErrors(['status' => 'Jika progress 100%, status harus Done'])->withInput();
-        }
-
-        // Validasi kalau complete = 0, status harus kosong/null
-        if ($validatedData['complete'] == 0 && $validatedData['status'] != null) {
-            return back()->withErrors(['status' => 'Jika progress 0%, status wajib kosong.'])->withInput();
-        }
-
-        //simpan
-        tifta::create($validatedData);
-
-        //redirect
+        $validated = $this->validateInput($request);
+        $validated['complete'] = $this->mapStatusToComplete($validated['status']);
+        Tifta::create($validated);
         return redirect()->route('tifta.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(tifta $tifta)
+    public function update(Request $request, Tifta $tifta)
     {
-        return view('tifta.show',compact('tifta'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(tifta $tifta)
-    {
-        return view('tifta.edit',compact('tifta'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, tifta $tifta)
-    {
-        // validate
-        $validatedData = $request->validate([
-            'event' => 'required|max:255',
-            'unit' => 'nullable|max:255',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'notes' => 'nullable|string',
-            'uic' => 'nullable|max:255',
-            'unit_collab' => 'nullable|max:255',
-            'complete' => 'nullable|integer|min:0|max:100',
-            'status' => 'nullable|max:255',
-            'respond' => 'nullable|string'
-        ]);
-
-        $validatedData['status'] = $validatedData['status'] ?? null;
-
-        // Validasi kalau complete = 100, status harus Done
-        if ($validatedData['complete'] == 100 && $validatedData['status'] != 'Done') {
-            return back()->withErrors(['status' => 'Jika progress 100%, status harus Done'])->withInput();
-        }
-
-        // Validasi kalau complete = 0, status harus kosong/null
-        if ($validatedData['complete'] == 0 && $validatedData['status'] != null) {
-            return back()->withErrors(['status' => 'Jika progress 0%, status wajib kosong.'])->withInput();
-        }
-
-        //simpan
-        $tifta->update($validatedData);
-
-        //redirect
+        $validated = $this->validateInput($request);
+        $validated['complete'] = $this->mapStatusToComplete($validated['status']);
+        $tifta->update($validated);
         return redirect()->route('tifta.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(tifta $tifta)
+    public function destroy(Tifta $tifta)
     {
         $tifta->delete();
         return redirect()->route('tifta.index');
+    }
+
+    public function show(Tifta $tifta)
+    {
+        return view('tifta.show', compact('tifta'));
+    }
+
+    public function edit(Tifta $tifta)
+    {
+        return view('tifta.edit', compact('tifta'));
+    }
+
+    private function validateInput(Request $request)
+    {
+        return $request->validate([
+            'event' => 'required|max:255',
+            'unit' => 'nullable|max:255',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'notes' => 'nullable|string',
+            'uic' => 'nullable|max:255',
+            'unit_collab' => 'nullable|max:255',
+            'status' => 'nullable|max:255',
+            'respond' => 'nullable|string'
+        ]);
+    }
+
+    private function mapStatusToComplete($status)
+    {
+        return [
+            'open' => 0,
+            'need discuss' => 25,
+            'eskalasi' => 50,
+            'progress' => 75,
+            'done' => 100,
+        ][strtolower($status)] ?? 0;
     }
 }
