@@ -168,7 +168,7 @@
                                         <optgroup label="TIF_TA">
                                             <option value="TIF_TA">TIF_TA</option>
                                         </optgroup>
-                                        <optgroup label="GSD">
+                                         <optgroup label="GSD">
                                             <option value="GSD">GSD</option>
                                         </optgroup>
                                     </select>
