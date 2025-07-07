@@ -15,14 +15,10 @@ class SnteldaController extends Controller
         $allsntelda = Sntelda::all();
 
         $total = $allsntelda->count();
-
         $close = $allsntelda->where('status', 'Done')->count();
-
         $open = $total - $close;
-
         $closePercentage = $open > 0 ? round(($close / $total) * 100, 1) : 0;
-
-        $actualProgress = $allsntelda->avg('complete');  // Laravel Collection method
+        $actualProgress = $allsntelda->avg('complete');
 
         return view('supportNeeded.sntelda', compact('allsntelda', 'total', 'close', 'closePercentage', 'actualProgress'));
     }
@@ -40,7 +36,7 @@ class SnteldaController extends Controller
      */
     public function store(Request $request)
     {
-        // validate
+        // validasi input
         $validatedData = $request->validate([
             'event' => 'required|max:255',
             'unit' => 'nullable|max:255',
@@ -49,28 +45,24 @@ class SnteldaController extends Controller
             'notes' => 'nullable|string',
             'uic' => 'nullable|max:255',
             'unit_collab' => 'nullable|max:255',
-            'complete' => 'nullable|integer|min:0|max:100',
             'status' => 'nullable|max:255',
             'respond' => 'nullable|string'
         ]);
 
-        $validatedData['status'] = $validatedData['status'] ?? null;
+        // mapping nilai complete berdasarkan status
+        $statusCompleteMap = [
+            'Open' => 0,
+            'Need Discuss' => 25,
+            'Eskalasi' => 50,
+            'Progress' => 75,
+            'Done' => 100
+        ];
 
-        // Validasi kalau complete = 100, status harus Done
-        if ($validatedData['complete'] == 100 && $validatedData['status'] != 'Done') {
-            return back()->withErrors(['status' => 'Jika progress 100%, status harus Done'])->withInput();
-        }
+        $validatedData['complete'] = $statusCompleteMap[$validatedData['status']] ?? 0;
 
-        // Validasi kalau complete = 0, status harus kosong/null
-        if ($validatedData['complete'] == 0 && $validatedData['status'] != null) {
-            return back()->withErrors(['status' => 'Jika progress 0%, status wajib kosong.'])->withInput();
-        }
+        // simpan ke database
+        Sntelda::create($validatedData);
 
-
-        //simpan
-        sntelda::create($validatedData);
-
-        //redirect
         return redirect()->route('sntelda.index');
     }
 
@@ -95,7 +87,7 @@ class SnteldaController extends Controller
      */
     public function update(Request $request, sntelda $sntelda)
     {
-        // validate
+        // validasi input
         $validatedData = $request->validate([
             'event' => 'required|max:255',
             'unit' => 'nullable|max:255',
@@ -104,27 +96,24 @@ class SnteldaController extends Controller
             'notes' => 'nullable|string',
             'uic' => 'nullable|max:255',
             'unit_collab' => 'nullable|max:255',
-            'complete' => 'nullable|integer|min:0|max:100',
             'status' => 'nullable|max:255',
             'respond' => 'nullable|string'
         ]);
 
-        // Validasi kalau complete = 100, status harus Done
-        if ($validatedData['complete'] == 100 && $validatedData['status'] != 'Done') {
-            return back()->withErrors(['status' => 'Jika progress 100%, status harus Done'])->withInput();
-        }
+        // mapping nilai complete berdasarkan status
+        $statusCompleteMap = [
+            'Open' => 0,
+            'Need Discuss' => 25,
+            'Eskalasi' => 50,
+            'Progress' => 75,
+            'Done' => 100
+        ];
 
-        // Validasi kalau complete = 0, status harus kosong/null
-        if ($validatedData['complete'] == 0 && $validatedData['status'] != null) {
-            return back()->withErrors(['status' => 'Jika progress 0%, status wajib kosong.'])->withInput();
-        }
+        $validatedData['complete'] = $statusCompleteMap[$validatedData['status']] ?? 0;
 
-        $validatedData['status'] = $validatedData['status'] ?? null;
-
-        //simpan
+        // update data ke database
         $sntelda->update($validatedData);
 
-        //redirect
         return redirect()->route('sntelda.index');
     }
 

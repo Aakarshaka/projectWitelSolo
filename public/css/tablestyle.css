@@ -275,6 +275,7 @@
 .collab-table td:nth-child(6),
 .collab-table td:nth-child(11){
     vertical-align: middle;
+    text-align: left;
 }
 
 /* PopUp */
