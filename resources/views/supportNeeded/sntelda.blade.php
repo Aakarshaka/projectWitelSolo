@@ -180,11 +180,6 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">% Complete</label>
-                                <input type="number" name="complete" id="editComplete" class="form-control" value="0" min="0" max="100" readonly>
-                            </div>
-
-                            <div class="mb-3">
                                 <label class="form-label">Status</label>
                                 <select name="status" id="editStatus" class="form-select" onchange="checkStatus(this, 'editComplete')">
                                     <option value="">-- Pilih Status --</option>
@@ -194,6 +189,11 @@
                                     <option value="Progress">Progress</option>
                                     <option value="Done">Done</option>
                                 </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">% Complete</label>
+                                <input type="number" name="complete" id="editComplete" class="form-control" value="0" min="0" max="100" readonly>
                             </div>
 
                             <div class="mb-3">
@@ -300,11 +300,6 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">% Complete</label>
-                                <input type="number" name="complete" id="addComplete" class="form-control" value="0" min="0" max="100" readonly>
-                            </div>
-
-                            <div class="mb-3">
                                 <label class="form-label">Status</label>
                                 <select name="status" class="form-select" id="addStatus" onchange="checkStatus(this, 'addComplete')">
                                     <option value="" selected disabled>-- Pilih Status --</option>
@@ -314,6 +309,11 @@
                                     <option value="Progress">Progress</option>
                                     <option value="Done">Done</option>
                                 </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">% Complete</label>
+                                <input type="number" name="complete" id="addComplete" class="form-control" value="0" min="0" max="100" readonly>
                             </div>
 
                             <div class="mb-3">

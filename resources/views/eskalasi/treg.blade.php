@@ -140,11 +140,6 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">% Complete</label>
-                                <input type="number" name="complete" id="editComplete" class="form-control" value ="0" min="0" max="100" oninput="checkComplete(this, 'editStatus')" onblur="setZeroIfEmpty(this)">
-                            </div>
-
-                            <div class="mb-3">
                                 <label class="form-label">Status</label>
                                 <select name="status" id="editStatus" class="form-select" onchange="checkStatus(this, 'editComplete')">
                                     <option value="">-- Pilih Status --</option>
@@ -154,6 +149,11 @@
                                     <option value="Need Discuss">Need Discuss</option>
                                     <option value="Open">Open</option>
                                 </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">% Complete</label>
+                                <input type="number" name="complete" id="editComplete" class="form-control" value ="0" min="0" max="100" oninput="checkComplete(this, 'editStatus')" onblur="setZeroIfEmpty(this)">
                             </div>
 
                             <div class="mb-3">
@@ -221,11 +221,6 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">% Complete</label>
-                                <input type="number" name="complete" class="form-control" id="addComplete" value ="0" min="0" max="100" placeholder="Masukkan progress" oninput="checkComplete(this, 'addStatus')" onblur="setZeroIfEmpty(this)">
-                            </div>
-
-                            <div class="mb-3">
                                 <label class="form-label">Status</label>
                                 <select name="status" class="form-select" id="addStatus" onchange="checkStatus(this, 'addComplete')">
                                     <option value="" selected disabled>-- Pilih Status --</option>
@@ -235,6 +230,11 @@
                                     <option value="Need Discuss">Need Discuss</option>
                                     <option value="Open">Open</option>
                                 </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">% Complete</label>
+                                <input type="number" name="complete" class="form-control" id="addComplete" value ="0" min="0" max="100" placeholder="Masukkan progress" oninput="checkComplete(this, 'addStatus')" onblur="setZeroIfEmpty(this)">
                             </div>
 
                             <div class="mb-3">
