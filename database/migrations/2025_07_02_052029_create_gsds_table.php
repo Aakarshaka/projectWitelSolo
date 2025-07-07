@@ -13,6 +13,19 @@ return new class extends Migration
     {
         Schema::create('gsds', function (Blueprint $table) {
             $table->id();
+
+            // Relasi ke snunits
+            $table->unsignedBigInteger('snunit_id')->nullable();
+            $table->foreign('snunit_id')->references('id')->on('snunits')->onDelete('cascade');
+
+            // Relasi ke snteldas
+            $table->unsignedBigInteger('sntelda_id')->nullable();
+            $table->foreign('sntelda_id')->references('id')->on('snteldas')->onDelete('cascade');
+
+            // Relasi ke snams
+            $table->unsignedBigInteger('snam_id')->nullable();
+            $table->foreign('snam_id')->references('id')->on('snams')->onDelete('cascade');
+
             $table->string('event');
             $table->string('unit')->nullable();
             $table->date('start_date')->nullable();
@@ -23,6 +36,7 @@ return new class extends Migration
             $table->integer('complete')->nullable();
             $table->string('status')->nullable();
             $table->text('respond')->nullable();
+
             $table->timestamps();
         });
     }

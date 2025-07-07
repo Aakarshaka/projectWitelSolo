@@ -3,12 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Witel extends Model
 {
     protected $guarded = [];
-
-    protected $table = 'witel';
 
     public function sntelda(): BelongsTo
     {
