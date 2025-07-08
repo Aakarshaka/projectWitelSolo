@@ -112,12 +112,10 @@ class SnteldaController extends Controller
     {
         $uic = strtoupper($data->uic ?? $data->unit_collab);
         $payload = $data->toArray();
-
-        // Hindari konflik primary key
         unset($payload['id'], $payload['created_at'], $payload['updated_at']);
         $payload['sntelda_id'] = $data->id;
 
-        $toWitel = ['BS', 'GS', 'RLEGS', 'RSO', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
+        $toWitel = ['BS', 'GS', 'RSO WITEL', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
         $toTreg  = ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS'];
 
         if (in_array($uic, $toWitel)) Witel::create($payload);
@@ -134,7 +132,7 @@ class SnteldaController extends Controller
         unset($payload['id'], $payload['created_at'], $payload['updated_at']);
         $key = ['sntelda_id' => $data->id];
 
-        $toWitel = ['BS', 'GS', 'RLEGS', 'RSO', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
+        $toWitel = ['BS', 'GS', 'RSO WITEL', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
         $toTreg  = ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS'];
 
         if (in_array($uic, $toWitel)) Witel::updateOrCreate($key, $payload);

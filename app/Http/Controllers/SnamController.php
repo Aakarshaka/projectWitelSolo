@@ -108,7 +108,7 @@ class SnamController extends Controller
         unset($payload['id'], $payload['created_at'], $payload['updated_at']);
         $payload['snam_id'] = $data->id;
 
-        $toWitel = ['BS', 'GS', 'RLEGS', 'RSO', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
+        $toWitel = ['BS', 'GS', 'RSO WITEL', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
         $toTreg  = ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS'];
 
         if (in_array($uic, $toWitel)) Witel::create($payload);
@@ -125,7 +125,7 @@ class SnamController extends Controller
         unset($payload['id'], $payload['created_at'], $payload['updated_at']);
         $key = ['snam_id' => $data->id];
 
-        $toWitel = ['BS', 'GS', 'RLEGS', 'RSO', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
+        $toWitel = ['BS', 'GS', 'RSO WITEL', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ'];
         $toTreg  = ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS'];
 
         if (in_array($uic, $toWitel)) Witel::updateOrCreate($key, $payload);
