@@ -2,112 +2,94 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\warroom;
+use App\Models\Warroom;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class WarroomController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $allwarroom = Warroom::all();
-        // Ambil semua data activity
-        $activities = Warroom::orderBy('tgl')->get();
+        $bulanFilter = $request->input('bulan') ?? Carbon::now()->format('m');
+        $tahunFilter = $request->input('tahun') ?? Carbon::now()->format('Y');
 
-        // Ambil data summary (diolah dari data di atas)
-        $jumlahAgenda = $activities->pluck('agenda')->unique()->count();
-        $namaAgenda = $activities->pluck('agenda')->unique();
+        $activities = Warroom::whereMonth('tgl', $bulanFilter)
+            ->whereYear('tgl', $tahunFilter)
+            ->orderBy('tgl', 'asc')
+            ->get();
+
+        $jumlahAgenda     = $activities->pluck('agenda')->unique()->count();
         $jumlahActionPlan = $activities->sum('jumlah_action_plan');
-        $jumlahEskalasi = $activities->where('status_action_plan', 'like', '%eskalasi%')->count(); // jika ada keyword eskalasi
+        $jumlahEskalasi   = $activities->where('status_action_plan', 'like', '%eskalasi%')->count();
 
-        return view('warroom', compact('allwarroom', 'activities', 'jumlahAgenda', 'namaAgenda', 'jumlahActionPlan', 'jumlahEskalasi'));
+        $daftarBulan = collect(range(1, 12))->map(function ($m) {
+            return Carbon::create()->month($m)->format('F');
+        });
 
+        return view('warroom.index', compact(
+            'activities',
+            'jumlahAgenda',
+            'jumlahActionPlan',
+            'jumlahEskalasi',
+            'bulanFilter',
+            'tahunFilter',
+            'daftarBulan'
+        ));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('warroom.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //validasi
-        $validated = $request->validate([
-            'tgl' => 'required|date',
-            'agenda' => 'required|string',
-            'peserta' => 'required|string',
-            'pembahasan' => 'required|string',
-            'action_plan' => 'required|string',
-            'support_needed' => 'nullable|string',
-            'info_kompetitor' => 'nullable|string',
-            'jumlah_action_plan' => 'required|integer',
-            'update_action_plan' => 'nullable|string',
-            'status_action_plan' => 'nullable|string',
-        ]);
+        $validated = $this->validateInput($request);
+        Warroom::create($validated);
 
-        //simpan
-        warroom::create($validatedData);
-
-        //redirect
-        return redirect()->route('warroom.index');
+        return redirect()->route('warroom.index')->with('success', 'Data Warroom berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(warroom $warroom)
+    public function show(Warroom $warroom)
     {
-        return view('warroom.show',compact('warroom'));
+        return view('warroom.show', compact('warroom'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(warroom $warroom)
+    public function edit(Warroom $warroom)
     {
-        return view('warroom.edit',compact('warroom'));
+        return view('warroom.edit', compact('warroom'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, warroom $warroom)
+    public function update(Request $request, Warroom $warroom)
     {
-        //validasi
-        $validated = $request->validate([
-            'tgl' => 'required|date',
-            'agenda' => 'required|string',
-            'peserta' => 'required|string',
-            'pembahasan' => 'required|string',
-            'action_plan' => 'required|string',
-            'support_needed' => 'nullable|string',
-            'info_kompetitor' => 'nullable|string',
-            'jumlah_action_plan' => 'required|integer',
-            'update_action_plan' => 'nullable|string',
-            'status_action_plan' => 'nullable|string',
-        ]);
+        $validated = $this->validateInput($request);
+        $warroom->update($validated);
 
-        //simpan
-        $warroom->update($validatedData);
-
-        //redirect
-        return redirect()->route('warroom.index');
+        return redirect()->route('warroom.index')->with('success', 'Data Warroom berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(warroom $warroom)
+    public function destroy(Warroom $warroom)
     {
         $warroom->delete();
-        return redirect()->route('warroom.index');
+        return redirect()->route('warroom.index')->with('success', 'Data Warroom berhasil dihapus.');
+    }
+
+    /**
+     * Helper untuk validasi input
+     */
+    private function validateInput(Request $request)
+    {
+        return $request->validate([
+            'tgl'                => 'required|date',
+            'agenda'             => 'required|string|max:255',
+            'peserta'            => 'required|string|max:255',
+            'pembahasan'         => 'required|string',
+            'action_plan'        => 'required|string',
+            'support_needed'     => 'nullable|string',
+            'info_kompetitor'    => 'nullable|string',
+            'jumlah_action_plan' => 'required|integer|min:0',
+            'update_action_plan' => 'nullable|string',
+            'status_action_plan' => 'nullable|string|max:255',
+        ]);
     }
 }
