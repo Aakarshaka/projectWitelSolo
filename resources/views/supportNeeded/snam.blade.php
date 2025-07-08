@@ -154,8 +154,7 @@
                                         <optgroup label="WITEL">
                                             <option value="BS">BS</option>
                                             <option value="GS">GS</option>
-                                            <option value="RLEGS">RLEGS</option>
-                                            <option value="RSO">RSO</option>
+                                            <option value="RSO">RSO WITEL</option>
                                             <option value="SSGS">SSGS</option>
                                             <option value="PRQ">PRQ</option>
                                         </optgroup>
@@ -274,8 +273,7 @@
                                         <optgroup label="WITEL">
                                             <option value="BS">BS</option>
                                             <option value="GS">GS</option>
-                                            <option value="RLEGS">RLEGS</option>
-                                            <option value="RSO">RSO</option>
+                                            <option value="RSO">RSO WITEL</option>
                                             <option value="SSGS">SSGS</option>
                                             <option value="PRQ">PRQ</option>
                                         </optgroup>
