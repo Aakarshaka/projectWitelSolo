@@ -44,3 +44,15 @@ Route::resource('tsel', TselController::class);
 Route::resource('gsd', GsdController::class);
 Route::resource('warroom', WarroomController::class);
 Route::resource('witel', WitelController::class);
+
+Route::get('/supportneeded', function () {
+    return view('supportneeded');
+});
+
+Route::get('/supportneeded2', function () {
+    return view('supportneeded2');
+});
+
+Route::get('/supportneeded3', function () {
+    return view('supportneeded3');
+});
