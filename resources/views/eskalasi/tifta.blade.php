@@ -48,7 +48,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($alltifta as $index => $item)
+                @forelse($alltifta as $index => $item)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item->event }}</td>
@@ -85,7 +85,11 @@
                         </form>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="12" style="text-align: center; font-weight: normal;">Belum ada data Eskalasi to TIF-TA</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
 

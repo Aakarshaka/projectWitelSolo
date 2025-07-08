@@ -178,3 +178,86 @@ body {
         gap: 15px;
     }
 }
+
+/* TABEL WARROOM */
+.warroom-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.warroom-table th {
+    background: #4A0E4E;
+    color: white;
+    padding: 12px 8px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+}
+
+.warroom-table td {
+    padding: 10px 8px;
+    border: 1px solid #ddd;
+    vertical-align: top;
+}
+
+/* Kolom khusus */
+.col-no { width: 25px; }
+.col-tgl { width: 90px; text-align: center; }
+.col-agenda { width: 120px; }
+.col-peserta { width: 120px; }
+.col-pembahasan { width: 250px; }
+.col-action-plan { width: 250px; }
+.col-support-needed { width: 120px; }
+.col-info-kompetitor { width: 120px; }
+.col-jumlah-action { width: 80px; text-align: center; }
+.col-update-action { width: 250px; }
+.col-status { width: 80px; text-align: center; }
+.col-action { width: 90px; text-align: center; }
+
+/* Status badge */
+.status-complete {
+    background: #43A047;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+}
+
+.status-progress {
+    background: #039BE5;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+}
+
+.status-eskalasi {
+    background: #EF6C00;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+}
+
+.warroom-table td:nth-child(1),
+.warroom-table td:nth-child(2),
+.warroom-table td:nth-child(3),
+.warroom-table td:nth-child(7),
+.warroom-table td:nth-child(8),
+.warroom-table td:nth-child(9),
+.warroom-table td:nth-child(11),
+.warroom-table td:nth-child(12){
+    text-align: center;
+    vertical-align: middle;
+}
+
+.warroom-table td:nth-child(4){
+    vertical-align: middle;
+}
+
+.warroom-table td:nth-child(5),
+.warroom-table td:nth-child(6),
+.warroom-table td:nth-child(10){
+    vertical-align: top;
+}

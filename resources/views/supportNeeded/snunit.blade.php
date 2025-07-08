@@ -48,7 +48,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($allsnunit as $index => $item)
+                @forelse($allsnunit as $index => $item)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item->event }}</td>
@@ -85,7 +85,11 @@
                         </form>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="12" style="text-align: center; font-weight: normal; font-weight: normal;">Belum ada data Support Needed UNIT</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
 

@@ -29,6 +29,26 @@ function openEditModal(button) {
     new bootstrap.Modal(document.getElementById("editModal")).show();
 }
 
+function openEditModalWarroom(button) {
+    const id = button.getAttribute('data-id');
+    document.getElementById('editTgl').value = button.getAttribute('data-tgl');
+    document.getElementById('editAgenda').value = button.getAttribute('data-agenda');
+    document.getElementById('editPeserta').value = button.getAttribute('data-peserta');
+    document.getElementById('editPembahasan').value = button.getAttribute('data-pembahasan');
+    document.getElementById('editActionPlan').value = button.getAttribute('data-action_plan');
+    document.getElementById('editSupportNeeded').value = button.getAttribute('data-support_needed');
+    document.getElementById('editInfoKompetitor').value = button.getAttribute('data-info_kompetitor');
+    document.getElementById('editJumlahActionPlan').value = button.getAttribute('data-jumlah_action_plan');
+    document.getElementById('editUpdateActionPlan').value = button.getAttribute('data-update_action_plan');
+    document.getElementById('editStatusActionPlan').value = button.getAttribute('data-status_action_plan');
+
+    // set action form-nya ke route PUT
+    document.getElementById('editForm').action = `/warroom/${id}`;
+
+    new bootstrap.Modal(document.getElementById('editModal')).show();
+}
+
+
 // ==========================
 // Set % Complete otomatis sesuai status
 // ==========================

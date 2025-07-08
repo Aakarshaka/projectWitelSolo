@@ -80,14 +80,14 @@ class WarroomController extends Controller
     private function validateInput(Request $request)
     {
         return $request->validate([
-            'tgl'                => 'required|date',
+            'tgl'                => 'nullable|date',
             'agenda'             => 'required|string|max:255',
-            'peserta'            => 'required|string|max:255',
-            'pembahasan'         => 'required|string',
-            'action_plan'        => 'required|string',
+            'peserta'            => 'nullable|string|max:255',
+            'pembahasan'         => 'nullable|string',
+            'action_plan'        => 'nullable|string',
             'support_needed'     => 'nullable|string',
             'info_kompetitor'    => 'nullable|string',
-            'jumlah_action_plan' => 'required|integer|min:0',
+            'jumlah_action_plan' => 'nullable|integer',
             'update_action_plan' => 'nullable|string',
             'status_action_plan' => 'nullable|string|max:255',
         ]);

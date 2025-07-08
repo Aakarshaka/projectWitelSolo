@@ -48,7 +48,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($alltreg as $index => $item)
+                @forelse($alltreg as $index => $item)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item->event }}</td>
@@ -85,7 +85,11 @@
                         </form>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="12" style="text-align: center; font-weight: normal;">Belum ada data Eskalasi to TREG</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
 
