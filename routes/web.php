@@ -25,6 +25,7 @@ Route::view('/auth/register', 'auth.register')->name('register');
 // Dashboard
 // ==================
 Route::view('/dashboard', 'dashboard')->name('dashboard');
+Route::view('/warroom', 'warroom')->name('warroom');
 
 // ==================
 // Support Needed

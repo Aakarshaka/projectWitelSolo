@@ -26,7 +26,7 @@ class WarroomController extends Controller
             return Carbon::create()->month($m)->format('F');
         });
 
-        return view('warroom.index', compact(
+        return view('warroom', compact(
             'activities',
             'jumlahAgenda',
             'jumlahActionPlan',
