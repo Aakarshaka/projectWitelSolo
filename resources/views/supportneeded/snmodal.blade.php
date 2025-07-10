@@ -274,7 +274,6 @@
                     <div class="sn-form-group">
                         <label class="sn-form-label">Progress</label required>
                         <select class="sn-form-select" name="progress">
-                            <option value="">Select Progress</option>
                             <option value="Open">Open</option>
                             <option value="Need Discuss">Need Discuss</option>
                             <option value="Progress">Progress</option>
@@ -378,13 +377,13 @@
                     <div class="sn-form-group">
                         <label class="sn-form-label">Progress</label>
                         <select class="sn-form-select" name="progress" id="edit_progress" required>
-                            <option value="">Select Progress</option>
+                            <option value disabled="">Select Progress</option>
                             <option value="Open">Open</option>
                             <option value="Need Discuss">Need Discuss</option>
                             <option value="Progress">Progress</option>
                             <option value="Done">Done</option>
                         </select>
-                    </div>
+                    </div> 
 
                     <div class="sn-form-group full-width">
                         <label class="sn-form-label">Notes to Follow Up</label>

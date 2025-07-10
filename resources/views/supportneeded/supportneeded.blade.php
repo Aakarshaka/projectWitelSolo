@@ -96,13 +96,37 @@
                         <td class="col-start">{{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d M Y') : '-'  }}</td>
                         <td class="col-end">{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d M Y')  : '-'  }}</td>
                         <td class="col-off">{{ $item->off_day }}</td>
-                        <td class="col-notes">{{ $item->notes_to_follow_up }}</td>
+                        <td class="col-notes">{!! nl2br (e($item->notes_to_follow_up)) !!}</td>
                         <td class="col-uic">{{ $item->uic }}</td>
                         <td class="col-progress">{{ $item->progress }}</td>
+                        @php
+                        switch($item->progress) {
+                        case 'Open':
+                        $complete = 0;
+                        $progressColor = 'bg-red';
+                        break;
+                        case 'Need Discuss':
+                        $complete = 25;
+                        $progressColor = 'bg-orange';
+                        break;
+                        case 'Progress':
+                        $complete = 75;
+                        $progressColor = 'bg-yellow';
+                        break;
+                        case 'Done':
+                        $complete = 100;
+                        $progressColor = 'bg-green';
+                        break;
+                        default:
+                        $complete = 0;
+                        $progressColor = 'bg-gray';
+                        }
+                        @endphp
+
                         <td class="col-complete">
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: {{ $item->complete }}%"></div>
-                                <div class="progress-text">{{ $item->complete }}%</div>
+                                <div class="progress-fill {{ $progressColor }}" style="width: {{ $complete }}%"></div>
+                                <div class="progress-text">{{ $complete }}%</div>
                             </div>
                         </td>
                         <td class="col-status">
@@ -110,7 +134,7 @@
                                 {{ $item->status }}
                             </span>
                         </td>
-                        <td class="col-respons">{{ $item->response_uic }}</td>
+                        <td class="col-respons">{!! nl2br (e($item->response_uic)) !!}</td>
                         <td class="col-action">
                             <button type="button"
                                 class="action-btn edit-btn"
