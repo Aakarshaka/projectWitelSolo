@@ -11,7 +11,8 @@ use App\Http\Controllers\{
     GsdController,
     WarroomController,
     SummaryController,
-    WitelController
+    WitelController,
+    SupportneededController
 };
 
 // ==================
@@ -44,19 +45,16 @@ Route::resource('tsel', TselController::class);
 Route::resource('gsd', GsdController::class);
 Route::resource('warroom', WarroomController::class);
 Route::resource('witel', WitelController::class);
+Route::resource('supportneeded', SupportneededController::class);
 
-Route::get('/supportneeded', function () {
-    return view('supportneeded');
+Route::get('summary/newsummary', function () {
+    return view('summary.newsummary');
 });
 
-Route::get('/newsummary', function () {
-    return view('newsummary');
+Route::get('dashboard/newdashboard', function () {
+    return view('dashboard.newdashboard');
 });
 
-Route::get('/newdashboard', function () {
-    return view('newdashboard');
-});
-
-Route::get('/newwarroom', function () {
-    return view('newwarroom');
+Route::get('warroom/newwarroom', function () {
+    return view('warroom.newwarroom');
 });

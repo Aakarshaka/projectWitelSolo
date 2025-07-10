@@ -10,8 +10,8 @@
             </button>
         </li>
 
-        <li class="{{ Request::is('newdashboard') ? 'active' : '' }}">
-            <a href="{{ url('/newdashboard') }}">
+        <li class="{{ Request::is('dashboard.newdashboard') ? 'active' : '' }}">
+            <a href="{{ url('dashboard/newdashboard') }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard">
                     <rect width="7" height="9" x="3" y="3" rx="1" />
                     <rect width="7" height="5" x="14" y="3" rx="1" />
@@ -22,8 +22,8 @@
             </a>
         </li>
 
-        <li class="{{ Request::is('newwarroom') ? 'active' : '' }}">
-            <a href="{{ url('/newwarroom') }}">
+        <li class="{{ Request::is('warroom.newwarroom') ? 'active' : '' }}">
+            <a href="{{ url('warroom/newwarroom') }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-presentation-icon lucide-presentation">
                     <path d="M2 3h20" />
                     <path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3" />
@@ -33,8 +33,8 @@
             </a>
         </li>
 
-        <li class="{{ Request::is('newsummary') ? 'active' : '' }}">
-            <a href="{{ url('/newsummary') }}">
+        <li class="{{ Request::is('summary.newsummary') ? 'active' : '' }}">
+            <a href="{{ url('summary/newsummary') }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 16v5" />
                     <path d="M16 14v7" />

@@ -31,7 +31,7 @@ class SupportneededController extends Controller
         $close = Supportneeded::where('status', 'Done')->count();
         $avgProgress = round(Supportneeded::avg('complete'));
 
-        return view('supportneeded', compact('items', 'total', 'close', 'avgProgress'));
+        return view('supportneeded.supportneeded', compact('items', 'total', 'close', 'avgProgress'));
     }
 
     public function store(Request $request)
