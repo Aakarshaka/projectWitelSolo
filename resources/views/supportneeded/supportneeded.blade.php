@@ -65,7 +65,7 @@
         </div>
 
         <div class="scroll-hint">
-            ← Geser ke kiri/kanan untuk melihat semua kolom →
+            ← Swipe left/right to see all Columns →
         </div>
 
         <div class="table-wrapper">
