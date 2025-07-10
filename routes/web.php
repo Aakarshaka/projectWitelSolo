@@ -12,7 +12,8 @@ use App\Http\Controllers\{
     WarroomController,
     SummaryController,
     WitelController,
-    SupportneededController
+    SupportneededController,
+    SumController
 };
 
 // ==================
@@ -43,13 +44,14 @@ Route::resource('tifta', TiftaController::class)->parameters(['tifta' => 'tifta'
 Route::resource('treg', TregController::class);
 Route::resource('tsel', TselController::class);
 Route::resource('gsd', GsdController::class);
-Route::resource('warroom', WarroomController::class);
+//Route::resource('warroom', WarroomController::class);
 Route::resource('witel', WitelController::class);
 Route::resource('supportneeded', SupportneededController::class);
 
 Route::get('summary/newsummary', function () {
     return view('summary.newsummary');
 });
+Route::get('summary/newsummary', [SumController::class, 'index']);
 
 Route::get('dashboard/newdashboard', function () {
     return view('dashboard.newdashboard');

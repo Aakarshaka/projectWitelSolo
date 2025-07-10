@@ -9,46 +9,73 @@ class SumController extends Controller
 {
     public function index()
     {
-        $data = SupportNeeded::all();
+        $data = supportneeded::all();
 
-        $byUic = $this->generateSummary($data, 'uic');
+        $byUIC = $this->generateSummary($data, 'uic');
         $byAgenda = $this->generateSummary($data, 'agenda');
         $byUnit = $this->generateSummary($data, 'unit_or_telda');
 
-        return view('newsummary', compact('byUic', 'byAgenda', 'byUnit'));
+        return view('summary.newsummary', [
+            'byUic' => $byUIC['rows'],
+            'totalUic' => $byUIC['total'],
+            'byAgenda' => $byAgenda['rows'],
+            'totalAgenda' => $byAgenda['total'],
+            'byUnit' => $byUnit['rows'],
+            'totalUnit' => $byUnit['total'],
+        ]);
     }
 
     private function generateSummary($data, $groupBy)
     {
-        $summary = [];
+        $summaryRows = [];
+
+        $statuses = [
+            'Open' => 'open',
+            'On Progress' => 'progress',
+            'Need Discuss' => 'discuss',
+            'Done' => 'done',
+        ];
 
         $grouped = $data->groupBy($groupBy);
-        $statuses = ['Open', 'On Progress', 'Need Discuss', 'Done'];
 
+        // Baris per grup
         foreach ($grouped as $key => $items) {
             $row = [
                 $groupBy => $key,
-                'Total' => $items->count()
+                'open' => 0,
+                'progress' => 0,
+                'done' => 0,
+                'discuss' => 0,
+                'total' => $items->count(),
             ];
 
-            foreach ($statuses as $status) {
-                $count = $items->where('progress', $status)->count();
-                $row[$status] = $count;
-                $row["% $status"] = $row['Total'] > 0 ? round($count / $row['Total'] * 100) : 0;
+            foreach ($statuses as $progressLabel => $fieldKey) {
+                $count = $items->where('progress', $progressLabel)->count();
+                $row[$fieldKey] = $count;
+                $row["{$fieldKey}_percent"] = $row['total'] > 0 ? round(($count / $row['total']) * 100) : 0;
             }
 
-            $summary[] = $row;
+            $summaryRows[] = $row;
         }
 
-        // Add total row
-        $totalRow = [$groupBy => 'TOTAL', 'Total' => $data->count()];
-        foreach ($statuses as $status) {
-            $count = $data->where('progress', $status)->count();
-            $totalRow[$status] = $count;
-            $totalRow["% $status"] = $data->count() > 0 ? round($count / $data->count() * 100) : 0;
-        }
-        $summary[] = $totalRow;
+        // Total baris
+        $totalRow = [
+            'open' => 0,
+            'progress' => 0,
+            'done' => 0,
+            'discuss' => 0,
+            'total' => $data->count(),
+        ];
 
-        return $summary;
+        foreach ($statuses as $progressLabel => $fieldKey) {
+            $count = $data->where('progress', $progressLabel)->count();
+            $totalRow[$fieldKey] = $count;
+            $totalRow["{$fieldKey}_percent"] = $totalRow['total'] > 0 ? round(($count / $totalRow['total']) * 100) : 0;
+        }
+
+        return [
+            'rows' => $summaryRows,
+            'total' => $totalRow,
+        ];
     }
 }
