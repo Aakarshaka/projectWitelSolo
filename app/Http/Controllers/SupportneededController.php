@@ -7,59 +7,76 @@ use Illuminate\Http\Request;
 
 class SupportneededController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = Supportneeded::query();
+
+        // Optional: filtering
+        if ($request->type_agenda) {
+            $query->where('agenda', $request->type_agenda);
+        }
+
+        if ($request->unit_or_witel) {
+            $query->where('unit_or_telda', $request->unit_or_witel);
+        }
+
+        if ($request->uic) {
+            $query->where('uic', $request->uic);
+        }
+
+        $items = $query->paginate(10);
+
+        // Optional: Summary data for top-right widgets
+        $total = Supportneeded::count();
+        $close = Supportneeded::where('status', 'Done')->count();
+        $avgProgress = round(Supportneeded::avg('complete'));
+
+        return view('supportneeded', compact('items', 'total', 'close', 'avgProgress'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'agenda' => 'required|string',
+            'unit_or_telda' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date',
+            'off_day' => 'nullable|integer',
+            'notes_to_follow_up' => 'nullable|string',
+            'uic' => 'nullable|string',
+            'progress' => 'nullable|string',
+            'complete' => 'nullable|integer|min:0|max:100',
+            'status' => 'nullable|string',
+            'response_uic' => 'nullable|string',
+        ]);
+
+        Supportneeded::create($validated);
+        return back()->with('success', 'Agenda created');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(supportneeded $supportneeded)
+    public function update(Request $request, Supportneeded $supportneeded)
     {
-        //
+        $validated = $request->validate([
+            'agenda' => 'required|string',
+            'unit_or_telda' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date',
+            'off_day' => 'nullable|integer',
+            'notes_to_follow_up' => 'nullable|string',
+            'uic' => 'nullable|string',
+            'progress' => 'nullable|string',
+            'complete' => 'nullable|integer|min:0|max:100',
+            'status' => 'nullable|string',
+            'response_uic' => 'nullable|string',
+        ]);
+
+        $supportneeded->update($validated);
+        return back()->with('success', 'Agenda updated');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(supportneeded $supportneeded)
+    public function destroy(Supportneeded $supportneeded)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, supportneeded $supportneeded)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(supportneeded $supportneeded)
-    {
-        //
+        $supportneeded->delete();
+        return back()->with('success', 'Agenda deleted');
     }
 }
