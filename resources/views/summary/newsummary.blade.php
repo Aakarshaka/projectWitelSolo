@@ -72,10 +72,18 @@
         text-align: center;
     }
 
+    .entity-name {
+        white-space: normal !important;
+        word-break: break-word;
+        max-width: 180px; /* batasi lebar kolom */
+    }
+
     .summary-table {
         width: 100%;
         border-collapse: collapse;
         font-size: 0.9rem;
+        border-radius: 8px;
+        overflow: hidden;
     }
 
     .summary-table th,
@@ -84,6 +92,11 @@
         text-align: center;
         white-space: nowrap;
         border-bottom: 1px solid #dee2e6;
+    }
+
+    .summary-table th:nth-child(n+3),
+    .summary-table td:nth-child(n+3) {
+        min-width: 80px;
     }
 
     .summary-table th {
@@ -170,10 +183,10 @@
                                         <th>UIC</th>
                                         <th>OPEN</th>
                                         <th>% OPEN</th>
-                                        <th>ON PROGRESS</th>
-                                        <th>% ON PROGRESS</th>
                                         <th>NEED DISCUSS</th>
                                         <th>% NEED DISCUSS</th>
+                                        <th>ON PROGRESS</th>
+                                        <th>% ON PROGRESS</th>
                                         <th>DONE</th>
                                         <th>% DONE</th>
                                         <th>TOTAL</th>
@@ -200,12 +213,12 @@
                                         <td class="entity-name">{{ $uic }}</td>
                                         <td><span class="status-badge status-open">{{ $rowData['open'] ?? 0 }}</span></td>
                                         <td><span class="percentage-badge percentage-open">{{ $rowData['open_percent'] ?? 0 }}%</span></td>
+                                        <td><span class="status-badge status-discuss">{{ $rowData['discuss'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-discuss">{{ $rowData['discuss_percent'] ?? 0 }}%</span></td>
                                         <td><span class="status-badge status-progress">{{ $rowData['progress'] ?? 0 }}</span></td>
                                         <td><span class="percentage-badge percentage-progress">{{ $rowData['progress_percent'] ?? 0 }}%</span></td>
                                         <td><span class="status-badge status-done">{{ $rowData['done'] ?? 0 }}</span></td>
                                         <td><span class="percentage-badge percentage-done">{{ $rowData['done_percent'] ?? 0 }}%</span></td>
-                                        <td><span class="status-badge status-discuss">{{ $rowData['discuss'] ?? 0 }}</span></td>
-                                        <td><span class="percentage-badge percentage-discuss">{{ $rowData['discuss_percent'] ?? 0 }}%</span></td>
                                         <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
                                     </tr>
                                 @endforeach
@@ -215,10 +228,10 @@
                                         <td colspan="2"><strong>TOTAL</strong></td>
                                         <td><strong>{{ $totalUic['open'] ?? 0 }}</strong></td>
                                         <td><strong>{{ $totalUic['open_percent'] ?? 0 }}%</strong></td>
-                                        <td><strong>{{ $totalUic['progress'] ?? 0 }}</strong></td>
-                                        <td><strong>{{ $totalUic['progress_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalUic['discuss'] ?? 0 }}</strong></td>
                                         <td><strong>{{ $totalUic['discuss_percent'] ?? 0 }}%</strong></td>
+                                        <td><strong>{{ $totalUic['progress'] ?? 0 }}</strong></td>
+                                        <td><strong>{{ $totalUic['progress_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalUic['done'] ?? 0 }}</strong></td>
                                         <td><strong>{{ $totalUic['done_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalUic['total'] ?? 0 }}</strong></td>
@@ -248,10 +261,10 @@
                                         <th>AGENDA</th>
                                         <th>OPEN</th>
                                         <th>% OPEN</th>
-                                        <th>ON PROGRESS</th>
-                                        <th>% ON PROGRESS</th>
                                         <th>NEED DISCUSS</th>
                                         <th>% NEED DISCUSS</th>
+                                        <th>ON PROGRESS</th>
+                                        <th>% ON PROGRESS</th>
                                         <th>DONE</th>
                                         <th>% DONE</th>
                                         <th>TOTAL</th>
@@ -284,12 +297,12 @@
                                         <td class="entity-name">{{ $agenda }}</td>
                                         <td><span class="status-badge status-open">{{ $rowData['open'] ?? 0 }}</span></td>
                                         <td><span class="percentage-badge percentage-open">{{ $rowData['open_percent'] ?? 0 }}%</span></td>
+                                        <td><span class="status-badge status-discuss">{{ $rowData['discuss'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-discuss">{{ $rowData['discuss_percent'] ?? 0 }}%</span></td>
                                         <td><span class="status-badge status-progress">{{ $rowData['progress'] ?? 0 }}</span></td>
                                         <td><span class="percentage-badge percentage-progress">{{ $rowData['progress_percent'] ?? 0 }}%</span></td>
                                         <td><span class="status-badge status-done">{{ $rowData['done'] ?? 0 }}</span></td>
                                         <td><span class="percentage-badge percentage-done">{{ $rowData['done_percent'] ?? 0 }}%</span></td>
-                                        <td><span class="status-badge status-discuss">{{ $rowData['discuss'] ?? 0 }}</span></td>
-                                        <td><span class="percentage-badge percentage-discuss">{{ $rowData['discuss_percent'] ?? 0 }}%</span></td>
                                         <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
                                     </tr>
                                 @endforeach
@@ -298,12 +311,12 @@
                                         <td colspan="2"><strong><i class="fas fa-calculator"></i> TOTAL</strong></td>
                                         <td><strong>{{ $totalAgenda['open'] ?? 0 }}</strong></td>
                                         <td><strong>{{ $totalAgenda['open_percent'] ?? 0 }}%</strong></td>
+                                        <td><strong>{{ $totalAgenda['discuss'] ?? 0 }}</strong></td>
+                                        <td><strong>{{ $totalAgenda['discuss_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalAgenda['progress'] ?? 0 }}</strong></td>
                                         <td><strong>{{ $totalAgenda['progress_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalAgenda['done'] ?? 0 }}</strong></td>
                                         <td><strong>{{ $totalAgenda['done_percent'] ?? 0 }}%</strong></td>
-                                        <td><strong>{{ $totalAgenda['discuss'] ?? 0 }}</strong></td>
-                                        <td><strong>{{ $totalAgenda['discuss_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalAgenda['total'] ?? 0 }}</strong></td>
                                     </tr>
                                 @endif
@@ -329,10 +342,10 @@
                                         <th>UNIT</th>
                                         <th>OPEN</th>
                                         <th>% OPEN</th>
-                                        <th>ON PROGRESS</th>
-                                        <th>% ON PROGRESS</th>
                                         <th>NEED DISCUSS</th>
                                         <th>% NEED DISCUSS</th>
+                                        <th>ON PROGRESS</th>
+                                        <th>% ON PROGRESS</th>
                                         <th>DONE</th>
                                         <th>% DONE</th>
                                         <th>TOTAL</th>
@@ -355,16 +368,16 @@
                                         }
                                     @endphp
                                     <tr>
-                                        <td class="row-number">{{ $index + 2 }}</td>
+                                        <td class="row-number">{{ $index + 1 }}</td>
                                         <td class="entity-name">{{ $unit }}</td>
                                         <td><span class="status-badge status-open">{{ $rowData['open'] ?? 0 }}</span></td>
                                         <td><span class="percentage-badge percentage-open">{{ $rowData['open_percent'] ?? 0 }}%</span></td>
+                                        <td><span class="status-badge status-discuss">{{ $rowData['discuss'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-discuss">{{ $rowData['discuss_percent'] ?? 0 }}%</span></td>
                                         <td><span class="status-badge status-progress">{{ $rowData['progress'] ?? 0 }}</span></td>
                                         <td><span class="percentage-badge percentage-progress">{{ $rowData['progress_percent'] ?? 0 }}%</span></td>
                                         <td><span class="status-badge status-done">{{ $rowData['done'] ?? 0 }}</span></td>
                                         <td><span class="percentage-badge percentage-done">{{ $rowData['done_percent'] ?? 0 }}%</span></td>
-                                        <td><span class="status-badge status-discuss">{{ $rowData['discuss'] ?? 0 }}</span></td>
-                                        <td><span class="percentage-badge percentage-discuss">{{ $rowData['discuss_percent'] ?? 0 }}%</span></td>
                                         <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
                                     </tr>
                                 @endforeach
@@ -373,12 +386,12 @@
                                         <td colspan="2"><strong>TOTAL</strong></td>
                                         <td><strong>{{ $totalUnit['open'] ?? 0 }}</strong></td>
                                         <td><strong>{{ $totalUnit['open_percent'] ?? 0 }}%</strong></td>
+                                        <td><strong>{{ $totalUnit['discuss'] ?? 0 }}</strong></td>
+                                        <td><strong>{{ $totalUnit['discuss_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalUnit['progress'] ?? 0 }}</strong></td>
                                         <td><strong>{{ $totalUnit['progress_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalUnit['done'] ?? 0 }}</strong></td>
                                         <td><strong>{{ $totalUnit['done_percent'] ?? 0 }}%</strong></td>
-                                        <td><strong>{{ $totalAgenda['discuss'] ?? 0 }}</strong></td>
-                                        <td><strong>{{ $totalAgenda['discuss_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalUnit['total'] ?? 0 }}</strong></td>
                                     </tr>
                                     @endif
