@@ -130,9 +130,22 @@
                             </div>
                         </td>
                         <td class="col-status">
-                            <span class="status-badge {{ $item->status === 'Done' ? 'status-done' : 'status-in-progress' }}">
-                                {{ $item->status }}
-                            </span>
+                            @php
+                            $escalationUics = ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS', 'TIF', 'TSEL', 'GSD'];
+
+                            if (in_array($item->uic, $escalationUics)) {
+                            $statusText = 'Eskalasi';
+                            $statusClass = 'status-done'; // contoh class-nya
+                            } elseif ($item->unit_or_telda == $item->uic) {
+                            $statusText = 'Action';
+                            $statusClass = 'status-action';
+                            } else {
+                            $statusText = 'Support Needed';
+                            $statusClass = 'status-in-progress';
+                            }
+                            @endphp
+
+                            <span class="status-badge {{ $statusClass }}">{{ $statusText }}</span>
                         </td>
                         <td class="col-respons">{!! nl2br (e($item->response_uic)) !!}</td>
                         <td class="col-action">

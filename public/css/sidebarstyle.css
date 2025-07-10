@@ -149,7 +149,7 @@
         right: 0;
         flex-direction: row;
         z-index: 1000;
-    }
+    } 
     
     #sidebar > ul {
         padding: 0;
