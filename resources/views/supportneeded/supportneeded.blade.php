@@ -95,7 +95,13 @@
                         <td class="col-unit">{{ $item->unit_or_telda }}</td>
                         <td class="col-start">{{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d M Y') : '-'  }}</td>
                         <td class="col-end">{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d M Y')  : '-'  }}</td>
-                        <td class="col-off">{{ $item->off_day }}</td>
+                        <td class="col-off">
+                            @if($item->start_date && $item->end_date)
+                            {{ \Carbon\Carbon::parse($item->start_date)->diffInDays(\Carbon\Carbon::parse($item->end_date)) + 1 }} Day
+                            @else
+                            -
+                            @endif
+                        </td>
                         <td class="col-notes">{!! nl2br (e($item->notes_to_follow_up)) !!}</td>
                         <td class="col-uic">{{ $item->uic }}</td>
                         <td class="col-progress">{{ $item->progress }}</td>
@@ -133,13 +139,19 @@
                             @php
                             $escalationUics = ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS', 'TIF', 'TSEL', 'GSD'];
 
-                            if (in_array($item->uic, $escalationUics)) {
+                            if (empty($item->unit_or_telda) && empty($item->uic)) {
+                            $statusText = '';
+                            $statusClass = '';
+                            }
+                            elseif (in_array($item->uic, $escalationUics)) {
                             $statusText = 'Eskalasi';
                             $statusClass = 'status-done'; // contoh class-nya
-                            } elseif ($item->unit_or_telda == $item->uic) {
+                            }
+                            elseif ($item->unit_or_telda == $item->uic) {
                             $statusText = 'Action';
                             $statusClass = 'status-action';
-                            } else {
+                            }
+                            else {
                             $statusText = 'Support Needed';
                             $statusClass = 'status-in-progress';
                             }
