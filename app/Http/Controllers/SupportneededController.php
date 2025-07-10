@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\supportneeded;
+use App\Models\Supportneeded;
 use Illuminate\Http\Request;
 
 class SupportneededController extends Controller
@@ -24,14 +24,55 @@ class SupportneededController extends Controller
             $query->where('uic', $request->uic);
         }
 
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('agenda', 'like', '%' . $request->search . '%')
+                    ->orWhere('unit_or_telda', 'like', '%' . $request->search . '%')
+                    ->orWhere('notes_to_follow_up', 'like', '%' . $request->search . '%')
+                    ->orWhere('uic', 'like', '%' . $request->search . '%')
+                    ->orWhere('progress', 'like', '%' . $request->search . '%')
+                    ->orWhere('status', 'like', '%' . $request->search . '%')
+                    ->orWhere('response_uic', 'like', '%' . $request->search . '%');
+            });
+        }
+
+
+        // Data untuk table
         $items = $query->paginate(10);
 
-        // Optional: Summary data for top-right widgets
-        $total = Supportneeded::count();
-        $close = Supportneeded::where('status', 'Done')->count();
-        $avgProgress = round(Supportneeded::avg('complete'));
+        // Summary Data
+        $allItems = Supportneeded::all();
+        $total = $allItems->count();
+        $close = $allItems->where('progress', 'Done')->count();
+        $closePercentage = $total > 0 ? round(($close / $total) * 100, 1) : 0;
 
-        return view('supportneeded.supportneeded', compact('items', 'total', 'close', 'avgProgress'));
+        // Hitung rata-rata progress
+        $progressMap = [
+            'Open' => 0,
+            'Need Discuss' => 25,
+            'Progress' => 75,
+            'Done' => 100,
+        ];
+
+        $totalProgress = 0;
+        $count = 0;
+
+        foreach ($allItems as $item) {
+            if (isset($progressMap[$item->progress])) {
+                $totalProgress += $progressMap[$item->progress];
+                $count++;
+            }
+        }
+
+        $avgProgress = $count > 0 ? round($totalProgress / $count, 1) : 0;
+
+        return view('supportneeded.supportneeded', compact(
+            'items',
+            'total',
+            'close',
+            'closePercentage',
+            'avgProgress'
+        ));
     }
 
     public function store(Request $request)
