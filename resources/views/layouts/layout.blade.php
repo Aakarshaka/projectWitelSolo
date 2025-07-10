@@ -10,9 +10,7 @@
     <link rel="stylesheet" href="{{ asset('css/newdashboardstyle.css') }}">
     <link rel="stylesheet" href="{{ asset('css/newwarroom.css') }}">
     <link rel="stylesheet" href="{{ asset('css/newsummary.css') }}">
-    <script type="text/javascript" src="{{ asset('js/sidebarscript.js') }}" defer></script>
 </head>
-
 <body>
 
     @include('layouts.newsidebar')

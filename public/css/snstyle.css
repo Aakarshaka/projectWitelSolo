@@ -1,556 +1,554 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-.container {
-    padding: 20px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-.header {
-    background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
-    color: white;
-    padding: 15px 30px;
-    margin: -20px -20px 20px -20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 20px rgba(139, 21, 56, 0.3);
-    flex-wrap: wrap;
-}
-
-.header h1 {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    min-width: 200px;
-}
-
-.stats-container {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.stat-card {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    padding: 8px 16px;
-    text-align: center;
-    min-width: 80px;
-    flex-shrink: 0;
-}
-
-.stat-label {
-    font-size: 12px;
-    opacity: 0.9;
-    font-weight: 500;
-}
-
-.stat-value {
-    font-size: 20px;
-    font-weight: 700;
-    margin-top: 2px;
-}
-
-.add-btn {
-    background: #22c55e;
-    color: white;
-    border: none;
-    padding: 25px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 14px;
-    flex-shrink: 0;
-}
-
-.add-btn:hover {
-    background: #16a34a;
-}
-
-.controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-
-.filters {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    flex: 1;
-}
-
-.filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 120px;
-    flex: 1;
-}
-
-.filter-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: #6d5671;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.filter-select {
-    padding: 8px 12px;
-    border: 1px solid #e6e1e8;
-    border-radius: 6px;
-    background: white;
-    font-size: 14px;
-    color: #2a1b2d;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-}
-
-.filter-select:focus {
-    outline: none;
-    border-color: #4a0e4e;
-    box-shadow: 0 0 0 3px rgba(74, 14, 78, 0.1);
-}
-
-.filter-btn {
-    background: #4a0e4e;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    align-self: flex-end;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.filter-btn:hover {
-    background: #3a0b3e;
-}
-
-.search-container {
-    flex-shrink: 0;
-}
-
-.table th.col-no {
-    width: 20px;
-}
-.table th.col-agenda {
-    width: 100px;
-}
-.table th.col-unit {
-    width: 100px;
-}
-.table th.col-start {
-    width: 100px;
-}
-.table th.col-end {
-    width: 100px;
-}
-.table th.col-off {
-    width: 30px;
-}
-.table th.col-notes {
-    width: 250px;
-}
-.table th.col-uic {
-    width: 50px;
-}
-.table th.col-progress {
-    width: 100px;
-}
-.table th.col-complete {
-    width: 50px;
-}
-.table th.col-status {
-    width: 50px;
-}
-.table th.col-respons {
-    width: 250px;
-}
-.table th.col-action {
-    width: 120px;
-}
-
-.table td:nth-child(1),
-.table td:nth-child(2),
-.table td:nth-child(3),
-.table td:nth-child(4),
-.table td:nth-child(5),
-.table td:nth-child(7),
-.table td:nth-child(8),
-.table td:nth-child(9),
-.table td:nth-child(10),
-.table td:nth-child(12) {
-    text-align: center;
-    vertical-align: middle;
-}
-
-.table td:nth-child(6),
-.table td:nth-child(11){
-    vertical-align: middle;
-    text-align: left;
-}
-
-.table-wrapper {
-    max-width: 100%;
-    overflow-x: auto;
-    overflow-y: auto;
-    height: calc(
-        100vh - 270px
-    ); /* Sesuaikan nilai ini dengan tinggi header + controls */
-    border-radius: 12px;
-    border: 1px solid #e6e1e8;
-    background: white;
-}
-
-.table-wrapper::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-.table-wrapper::-webkit-scrollbar-thumb {
-    background: #4a0e4e;
-    border-radius: 4px;
-}
-
-.table-wrapper::-webkit-scrollbar-thumb:hover {
-    background: #3a0b3e;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    table-layout: auto;
-}
-
-.table th {
-    position: sticky;
-    top: 0;
-    background: #f8f6f9;
-    color: #2a1b2d;
-    font-weight: 600;
-    padding: 12px 8px;
-    text-align: left;
-    border-bottom: 2px solid #e6e1e8;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    white-space: nowrap;
-    z-index: 10;
-    text-align: center;
-}
-
-.table td {
-    padding: 12px 8px;
-    border-bottom: 1px solid #f2e8f3;
-    vertical-align: middle;
-    max-width: 200px;
-    word-wrap: break-word;
-}
-
-.table tr:hover {
-    background: #faf8fb;
-}
-
-.table tr:last-child td {
-    border-bottom: none;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 20px;
-    background: #e6e1e8;
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
-    min-width: 100px;
-    z-index: 1;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
-    transition: width 0.3s ease;
-    border-radius: 10px;
-}
-
-.progress-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 11px;
-    font-weight: 600;
-    color: #2a1b2d;
-    z-index: 1;
-}
-
-.status-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    white-space: nowrap;
-}
-
-.status-in-progress {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.status-completed {
-    background: #d1fae5;
-    color: #047857;
-}
-
-.status-pending {
-    background: #fee2e2;
-    color: #dc2626;
-}
-
-.button-group {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.action-btn {
-    padding: 10px 10px;
-    border: none;
-    cursor: pointer;
-    font-size: 11px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    min-width: 60px;
-    text-align: center;
-    border-radius: 0px;
-}
-
-.edit-btn {
-    background: #fbbf24;
-    color: white;
-}
-
-.edit-btn:hover {
-    background: #f59e0b;
-}
-
-.delete-btn {
-    background: #ef4444;
-    color: white;
-}
-
-.delete-btn:hover {
-    background: #dc2626;
-}
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.pagination button {
-    padding: 8px 12px;
-    border: 1px solid #e6e1e8;
-    background: white;
-    cursor: pointer;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-.pagination button:hover {
-    background: #f2e8f3;
-}
-
-.pagination button.active {
-    background: #4a0e4e;
-    color: white;
-    border-color: #4a0e4e;
-}
-
-.search-box {
-    padding: 8px 12px;
-    border: 1px solid #e6e1e8;
-    border-radius: 6px;
-    font-size: 14px;
-    min-width: 200px;
-    transition: all 0.3s ease;
-}
-
-.search-box:focus {
-    outline: none;
-    border-color: #4a0e4e;
-    box-shadow: 0 0 0 3px rgba(74, 14, 78, 0.1);
-}
-
-/* PERBAIKAN: Tambahkan pesan scroll hint untuk mobile */
-.scroll-hint {
-    display: none;
-    text-align: center;
-    font-size: 12px;
-    color: #6d5671;
-    margin-bottom: 10px;
-    padding: 8px;
-    background: #f8f6f9;
-    border-radius: 6px;
-    border: 1px solid #e6e1e8;
-}
-
-.sn-footer {
-    text-align: center;
-    font-size: 15px;
-    color: #6d5671;
-    margin-top: 10px;
-    padding: 10px 0;
-}
-
-@media (max-width: 800px) {
-    .container {
-        padding: 10px;
-    }
-
-    .header {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-        margin: -10px -10px 15px -10px;
-        padding: 15px;
-    }
-
-    .header h1 {
-        font-size: 20px;
-        min-width: auto;
-    }
-
-    .stats-container {
-        justify-content: center;
-        width: 100%;
-    }
-
-    .stat-card {
-        min-width: 70px;
-        padding: 6px 12px;
-    }
-
-    .stat-label {
-        font-size: 10px;
-    }
-
-    .stat-value {
-        font-size: 16px;
-    }
-
-    .add-btn {
-        padding: 20px 16px;
-        font-size: 12px;
-    }
-
-    .controls {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-    }
-
-    .filters {
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .filter-group {
-        min-width: auto;
-    }
-
-    .filter-btn {
-        align-self: center;
-        width: 100%;
-        max-width: 200px;
-    }
-
-    .search-container {
-        width: 100%;
-    }
-
-    .search-box {
-        min-width: auto;
-        width: 100%;
-    }
-
-    .table-wrapper {
-        border-radius: 8px;
-    }
-
-    .table {
-        /* PERBAIKAN: Kurangi min-width untuk mobile */
-        min-width: 700px;
-        font-size: 11px;
-    }
-
-    .table th,
-    .table td {
-        padding: 8px 6px;
-        font-size: 11px;
-    }
-
-    .table th {
-        font-size: 10px;
-    }
-
-    .progress-bar {
-        min-width: 80px;
-        height: 16px;
-    }
-
-    .progress-text {
-        font-size: 10px;
-    }
-
-    .status-badge {
-        font-size: 10px;
-        padding: 3px 6px;
-    }
-
-    .action-btn {
-        font-size: 10px;
-        padding: 3px 6px;
-    }
-
-    .pagination button {
-        padding: 6px 8px;
-        font-size: 12px;
-    }
-
-    /* PERBAIKAN: Tampilkan scroll hint di mobile */
-    .scroll-hint {
-        display: block;
-    }
-}
-
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #f8f6f9;
+        }
+
+        .main-content {
+            margin-left: 60px;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        .container {
+            padding: 20px;
+            width: 100%;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
+            color: white;
+            padding: 15px 30px;
+            margin: -20px -20px 20px -20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(139, 21, 56, 0.3);
+            flex-wrap: wrap;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            min-width: 200px;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            text-align: center;
+            min-width: 80px;
+            flex-shrink: 0;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .add-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 25px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .add-btn:hover {
+            background: #16a34a;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 120px;
+            flex: 1;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #6d5671;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #e6e1e8;
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+            color: #2a1b2d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #4a0e4e;
+            box-shadow: 0 0 0 3px rgba(74, 14, 78, 0.1);
+        }
+
+        .filter-btn {
+            background: #4a0e4e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-self: flex-end;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .filter-btn:hover {
+            background: #3a0b3e;
+        }
+
+        .search-container {
+            flex-shrink: 0;
+        }
+
+        .search-box {
+            padding: 8px 12px;
+            border: 1px solid #e6e1e8;
+            border-radius: 6px;
+            font-size: 14px;
+            min-width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #4a0e4e;
+            box-shadow: 0 0 0 3px rgba(74, 14, 78, 0.1);
+        }
+
+        /* PERBAIKAN UTAMA: Table wrapper yang lebih baik */
+        .table-container {
+            position: relative;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e6e1e8;
+            overflow: hidden;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: calc(100vh - 280px);
+            position: relative;
+        }
+
+        .table-wrapper::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-track {
+            background: #f8f6f9;
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: #4a0e4e;
+            border-radius: 4px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #3a0b3e;
+        }
+
+        .table-wrapper::-webkit-scrollbar-corner {
+            background: #f8f6f9;
+        }
+
+        /* PERBAIKAN: Table dengan width yang sesuai kolom */
+        .table {
+            border-collapse: collapse;
+            font-size: 13px;
+            table-layout: fixed;
+            width: max-content; /* Membuat table mengikuti total width kolom */
+            min-width: 100%; /* Minimal selebar container */
+        }
+
+        /* PERBAIKAN: Definisi width kolom yang lebih presisi */
+        .table th.col-no { width: 30px; }
+        .table th.col-agenda { width: 100px; }
+        .table th.col-unit { width: 100px; }
+        .table th.col-start { width: 50px; }
+        .table th.col-end { width: 50px; }
+        .table th.col-off { width: 50px; }
+        .table th.col-notes { width: 300px; }
+        .table th.col-uic { width: 50px; }
+        .table th.col-progress { width: 100px; }
+        .table th.col-complete { width: 100px; }
+        .table th.col-status { width: 100px; }
+        .table th.col-respons { width: 300px; }
+        .table th.col-action { width: 150px; }
+
+        .table th {
+            position: sticky;
+            top: 0;
+            background: #a8a8a9;
+            color: #2a1b2d;
+            font-weight: 600;
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 2px solid #e6e1e8;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            z-index: 10;
+            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #f2e8f3;
+            vertical-align: middle;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* PERBAIKAN: Alignment untuk kolom tertentu */
+        .table td:nth-child(1), /* No */
+        .table td:nth-child(2), /* Agenda */
+        .table td:nth-child(3), /* Unit */
+        .table td:nth-child(4), /* Start */
+        .table td:nth-child(5), /* End */
+        .table td:nth-child(7), /* UIC */
+        .table td:nth-child(8), /* Off */
+        .table td:nth-child(9), /* Progress */
+        .table td:nth-child(10), /* Complete */
+        .table td:nth-child(11), /* Status */
+        .table td:nth-child(13) { /* Action */
+            text-align: center;
+        }
+
+        .table td:nth-child(6), /* Notes */
+        .table td:nth-child(12) { /* Respons */
+            text-align: left;
+        }
+
+        .table tr:hover {
+            background: #faf8fb;
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Progress bar styles */
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e6e1e8;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            min-width: 80px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 11px;
+            font-weight: 600;
+            color: #2a1b2d;
+            z-index: 1;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .status-in-progress {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-completed {
+            background: #d1fae5;
+            color: #047857;
+        }
+
+        .status-pending {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Action buttons */
+        
+
+        .action-btn {
+            padding: 12px 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .edit-btn {
+            background: #fbbf24;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #f59e0b;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #e6e1e8;
+            background: white;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button:hover {
+            background: #f2e8f3;
+        }
+
+        .pagination button.active {
+            background: #4a0e4e;
+            color: white;
+            border-color: #4a0e4e;
+        }
+
+        /* Scroll hint */
+        .scroll-hint {
+            display: none;
+            text-align: center;
+            font-size: 12px;
+            color: #6d5671;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #f8f6f9;
+            border-radius: 6px;
+            border: 1px solid #e6e1e8;
+        }
+
+        .sn-footer {
+            text-align: center;
+            font-size: 15px;
+            color: #6d5671;
+            margin-top: 10px;
+            padding: 10px 0;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 800px) {
+            .main-content {
+                margin-left: 0;
+                margin-bottom: 60px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                margin: -10px -10px 15px -10px;
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+                min-width: auto;
+            }
+
+            .stats-container {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .stat-card {
+                min-width: 70px;
+                padding: 6px 12px;
+            }
+
+            .stat-label {
+                font-size: 10px;
+            }
+
+            .stat-value {
+                font-size: 16px;
+            }
+
+            .add-btn {
+                padding: 20px 16px;
+                font-size: 12px;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .filters {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .filter-group {
+                min-width: auto;
+            }
+
+            .filter-btn {
+                align-self: center;
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .search-box {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .table-container {
+                border-radius: 8px;
+            }
+
+            .table {
+                font-size: 11px;
+            }
+
+            .table th,
+            .table td {
+                padding: 8px 6px;
+                font-size: 11px;
+            }
+
+            .table th {
+                font-size: 10px;
+            }
+
+            .progress-bar {
+                min-width: 60px;
+                height: 16px;
+            }
+
+            .progress-text {
+                font-size: 10px;
+            }
+
+            .status-badge {
+                font-size: 10px;
+                padding: 3px 6px;
+            }
+
+            .action-btn {
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+
+            .pagination button {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+
+            .scroll-hint {
+                display: block;
+            }
+        }

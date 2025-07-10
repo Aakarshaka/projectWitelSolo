@@ -18,7 +18,6 @@
                     <rect width="7" height="9" x="14" y="12" rx="1" />
                     <rect width="7" height="5" x="3" y="16" rx="1" />
                 </svg>
-                <span>Dashboard</span>
             </a>
         </li>
 
@@ -29,7 +28,6 @@
                     <path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3" />
                     <path d="m7 21 5-5 5 5" />
                 </svg>
-                <span>War Room</span>
             </a>
         </li>
 
@@ -43,7 +41,6 @@
                     <path d="M4 18v3" />
                     <path d="M8 14v7" />
                 </svg>
-                <span>Summary</span>
             </a>
         </li>
 
@@ -56,7 +53,6 @@
                     <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />
                     <path d="M3 4h8" />
                 </svg>
-                <span>Support Needed</span>
             </a>
         </li>
 
@@ -67,7 +63,6 @@
                     <path d="M7.998 9.003a5 5 0 1 0 8-.005" />
                     <circle cx="12" cy="12" r="10" />
                 </svg>
-                <span>Logout</span>
             </a>
         </li>
 
