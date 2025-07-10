@@ -7,6 +7,9 @@
     <title>@yield('title')</title>
     <link rel="stylesheet" href="{{ asset('css/sidebarstyle.css') }}">
     <link rel="stylesheet" href="{{ asset('css/snstyle.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/newdashboardstyle.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/newwarroom.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/newsummary.css') }}">
     <script type="text/javascript" src="{{ asset('js/sidebarscript.js') }}" defer></script>
 </head>
 

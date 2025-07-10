@@ -93,29 +93,6 @@
                     <td class="col-start">20 Jan 2025</td>
                     <td class="col-end">28 Feb 2025</td>
                     <td class="col-off">3</td>
-                    <td class="col-notes">Telah dilakukan pengembangan fitur enhancement dalam dashboard MetaBright yang terintegrasi dengan sistem monitoring dan alertelah dilakukan pengembangan fitur enhancement dalam dashboard MetaBright yang terintegrasi dengan sistem monitoring dan alertelah dilakukan pengembangan fitur enhancement dalam dashboard MetaBright yang terintegrasi dengan sistem monitoring dan alertelah dilakukan pengembangan fitur enhancement dalam dashboard MetaBright yang terintegrasi dengan sistem monitoring dan alertelah dilakukan pengembangan fitur enhancement dalam dashboard MetaBright yang terintegrasi dengan sistem monitoring dan alertelah dilakukan pengembangan fitur enhancement dalam dashboard MetaBright yang terintegrasi dengan sistem monitoring dan alertelah dilakukan pengembangan fitur enhancement dalam dashboard MetaBright yang terintegrasi dengan sistem monitoring dan alertelah dilakukan pengembangan fitur enhancement dalam dashboard MetaBright yang terintegrasi dengan sistem monitoring dan alert</td>
-                    <td class="col-uic">BPPLP</td>
-                    <td class="col-progress">On Progress</td>
-                    <td class="col-complete">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 25%"></div>
-                            <div class="progress-text">25%</div>
-                        </div>
-                    </td>
-                    <td class="col-status"><span class="status-badge status-in-progress">Eskalasi</span></td>
-                    <td class="col-respons">Development team sedang melakukan enhancement fitur dashboard</td>
-                    <td class="col-action">
-                        <button class="action-btn edit-btn">Edit</button>
-                        <button class="action-btn delete-btn">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-no">1</td>
-                    <td class="col-agenda">1 0n 1 WR Witel</td>
-                    <td class="col-unit">Witel Yogyakarta</td>
-                    <td class="col-start">20 Jan 2025</td>
-                    <td class="col-end">28 Feb 2025</td>
-                    <td class="col-off">3</td>
                     <td class="col-notes">Telah dilakukan pengembangan fitur enhancement dalam dashboard MetaBright yang terintegrasi dengan sistem monitoring dan alert</td>
                     <td class="col-uic">BPPLP</td>
                     <td class="col-progress">On Progress</td>
@@ -227,18 +204,7 @@
             </tbody>
         </table>
     </div>
-
-    <div class="pagination">
-        <button>Previous</button>
-        <button class="active">1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>4</button>
-        <button>5</button>
-        <button>...</button>
-        <button>33</button>
-        <button>Next</button>
-    </div>
+    <div class="sn-footer">Powered by <strong>GIAT CORE</strong></div>
 </div>
 
 <script>

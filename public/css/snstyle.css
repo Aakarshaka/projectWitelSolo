@@ -404,6 +404,14 @@
     border: 1px solid #e6e1e8;
 }
 
+.sn-footer {
+    text-align: center;
+    font-size: 15px;
+    color: #6d5671;
+    margin-top: 20px;
+    padding: 10px 0;
+}
+
 @media (max-width: 800px) {
     .container {
         padding: 10px;
@@ -524,3 +532,4 @@
         display: block;
     }
 }
+

@@ -1,0 +1,12 @@
+.sum-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    text-align: center;
+}
+
+.sum-text {
+    font-size: 14px;
+    color: #666;
+}

@@ -49,10 +49,14 @@ Route::get('/supportneeded', function () {
     return view('supportneeded');
 });
 
-Route::get('/supportneeded2', function () {
-    return view('supportneeded2');
+Route::get('/newsummary', function () {
+    return view('newsummary');
 });
 
-Route::get('/supportneeded3', function () {
-    return view('supportneeded3');
+Route::get('/newdashboard', function () {
+    return view('newdashboard');
+});
+
+Route::get('/newwarroom', function () {
+    return view('newwarroom');
 });

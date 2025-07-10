@@ -1,0 +1,12 @@
+.dash-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    text-align: center;
+}
+
+.dash-text {
+    font-size: 14px;
+    color: #666;
+}
