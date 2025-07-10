@@ -5,9 +5,6 @@
 @push('styles')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 <style>
-    /* Import existing styles from Support Needed page */
-    @import url('{{ asset(' css/snstyle.css') }}');
-
     /* Reset and base styles */
     * {
         box-sizing: border-box;
@@ -83,17 +80,17 @@
 
     .summary-table th,
     .summary-table td {
-        padding: 0.75rem;
+        padding: 0.75rem 1rem;
         text-align: center;
         white-space: nowrap;
         border-bottom: 1px solid #dee2e6;
     }
 
     .summary-table th {
-        background: #f8f9fa;
-        font-weight: 600;
-        color: #495057;
-    }
+    font-weight: 700;
+    background-color: #e9ecef;
+    color: #212529;
+}
 
     .summary-table .total-row {
         background: #e9ecef;
@@ -171,39 +168,48 @@
                                     <tr>
                                         <th>No</th>
                                         <th>UIC</th>
-                                        <th>Open</th>
-                                        <th>% Open</th>
-                                        <th>On Progress</th>
-                                        <th>% On Progress</th>
-                                        <th>Done</th>
-                                        <th>% Done</th>
-                                        <th>Need Discuss</th>
-                                        <th>% Need Discuss</th>
-                                        <th>Total</th>
+                                        <th>OPEN</th>
+                                        <th>% OPEN</th>
+                                        <th>ON PROGRESS</th>
+                                        <th>% ON PROGRESS</th>
+                                        <th>NEED DISCUSS</th>
+                                        <th>% NEED DISCUSS</th>
+                                        <th>DONE</th>
+                                        <th>% DONE</th>
+                                        <th>TOTAL</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(isset($byUic) && count($byUic) > 0)
-                                    @foreach ($byUic as $index => $row)
+                                    @php
+                                        $uicList = ['BS','GS','RLEGS','RSO','TIF','TSEL','GSD','SSGS','PRQ','RSMES','BPPLP','SSS'];
+                                    @endphp
+                                    @foreach ($uicList as $index => $uic)
+                                    @php
+                                        $rowData = null;
+                                        if(isset($byUic) && count($byUic) > 0) {
+                                            foreach($byUic as $data) {
+                                                if($data['uic'] == $uic) {
+                                                    $rowData = $data;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    @endphp
                                     <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td><strong>{{ $row['uic'] }}</strong></td>
-                                        <td class="status-open">{{ $row['open'] }}</td>
-                                        <td class="percentage status-open">{{ $row['open_percent'] }}%</td>
-                                        <td class="status-progress">{{ $row['progress'] }}</td>
-                                        <td class="percentage status-progress">{{ $row['progress_percent'] }}%</td>
-                                        <td class="status-done">{{ $row['done'] }}</td>
-                                        <td class="percentage status-done">{{ $row['done_percent'] }}%</td>
-                                        <td class="status-discuss">{{ $row['discuss'] }}</td>
-                                        <td class="percentage status-discuss">{{ $row['discuss_percent'] }}%</td>
-                                        <td><strong>{{ $row['total'] }}</strong></td>
+                                        <td class="row-number">{{ $index + 1 }}</td>
+                                        <td class="entity-name">{{ $uic }}</td>
+                                        <td><span class="status-badge status-open">{{ $rowData['open'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-open">{{ $rowData['open_percent'] ?? 0 }}%</span></td>
+                                        <td><span class="status-badge status-progress">{{ $rowData['progress'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-progress">{{ $rowData['progress_percent'] ?? 0 }}%</span></td>
+                                        <td><span class="status-badge status-done">{{ $rowData['done'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-done">{{ $rowData['done_percent'] ?? 0 }}%</span></td>
+                                        <td><span class="status-badge status-discuss">{{ $rowData['discuss'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-discuss">{{ $rowData['discuss_percent'] ?? 0 }}%</span></td>
+                                        <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
                                     </tr>
-                                    @endforeach
-                                    @else
-                                    <tr>
-                                        <td colspan="11" class="text-center">No data available</td>
-                                    </tr>
-                                    @endif
+                                @endforeach
+
                                     @if(isset($totalUic))
                                     <tr class="table-secondary total-row">
                                         <td colspan="2"><strong>TOTAL</strong></td>
@@ -211,10 +217,10 @@
                                         <td><strong>{{ $totalUic['open_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalUic['progress'] ?? 0 }}</strong></td>
                                         <td><strong>{{ $totalUic['progress_percent'] ?? 0 }}%</strong></td>
-                                        <td><strong>{{ $totalUic['done'] ?? 0 }}</strong></td>
-                                        <td><strong>{{ $totalUic['done_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalUic['discuss'] ?? 0 }}</strong></td>
                                         <td><strong>{{ $totalUic['discuss_percent'] ?? 0 }}%</strong></td>
+                                        <td><strong>{{ $totalUic['done'] ?? 0 }}</strong></td>
+                                        <td><strong>{{ $totalUic['done_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalUic['total'] ?? 0 }}</strong></td>
                                     </tr>
                                     @endif
@@ -239,43 +245,57 @@
                                 <thead class="table-dark">
                                     <tr>
                                         <th>No</th>
-                                        <th>Agenda</th>
-                                        <th>Open</th>
-                                        <th>% Open</th>
-                                        <th>On Progress</th>
-                                        <th>% On Progress</th>
-                                        <th>Done</th>
-                                        <th>% Done</th>
-                                        <th>Need Discuss</th>
-                                        <th>% Need Discuss</th>
-                                        <th>Total</th>
+                                        <th>AGENDA</th>
+                                        <th>OPEN</th>
+                                        <th>% OPEN</th>
+                                        <th>ON PROGRESS</th>
+                                        <th>% ON PROGRESS</th>
+                                        <th>NEED DISCUSS</th>
+                                        <th>% NEED DISCUSS</th>
+                                        <th>DONE</th>
+                                        <th>% DONE</th>
+                                        <th>TOTAL</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(isset($byAgenda) && count($byAgenda) > 0)
-                                    @foreach ($byAgenda as $index => $row)
+                                    @php
+                                        $agendaList = [
+                                            '1 ON 1 UIC',
+                                            '1 ON 1 WITEL',
+                                            'EVP DIRECTION',
+                                            'WBR IT FEB',
+                                            'STRATEGIC MEETING'
+                                        ];
+                                    @endphp
+                                    @foreach ($agendaList as $index => $agenda)
+                                    @php
+                                        $rowData = null;
+                                        if(isset($byAgenda) && count($byAgenda) > 0) {
+                                            foreach($byAgenda as $data) {
+                                                if($data['agenda'] == $agenda) {
+                                                    $rowData = $data;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    @endphp
                                     <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td><strong>{{ $row['agenda'] }}</strong></td>
-                                        <td class="status-open">{{ $row['open'] }}</td>
-                                        <td class="percentage status-open">{{ $row['open_percent'] }}%</td>
-                                        <td class="status-progress">{{ $row['progress'] }}</td>
-                                        <td class="percentage status-progress">{{ $row['progress_percent'] }}%</td>
-                                        <td class="status-done">{{ $row['done'] }}</td>
-                                        <td class="percentage status-done">{{ $row['done_percent'] }}%</td>
-                                        <td class="status-discuss">{{ $row['discuss'] }}</td>
-                                        <td class="percentage status-discuss">{{ $row['discuss_percent'] }}%</td>
-                                        <td><strong>{{ $row['total'] }}</strong></td>
+                                        <td class="row-number">{{ $index + 1 }}</td>
+                                        <td class="entity-name">{{ $agenda }}</td>
+                                        <td><span class="status-badge status-open">{{ $rowData['open'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-open">{{ $rowData['open_percent'] ?? 0 }}%</span></td>
+                                        <td><span class="status-badge status-progress">{{ $rowData['progress'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-progress">{{ $rowData['progress_percent'] ?? 0 }}%</span></td>
+                                        <td><span class="status-badge status-done">{{ $rowData['done'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-done">{{ $rowData['done_percent'] ?? 0 }}%</span></td>
+                                        <td><span class="status-badge status-discuss">{{ $rowData['discuss'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-discuss">{{ $rowData['discuss_percent'] ?? 0 }}%</span></td>
+                                        <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
                                     </tr>
-                                    @endforeach
-                                    @else
-                                    <tr>
-                                        <td colspan="11" class="text-center">No data available</td>
-                                    </tr>
-                                    @endif
+                                @endforeach
                                     @if(isset($totalAgenda))
-                                    <tr class="table-secondary total-row">
-                                        <td colspan="2"><strong>TOTAL</strong></td>
+                                    <tr class="total-row">
+                                        <td colspan="2"><strong><i class="fas fa-calculator"></i> TOTAL</strong></td>
                                         <td><strong>{{ $totalAgenda['open'] ?? 0 }}</strong></td>
                                         <td><strong>{{ $totalAgenda['open_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalAgenda['progress'] ?? 0 }}</strong></td>
@@ -286,15 +306,13 @@
                                         <td><strong>{{ $totalAgenda['discuss_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalAgenda['total'] ?? 0 }}</strong></td>
                                     </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
+                                @endif
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-
         {{-- Table: By Unit --}}
         <div class="row mb-4">
             <div class="col-12">
@@ -308,40 +326,48 @@
                                 <thead class="table-dark">
                                     <tr>
                                         <th>No</th>
-                                        <th>Unit</th>
-                                        <th>Open</th>
-                                        <th>% Open</th>
-                                        <th>On Progress</th>
-                                        <th>% On Progress</th>
-                                        <th>Done</th>
-                                        <th>% Done</th>
-                                        <th>Need Discuss</th>
-                                        <th>% Need Discuss</th>
-                                        <th>Total</th>
+                                        <th>UNIT</th>
+                                        <th>OPEN</th>
+                                        <th>% OPEN</th>
+                                        <th>ON PROGRESS</th>
+                                        <th>% ON PROGRESS</th>
+                                        <th>NEED DISCUSS</th>
+                                        <th>% NEED DISCUSS</th>
+                                        <th>DONE</th>
+                                        <th>% DONE</th>
+                                        <th>TOTAL</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(isset($byUnit) && count($byUnit) > 0)
-                                    @foreach ($byUnit as $index => $row)
+                                    @php
+                                        $unitList = ['BLORA', 'BOYOLALI', 'JEPARA', 'KLATEN', 'KUDUS', 'MEA SOLO', 'PATI', 'PURWODADI', 'REMBANG', 'SRAGEN', 'WONOGIRI','BS','GS','PRQ'];
+                                    @endphp
+                                    @foreach ($unitList as $index => $unit)
+                                    @php
+                                        $rowData = null;
+                                        if(isset($byUnit) && count($byUnit) > 0) {
+                                            foreach($byUnit as $data) {
+                                                if($data['unit_or_telda'] == $unit) {
+                                                    $rowData = $data;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    @endphp
                                     <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td><strong>{{ $row['unit_or_telda'] }}</strong></td>
-                                        <td class="status-open">{{ $row['open'] }}</td>
-                                        <td class="percentage status-open">{{ $row['open_percent'] }}%</td>
-                                        <td class="status-progress">{{ $row['progress'] }}</td>
-                                        <td class="percentage status-progress">{{ $row['progress_percent'] }}%</td>
-                                        <td class="status-done">{{ $row['done'] }}</td>
-                                        <td class="percentage status-done">{{ $row['done_percent'] }}%</td>
-                                        <td class="status-discuss">{{ $row['discuss'] }}</td>
-                                        <td class="percentage status-discuss">{{ $row['discuss_percent'] }}%</td>
-                                        <td><strong>{{ $row['total'] }}</strong></td>
+                                        <td class="row-number">{{ $index + 2 }}</td>
+                                        <td class="entity-name">{{ $unit }}</td>
+                                        <td><span class="status-badge status-open">{{ $rowData['open'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-open">{{ $rowData['open_percent'] ?? 0 }}%</span></td>
+                                        <td><span class="status-badge status-progress">{{ $rowData['progress'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-progress">{{ $rowData['progress_percent'] ?? 0 }}%</span></td>
+                                        <td><span class="status-badge status-done">{{ $rowData['done'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-done">{{ $rowData['done_percent'] ?? 0 }}%</span></td>
+                                        <td><span class="status-badge status-discuss">{{ $rowData['discuss'] ?? 0 }}</span></td>
+                                        <td><span class="percentage-badge percentage-discuss">{{ $rowData['discuss_percent'] ?? 0 }}%</span></td>
+                                        <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
                                     </tr>
-                                    @endforeach
-                                    @else
-                                    <tr>
-                                        <td colspan="11" class="text-center">No data available</td>
-                                    </tr>
-                                    @endif
+                                @endforeach
                                     @if(isset($totalUnit))
                                     <tr class="table-secondary total-row">
                                         <td colspan="2"><strong>TOTAL</strong></td>
@@ -351,8 +377,8 @@
                                         <td><strong>{{ $totalUnit['progress_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalUnit['done'] ?? 0 }}</strong></td>
                                         <td><strong>{{ $totalUnit['done_percent'] ?? 0 }}%</strong></td>
-                                        <td><strong>{{ $totalUnit['discuss'] ?? 0 }}</strong></td>
-                                        <td><strong>{{ $totalUnit['discuss_percent'] ?? 0 }}%</strong></td>
+                                        <td><strong>{{ $totalAgenda['discuss'] ?? 0 }}</strong></td>
+                                        <td><strong>{{ $totalAgenda['discuss_percent'] ?? 0 }}%</strong></td>
                                         <td><strong>{{ $totalUnit['total'] ?? 0 }}</strong></td>
                                     </tr>
                                     @endif

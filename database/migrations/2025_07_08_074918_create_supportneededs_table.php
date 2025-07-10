@@ -17,12 +17,12 @@ return new class extends Migration
             $table->string('unit_or_telda')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->integer('off_day')->default(0);
+            $table->integer('off_day')->nullable();
             $table->text('notes_to_follow_up')->nullable();
             $table->string('uic')->nullable();
-            $table->string('progress')->default('On Progress'); // e.g. On Progress / Done
-            $table->integer('complete')->default(0); // 0-100 (%)
-            $table->string('status')->default('Eskalasi'); // e.g. Eskalasi / Done
+            $table->string('progress')->nullable(); // e.g. On Progress / Done
+            $table->integer('complete')->nullable(); // 0-100 (%)
+            $table->string('status')->nullable(); // e.g. Eskalasi / Done
             $table->text('response_uic')->nullable();
             $table->timestamps();
         });
