@@ -89,7 +89,8 @@ class SupportneededController extends Controller
         $escalationUics = ['RLEGS', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'RSMES', 'BPPLP', 'SSS'];
         $supportNeededUics = ['BS', 'GS', 'RSO WITEL', 'SSGS', 'PRQ'];
 
-        if (empty($validated['unit_or_telda']) && empty($validated['uic'])) {
+        if (empty($validated['unit_or_telda']) || empty($validated['uic'])) {
+            // kalau salah satu kosong, status kosong
             $status = '';
         } elseif ($validated['unit_or_telda'] === $validated['uic']) {
             $status = 'Action';
@@ -153,7 +154,8 @@ class SupportneededController extends Controller
         $escalationUics = ['RLEGS', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'RSMES', 'BPPLP', 'SSS'];
         $supportNeededUics = ['BS', 'GS', 'RSO WITEL', 'SSGS', 'PRQ'];
 
-        if (empty($validated['unit_or_telda']) && empty($validated['uic'])) {
+        if (empty($validated['unit_or_telda']) || empty($validated['uic'])) {
+            // kalau salah satu kosong, status kosong
             $status = '';
         } elseif ($validated['unit_or_telda'] === $validated['uic']) {
             $status = 'Action';
@@ -236,5 +238,4 @@ class SupportneededController extends Controller
 
         return response()->json($data);
     }
-
 }
