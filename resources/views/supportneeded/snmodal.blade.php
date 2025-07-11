@@ -30,10 +30,17 @@
         width: 90%;
         max-width: 700px;
         max-height: 90vh;
-        overflow-y: auto;
+        /* overflow-y: auto; ❌ hapus ini */
+        overflow: hidden;
+        /* ✅ tambahkan */
         transform: scale(0.7);
         transition: transform 0.3s ease;
+        display: flex;
+        /* ✅ */
+        flex-direction: column;
+        /* ✅ */
     }
+
 
     .sn-modal.show .sn-modal-content {
         transform: scale(1);
@@ -77,7 +84,14 @@
 
     .sn-modal-body {
         padding: 30px;
+        overflow-y: auto;
+        /* ✅ scroll di sini */
+        flex-grow: 1;
+        /* ✅ biar body ambil sisa tinggi */
+        max-height: calc(90vh - 160px);
+        /* ✅ sesuaikan tinggi header + footer */
     }
+
 
     .sn-form-grid {
         display: grid;
@@ -288,17 +302,20 @@
 
                     <div class="sn-form-group full-width">
                         <label class="sn-form-label">Notes to Follow Up</label>
-                        <textarea class="sn-form-textarea" name="notes_to_follow_up" rows="4" placeholder="Enter detailed notes for follow up..."></textarea>
+                        <textarea class="sn-form-textarea" name="notes_to_follow_up" rows="4"
+                            placeholder="Enter detailed notes for follow up..."></textarea>
                     </div>
 
                     <div class="sn-form-group full-width">
                         <label class="sn-form-label">Response UIC</label>
-                        <textarea class="sn-form-textarea" name="response_uic" rows="4" placeholder="Enter UIC response..."></textarea>
+                        <textarea class="sn-form-textarea" name="response_uic" rows="4"
+                            placeholder="Enter UIC response..."></textarea>
                     </div>
                 </div>
             </div>
             <div class="sn-modal-footer">
-                <button type="button" class="sn-btn sn-btn-secondary" onclick="closeModal('addSupportModal')">Cancel</button>
+                <button type="button" class="sn-btn sn-btn-secondary"
+                    onclick="closeModal('addSupportModal')">Cancel</button>
                 <button type="submit" class="sn-btn sn-btn-primary">Add Support</button>
             </div>
         </form>
@@ -396,17 +413,20 @@
 
                     <div class="sn-form-group full-width">
                         <label class="sn-form-label">Notes to Follow Up</label>
-                        <textarea class="sn-form-textarea" name="notes_to_follow_up" id="edit_notes_to_follow_up" rows="4" placeholder="Enter detailed notes for follow up..."></textarea>
+                        <textarea class="sn-form-textarea" name="notes_to_follow_up" id="edit_notes_to_follow_up"
+                            rows="4" placeholder="Enter detailed notes for follow up..."></textarea>
                     </div>
 
                     <div class="sn-form-group full-width">
                         <label class="sn-form-label">Response UIC</label>
-                        <textarea class="sn-form-textarea" name="response_uic" id="edit_response_uic" rows="4" placeholder="Enter UIC response..."></textarea>
+                        <textarea class="sn-form-textarea" name="response_uic" id="edit_response_uic" rows="4"
+                            placeholder="Enter UIC response..."></textarea>
                     </div>
                 </div>
             </div>
             <div class="sn-modal-footer">
-                <button type="button" class="sn-btn sn-btn-secondary" onclick="closeModal('editSupportModal')">Cancel</button>
+                <button type="button" class="sn-btn sn-btn-secondary"
+                    onclick="closeModal('editSupportModal')">Cancel</button>
                 <button type="submit" class="sn-btn sn-btn-primary">Update Support</button>
             </div>
         </form>
@@ -428,14 +448,14 @@
     }
 
     // Close modal when clicking outside
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
         if (event.target.classList.contains('sn-modal')) {
             closeModal(event.target.id);
         }
     });
 
     // Close modal with Escape key
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') {
             const openModal = document.querySelector('.sn-modal.show');
             if (openModal) {
@@ -474,13 +494,13 @@
     }
 
     // Update the Add Support button to use the new modal
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Validasi Add Support Modal
         const startDateInput = document.getElementById('add_start_date');
         const endDateInput = document.getElementById('add_end_date');
 
         if (startDateInput && endDateInput) {
-            startDateInput.addEventListener('change', function() {
+            startDateInput.addEventListener('change', function () {
                 if (startDateInput.value) {
                     endDateInput.min = startDateInput.value;
                     if (endDateInput.value && endDateInput.value < startDateInput.value) {
@@ -497,7 +517,7 @@
         const editEndDateInput = document.getElementById('edit_end_date');
 
         if (editStartDateInput && editEndDateInput) {
-            editStartDateInput.addEventListener('change', function() {
+            editStartDateInput.addEventListener('change', function () {
                 if (editStartDateInput.value) {
                     editEndDateInput.min = editStartDateInput.value;
                     if (editEndDateInput.value && editEndDateInput.value < editStartDateInput.value) {
