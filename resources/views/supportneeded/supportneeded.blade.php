@@ -37,27 +37,67 @@
                             <option>WBR IT FEB</option>
                         </select>
                     </div>
-                    <div class="filter-group">
-                        <label class="filter-label">Witel or Unit</label>
-                        <select class="filter-select">
-                            <option>All Witel or Unit</option>
-                            <option>RLEGS</option>
-                            <option>Witel Bali</option>
-                            <option>Witel Yogyakarta</option>
-                            <option>Witel Suramadu</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label class="filter-label">UIC</label>
-                        <select class="filter-select">
-                            <option>All UIC</option>
-                            <option>BPPLP</option>
-                            <option>RSO1</option>
-                            <option>RSMES</option>
-                            <option>RLEGS</option>
-                        </select>
-                    </div>
-                    <button class="filter-btn">FILTER</button>
+                    <form method="GET" action="{{ route('supportneeded.index') }}" class="filters-form">
+                        <div class="filter-group">
+                            <label class="filter-label">Witel or Unit</label>
+                            <select class="filter-select" name="unit">
+                                <option value="">All Witel or Unit</option>
+                                <option value="TELDA BLORA" {{ request('unit') == 'TELDA BLORA' ? 'selected' : '' }}>TELDA
+                                    BLORA</option>
+                                <option value="TELDA BOYOLALI" {{ request('unit') == 'TELDA BOYOLALI' ? 'selected' : '' }}>
+                                    TELDA BOYOLALI</option>
+                                <option value="TELDA JEPARA" {{ request('unit') == 'TELDA JEPARA' ? 'selected' : '' }}>TELDA
+                                    JEPARA</option>
+                                <option value="TELDA KLATEN" {{ request('unit') == 'TELDA KLATEN' ? 'selected' : '' }}>TELDA
+                                    KLATEN</option>
+                                <option value="TELDA KUDUS" {{ request('unit') == 'TELDA KUDUS' ? 'selected' : '' }}>TELDA
+                                    KUDUS</option>
+                                <option value="MEA SOLO" {{ request('unit') == 'MEA SOLO' ? 'selected' : '' }}>MEA SOLO
+                                </option>
+                                <option value="TELDA PATI" {{ request('unit') == 'TELDA PATI' ? 'selected' : '' }}>TELDA PATI
+                                </option>
+                                <option value="TELDA PURWODADI" {{ request('unit') == 'TELDA PURWODADI' ? 'selected' : '' }}>
+                                    TELDA PURWODADI</option>
+                                <option value="TELDA REMBANG" {{ request('unit') == 'TELDA REMBANG' ? 'selected' : '' }}>TELDA
+                                    REMBANG</option>
+                                <option value="TELDA SRAGEN" {{ request('unit') == 'TELDA SRAGEN' ? 'selected' : '' }}>TELDA
+                                    SRAGEN</option>
+                                <option value="TELDA WONOGIRI" {{ request('unit') == 'TELDA WONOGIRI' ? 'selected' : '' }}>
+                                    TELDA WONOGIRI</option>
+                                <option value="BS" {{ request('unit') == 'BS' ? 'selected' : '' }}>BS</option>
+                                <option value="GS" {{ request('unit') == 'GS' ? 'selected' : '' }}>GS</option>
+                                <option value="PRQ" {{ request('unit') == 'PRQ' ? 'selected' : '' }}>PRQ</option>
+                                <option value="SSGS" {{ request('unit') == 'SSGS' ? 'selected' : '' }}>SSGS</option>
+                                <option value="RSO WITEL" {{ request('unit') == 'RSO WITEL' ? 'selected' : '' }}>RSO WITEL
+                                </option>
+                                <!-- Tambahkan lainnya sesuai kebutuhan -->
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">UIC</label>
+                            <select class="filter-select" name="uic">
+                                <option value="">All UIC</option>
+                                <option value="BS" {{ request('uic') == 'BS' ? 'selected' : '' }}>BS</option>
+                                <option value="GS" {{ request('uic') == 'GS' ? 'selected' : '' }}>GS</option>
+                                <option value="RLEGS" {{ request('uic') == 'RLEGS' ? 'selected' : '' }}>RLEGS</option>
+                                <option value="RSO REGIONAL" {{ request('uic') == 'RSO REGIONAL' ? 'selected' : '' }}>RSO
+                                    REGIONAL</option>
+                                <option value="RSO WITEL" {{ request('uic') == 'RSO WITEL' ? 'selected' : '' }}>RSO WITEL
+                                </option>
+                                <option value="ED" {{ request('uic') == 'ED' ? 'selected' : '' }}>ED</option>
+                                <option value="TIF" {{ request('uic') == 'TIF' ? 'selected' : '' }}>TIF</option>
+                                <option value="TSEL" {{ request('uic') == 'TSEL' ? 'selected' : '' }}>TSEL</option>
+                                <option value="GSD" {{ request('uic') == 'GSD' ? 'selected' : '' }}>GSD</option>
+                                <option value="SSGS" {{ request('uic') == 'SSGS' ? 'selected' : '' }}>SSGS</option>
+                                <option value="PRQ" {{ request('uic') == 'PRQ' ? 'selected' : '' }}>PRQ</option>
+                                <option value="RSMES" {{ request('uic') == 'RSMES' ? 'selected' : '' }}>RSMES</option>
+                                <option value="BPPLP" {{ request('uic') == 'BPPLP' ? 'selected' : '' }}>BPPLP</option>
+                                <option value="SSS" {{ request('uic') == 'SSS' ? 'selected' : '' }}>SSS</option>
+                                <!-- Tambahkan lainnya sesuai kebutuhan -->
+                            </select>
+                        </div>
+                        <button type="submit" class="filter-btn">FILTER</button>
+                    </form>
                 </div>
                 <div class="search-container">
                     <form action="{{ route('supportneeded.index') }}" method="GET" class="search-form">
@@ -169,16 +209,16 @@
                                 <td class="col-respons">{!! nl2br(e($item->response_uic)) !!}</td>
                                 <td class="col-action">
                                     <button type="button" class="action-btn edit-btn" onclick="populateEditForm({
-                                                    id: '{{ $item->id }}',
-                                                    agenda: '{{ $item->agenda }}',
-                                                    unit_or_telda: '{{ $item->unit_or_telda }}',
-                                                    start_date: '{{ $item->start_date }}',
-                                                    end_date: '{{ $item->end_date }}',
-                                                    uic: '{{ $item->uic }}',
-                                                    progress: '{{ $item->progress }}',
-                                                    notes_to_follow_up: `{{ $item->notes_to_follow_up }}`,
-                                                    response_uic: `{{ $item->response_uic }}`
-                                                    }); openModal('editSupportModal');">Edit</button>
+                                                                            id: '{{ $item->id }}',
+                                                                            agenda: '{{ $item->agenda }}',
+                                                                            unit_or_telda: '{{ $item->unit_or_telda }}',
+                                                                            start_date: '{{ $item->start_date }}',
+                                                                            end_date: '{{ $item->end_date }}',
+                                                                            uic: '{{ $item->uic }}',
+                                                                            progress: '{{ $item->progress }}',
+                                                                            notes_to_follow_up: `{{ $item->notes_to_follow_up }}`,
+                                                                            response_uic: `{{ $item->response_uic }}`
+                                                                            }); openModal('editSupportModal');">Edit</button>
                                     <form action="{{ route('supportneeded.destroy', $item->id) }}" method="POST"
                                         style="display:inline;">
                                         @csrf
