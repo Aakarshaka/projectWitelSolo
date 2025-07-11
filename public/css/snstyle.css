@@ -259,10 +259,10 @@ body {
     width: 100px;
 }
 .table th.col-start {
-    width: 50px;
+    width: 80px;
 }
 .table th.col-end {
-    width: 50px;
+    width: 100px;
 }
 .table th.col-off {
     width: 50px;
