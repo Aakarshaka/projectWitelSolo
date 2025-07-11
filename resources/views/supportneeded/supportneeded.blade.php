@@ -60,12 +60,13 @@
                     <button class="filter-btn">FILTER</button>
                 </div>
                 <div class="search-container">
-                    <form action="{{ route('supportneeded.index') }}" method="GET">
+                    <form action="{{ route('supportneeded.index') }}" method="GET" class="search-form">
                         <input type="text" name="search" class="search-box" placeholder="Search agenda or unit..."
                             value="{{ request('search') }}">
                         <button type="submit" class="filter-btn">Search</button>
                     </form>
                 </div>
+
             </div>
 
             <div class="scroll-hint">
@@ -101,7 +102,8 @@
                                     {{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d M Y') : '-'  }}
                                 </td>
                                 <td class="col-end">
-                                    {{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d M Y') : '-'  }}</td>
+                                    {{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d M Y') : '-'  }}
+                                </td>
                                 <td class="col-off">
                                     @if($item->start_date && $item->end_date)
                                         {{ \Carbon\Carbon::parse($item->start_date)->diffInDays(\Carbon\Carbon::parse($item->end_date)) + 1 }}
@@ -167,16 +169,16 @@
                                 <td class="col-respons">{!! nl2br(e($item->response_uic)) !!}</td>
                                 <td class="col-action">
                                     <button type="button" class="action-btn edit-btn" onclick="populateEditForm({
-                                            id: '{{ $item->id }}',
-                                            agenda: '{{ $item->agenda }}',
-                                            unit_or_telda: '{{ $item->unit_or_telda }}',
-                                            start_date: '{{ $item->start_date }}',
-                                            end_date: '{{ $item->end_date }}',
-                                            uic: '{{ $item->uic }}',
-                                            progress: '{{ $item->progress }}',
-                                            notes_to_follow_up: `{{ $item->notes_to_follow_up }}`,
-                                            response_uic: `{{ $item->response_uic }}`
-                                            }); openModal('editSupportModal');">Edit</button>
+                                                    id: '{{ $item->id }}',
+                                                    agenda: '{{ $item->agenda }}',
+                                                    unit_or_telda: '{{ $item->unit_or_telda }}',
+                                                    start_date: '{{ $item->start_date }}',
+                                                    end_date: '{{ $item->end_date }}',
+                                                    uic: '{{ $item->uic }}',
+                                                    progress: '{{ $item->progress }}',
+                                                    notes_to_follow_up: `{{ $item->notes_to_follow_up }}`,
+                                                    response_uic: `{{ $item->response_uic }}`
+                                                    }); openModal('editSupportModal');">Edit</button>
                                     <form action="{{ route('supportneeded.destroy', $item->id) }}" method="POST"
                                         style="display:inline;">
                                         @csrf

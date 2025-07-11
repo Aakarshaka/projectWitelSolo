@@ -91,6 +91,44 @@ class SupportneededController extends Controller
             'response_uic' => 'nullable|string',
         ]);
 
+        $status = null;
+        if (empty($validated['unit_or_telda']) && empty($validated['uic'])) {
+            $status = '';
+        } elseif (in_array($validated['uic'], ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS', 'TIF', 'TSEL', 'GSD'])) {
+            $status = 'Eskalasi';
+        } elseif ($validated['unit_or_telda'] === $validated['uic']) {
+            $status = 'Action';
+        } else {
+            $status = 'Support Needed';
+        }
+
+        $validated['status'] = $status;
+
+        $start = $validated['start_date'] ?? null;
+        $end = $validated['end_date'] ?? null;
+        $validated['off_day'] = ($start && $end)
+            ? \Carbon\Carbon::parse($start)->diffInDays(\Carbon\Carbon::parse($end)) + 1
+            : 0;
+
+        if (!isset($validated['complete'])) {
+            switch ($validated['progress']) {
+                case 'Open':
+                    $validated['complete'] = 0;
+                    break;
+                case 'Need Discuss':
+                    $validated['complete'] = 25;
+                    break;
+                case 'Progress':
+                    $validated['complete'] = 75;
+                    break;
+                case 'Done':
+                    $validated['complete'] = 100;
+                    break;
+                default:
+                    $validated['complete'] = 0;
+            }
+        }
+
         Supportneeded::create($validated);
         return back()->with('success', 'Agenda created');
     }
@@ -110,6 +148,19 @@ class SupportneededController extends Controller
             'status' => 'nullable|string',
             'response_uic' => 'nullable|string',
         ]);
+
+        $status = null;
+        if (empty($validated['unit_or_telda']) && empty($validated['uic'])) {
+            $status = '';
+        } elseif (in_array($validated['uic'], ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS', 'TIF', 'TSEL', 'GSD'])) {
+            $status = 'Eskalasi';
+        } elseif ($validated['unit_or_telda'] === $validated['uic']) {
+            $status = 'Action';
+        } else {
+            $status = 'Support Needed';
+        }
+
+        $validated['status'] = $status;
 
         $supportneeded->update($validated);
         return back()->with('success', 'Agenda updated');
