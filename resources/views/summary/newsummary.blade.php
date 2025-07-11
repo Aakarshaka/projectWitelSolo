@@ -351,37 +351,46 @@
                                                 }
                                             @endphp
                                             <tr>
-                                                <td class="row-number">{{ $index + 1 }}</td>
-                                                <td class="entity-name">{{ $uic }}</td>
-                                                <td><span class="status-badge status-open">{{ $rowData['open'] ?? 0 }}</span>
-                                                </td>
-                                                <td><span class="percentage-badge">{{ $rowData['open_percent'] ?? 0 }}%</span>
-                                                </td>
-                                                <td><span
-                                                        class="status-badge status-discuss">{{ $rowData['discuss'] ?? 0 }}</span>
-                                                </td>
-                                                <td><span
-                                                        class="percentage-badge">{{ $rowData['discuss_percent'] ?? 0 }}%</span>
-                                                </td>
-                                                <td>
-                                                <td class="col-progress">
-                                                    <button
-                                                        onclick="openDetailModal('{{ $item->uic }}', '{{ $item->progress }}')"
-                                                        class="action-btn">
-                                                        {{ $item->progress }}
-                                                    </button>
-                                                </td>
-                                                <span
-                                                    class="status-badge status-progress">{{ $rowData['progress'] ?? 0 }}</span>
-                                                </td>
-                                                <td><span
-                                                        class="percentage-badge">{{ $rowData['progress_percent'] ?? 0 }}%</span>
-                                                </td>
-                                                <td><span class="status-badge status-done">{{ $rowData['done'] ?? 0 }}</span>
-                                                </td>
-                                                <td><span class="percentage-badge">{{ $rowData['done_percent'] ?? 0 }}%</span>
-                                                </td>
-                                                <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
+                                            <td class="row-number">{{ $index + 1 }}</td>
+                                            <td class="entity-name">{{ $uic }}</td>
+                                            {{-- OPEN --}}
+                                            <td class="col-progress">
+                                            <button class="status-badge status-open"
+                                                onclick="openDetailModal('uic', '{{ $uic }}', 'Open')">
+                                                {{ $rowData['open'] ?? 0 }}
+                                            </button>
+                                            </td>
+                                            <td><span class="percentage-badge">{{ $rowData['open_percent'] ?? 0 }}%</span></td>
+
+                                            {{-- NEED DISCUSS --}}
+                                            <td class="col-progress">
+                                            <button class="status-badge status-discuss"
+                                                onclick="openDetailModal('uic', '{{ $uic }}', 'Need Discuss')">
+                                                {{ $rowData['discuss'] ?? 0 }}
+                                            </button>
+                                            </td>
+                                            <td><span class="percentage-badge">{{ $rowData['discuss_percent'] ?? 0 }}%</span></td>
+
+                                            {{-- PROGRESS --}}
+                                            <td class="col-progress">
+                                            <button class="status-badge status-progress"
+                                                onclick="openDetailModal('uic', '{{ $uic }}', 'Progress')">
+                                                {{ $rowData['progress'] ?? 0 }}
+                                            </button>
+                                            </td>
+                                            <td><span class="percentage-badge">{{ $rowData['progress_percent'] ?? 0 }}%</span></td>
+
+                                            {{-- DONE --}}
+                                            <td class="col-progress">
+                                            <button class="status-badge status-done"
+                                                onclick="openDetailModal('uic', '{{ $uic }}', 'Done')">
+                                                {{ $rowData['done'] ?? 0 }}
+                                            </button>
+                                            </td>
+                                            <td><span class="percentage-badge">{{ $rowData['done_percent'] ?? 0 }}%</span></td>
+
+                                            {{-- TOTAL --}}
+                                            <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
                                             </tr>
                                         @endforeach
 
@@ -457,27 +466,44 @@
                                             <tr>
                                                 <td class="row-number">{{ $index + 1 }}</td>
                                                 <td class="entity-name">{{ $agenda }}</td>
-                                                <td><span class="status-badge status-open">{{ $rowData['open'] ?? 0 }}</span>
-                                                </td>
-                                                <td><span class="percentage-badge">{{ $rowData['open_percent'] ?? 0 }}%</span>
-                                                </td>
-                                                <td><span
-                                                        class="status-badge status-discuss">{{ $rowData['discuss'] ?? 0 }}</span>
-                                                </td>
-                                                <td><span
-                                                        class="percentage-badge">{{ $rowData['discuss_percent'] ?? 0 }}%</span>
-                                                </td>
-                                                <td><span
-                                                        class="status-badge status-progress">{{ $rowData['progress'] ?? 0 }}</span>
-                                                </td>
-                                                <td><span
-                                                        class="percentage-badge">{{ $rowData['progress_percent'] ?? 0 }}%</span>
-                                                </td>
-                                                <td><span class="status-badge status-done">{{ $rowData['done'] ?? 0 }}</span>
-                                                </td>
-                                                <td><span class="percentage-badge">{{ $rowData['done_percent'] ?? 0 }}%</span>
-                                                </td>
-                                                <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
+                                                {{-- OPEN --}}
+                                            <td class="col-progress">
+                                            <button class="status-badge status-open"
+                                                onclick="openDetailModal('agenda', '{{ $agenda }}', 'Open')">
+                                                {{ $rowData['open'] ?? 0 }}
+                                            </button>
+                                            </td>
+                                            <td><span class="percentage-badge">{{ $rowData['open_percent'] ?? 0 }}%</span></td>
+
+                                            {{-- NEED DISCUSS --}}
+                                            <td class="col-progress">
+                                            <button class="status-badge status-discuss"
+                                                onclick="openDetailModal('agenda', '{{ $agenda }}', 'Need Discuss')">
+                                                {{ $rowData['discuss'] ?? 0 }}
+                                            </button>
+                                            </td>
+                                            <td><span class="percentage-badge">{{ $rowData['discuss_percent'] ?? 0 }}%</span></td>
+
+                                            {{-- PROGRESS --}}
+                                            <td class="col-progress">
+                                            <button class="status-badge status-progress"
+                                                onclick="openDetailModal('agenda', '{{ $agenda }}', 'Progress')">
+                                                {{ $rowData['progress'] ?? 0 }}
+                                            </button>
+                                            </td>
+                                            <td><span class="percentage-badge">{{ $rowData['progress_percent'] ?? 0 }}%</span></td>
+
+                                            {{-- DONE --}}
+                                            <td class="col-progress">
+                                            <button class="status-badge status-done"
+                                                onclick="openDetailModal('agenda', '{{ $agenda }}', 'Done')">
+                                                {{ $rowData['done'] ?? 0 }}
+                                            </button>
+                                            </td>
+                                            <td><span class="percentage-badge">{{ $rowData['done_percent'] ?? 0 }}%</span></td>
+
+                                            {{-- TOTAL --}}
+                                            <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
                                             </tr>
                                         @endforeach
                                         @if(isset($totalAgenda))
@@ -529,7 +555,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $unitList = ['BLORA', 'BOYOLALI', 'JEPARA', 'KLATEN', 'KUDUS', 'MEA SOLO', 'PATI', 'PURWODADI', 'REMBANG', 'SRAGEN', 'WONOGIRI', 'BS', 'GS', 'PRQ'];
+                                            $unitList = ['TELDA BLORA', 'TELDA BOYOLALI', 'TELDA JEPARA', 'TELDA KLATEN', 'TELDA KUDUS', 'MEA SOLO', 'TELDA PATI', 'TELDA PURWODADI', 'TELDA REMBANG', 'TELDA SRAGEN', 'TELDA WONOGIRI', 'BS', 'GS', 'PRQ'];
                                         @endphp
                                         @foreach ($unitList as $index => $unit)
                                             @php
@@ -546,27 +572,44 @@
                                             <tr>
                                                 <td class="row-number">{{ $index + 1 }}</td>
                                                 <td class="entity-name">{{ $unit }}</td>
-                                                <td><span class="status-badge status-open">{{ $rowData['open'] ?? 0 }}</span>
-                                                </td>
-                                                <td><span class="percentage-badge">{{ $rowData['open_percent'] ?? 0 }}%</span>
-                                                </td>
-                                                <td><span
-                                                        class="status-badge status-discuss">{{ $rowData['discuss'] ?? 0 }}</span>
-                                                </td>
-                                                <td><span
-                                                        class="percentage-badge">{{ $rowData['discuss_percent'] ?? 0 }}%</span>
-                                                </td>
-                                                <td><span
-                                                        class="status-badge status-progress">{{ $rowData['progress'] ?? 0 }}</span>
-                                                </td>
-                                                <td><span
-                                                        class="percentage-badge">{{ $rowData['progress_percent'] ?? 0 }}%</span>
-                                                </td>
-                                                <td><span class="status-badge status-done">{{ $rowData['done'] ?? 0 }}</span>
-                                                </td>
-                                                <td><span class="percentage-badge">{{ $rowData['done_percent'] ?? 0 }}%</span>
-                                                </td>
-                                                <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
+                                                {{-- OPEN --}}
+                                            <td class="col-progress">
+                                            <button class="status-badge status-open"
+                                                onclick="openDetailModal('unit', '{{ $unit }}', 'Open')">
+                                                {{ $rowData['open'] ?? 0 }}
+                                            </button>
+                                            </td>
+                                            <td><span class="percentage-badge">{{ $rowData['open_percent'] ?? 0 }}%</span></td>
+
+                                            {{-- NEED DISCUSS --}}
+                                            <td class="col-progress">
+                                            <button class="status-badge status-discuss"
+                                                onclick="openDetailModal('unit', '{{ $unit }}', 'Need Discuss')">
+                                                {{ $rowData['discuss'] ?? 0 }}
+                                            </button>
+                                            </td>
+                                            <td><span class="percentage-badge">{{ $rowData['discuss_percent'] ?? 0 }}%</span></td>
+
+                                            {{-- PROGRESS --}}
+                                            <td class="col-progress">
+                                            <button class="status-badge status-progress"
+                                                onclick="openDetailModal('unit', '{{ $unit }}', 'Progress')">
+                                                {{ $rowData['progress'] ?? 0 }}
+                                            </button>
+                                            </td>
+                                            <td><span class="percentage-badge">{{ $rowData['progress_percent'] ?? 0 }}%</span></td>
+
+                                            {{-- DONE --}}
+                                            <td class="col-progress">
+                                            <button class="status-badge status-done"
+                                                onclick="openDetailModal('unit', '{{ $unit }}', 'Done')">
+                                                {{ $rowData['done'] ?? 0 }}
+                                            </button>
+                                            </td>
+                                            <td><span class="percentage-badge">{{ $rowData['done_percent'] ?? 0 }}%</span></td>
+
+                                            {{-- TOTAL --}}
+                                            <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
                                             </tr>
                                         @endforeach
                                         @if(isset($totalUnit))
@@ -634,38 +677,50 @@
         }
     </style>
     <script>
-        function openDetailModal(uic, progress) {
-            const modal = document.getElementById('detailModal');
-            const content = document.getElementById('detailContent');
-            content.innerHTML = '<p>Loading...</p>';
-            modal.style.display = 'block';
+    function openDetailModal(type, value, progress) {
+        const modal = document.getElementById('detailModal');
+        const content = document.getElementById('detailContent');
+        content.innerHTML = '<p>Loading...</p>';
+        modal.style.display = 'block';
 
-            fetch(`/supportneeded/detail?uic=${encodeURIComponent(uic)}&progress=${encodeURIComponent(progress)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.length === 0) {
-                        content.innerHTML = '<p>No data found.</p>';
-                    } else {
-                        let html = '<table style="width:100%; border-collapse:collapse;">';
-                        html += '<tr><th style="border:1px solid #ccc;padding:5px;">Agenda</th><th style="border:1px solid #ccc;padding:5px;">Unit</th><th style="border:1px solid #ccc;padding:5px;">UIC</th></tr>';
-                        data.forEach(item => {
-                            html += `<tr>
-                                        <td style="border:1px solid #ccc;padding:5px;">${item.agenda}</td>
-                                        <td style="border:1px solid #ccc;padding:5px;">${item.unit_or_telda}</td>
-                                        <td style="border:1px solid #ccc;padding:5px;">${item.uic}</td>
-                                     </tr>`;
-                        });
-                        html += '</table>';
-                        content.innerHTML = html;
-                    }
-                })
-                .catch(() => {
-                    content.innerHTML = '<p>Failed to load data.</p>';
-                });
+        let url = '/supportneeded/detail?';
+        if (type === 'uic') {
+            url += `uic=${encodeURIComponent(value)}&progress=${encodeURIComponent(progress)}`;
+        } else if (type === 'agenda') {
+            url += `agenda=${encodeURIComponent(value)}&progress=${encodeURIComponent(progress)}`;
+        } else if (type === 'unit') {
+            url += `unit=${encodeURIComponent(value)}&progress=${encodeURIComponent(progress)}`;
+        } else {
+            content.innerHTML = '<p>Invalid request type.</p>';
+            return;
         }
 
-        function closeDetailModal() {
-            document.getElementById('detailModal').style.display = 'none';
-        }
-    </script>
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length === 0) {
+                    content.innerHTML = '<p>No data found.</p>';
+                } else {
+                    let html = '<table style="width:100%; border-collapse:collapse;">';
+                    html += '<tr><th style="border:1px solid #ccc;padding:5px;">Agenda</th><th style="border:1px solid #ccc;padding:5px;">Unit</th><th style="border:1px solid #ccc;padding:5px;">UIC</th></tr>';
+                    data.forEach(item => {
+                        html += `<tr>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.agenda}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.unit_or_telda}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.uic}</td>
+                        </tr>`;
+                    });
+                    html += '</table>';
+                    content.innerHTML = html;
+                }
+            })
+            .catch(() => {
+                content.innerHTML = '<p>Failed to load data.</p>';
+            });
+    }
+
+    function closeDetailModal() {
+        document.getElementById('detailModal').style.display = 'none';
+    }
+</script>
 @endsection

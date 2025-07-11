@@ -37,6 +37,8 @@ Route::get('supportNeeded/summary', [SummaryController::class, 'index'])->name('
 // ==================
 // Resource Controllers (CRUD)
 // ==================
+Route::get('/supportneeded/detail', [SupportneededController::class, 'getDetail'])->name('supportneeded.detail');
+
 Route::resource('snunit', SnunitController::class);
 Route::resource('snam', SnamController::class);
 Route::resource('sntelda', SnteldaController::class);
@@ -60,5 +62,3 @@ Route::get('dashboard/newdashboard', function () {
 Route::get('warroom/newwarroom', function () {
     return view('warroom.newwarroom');
 });
-
-Route::get('/supportneeded/detail', [SupportneededController::class, 'getDetail']);

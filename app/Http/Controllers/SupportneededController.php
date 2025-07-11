@@ -180,14 +180,26 @@ class SupportneededController extends Controller
      */
     public function getDetail(Request $request)
     {
-        $request->validate([
-            'uic' => 'required|string',
-            'progress' => 'required|string',
-        ]);
+        $progress = $request->query('progress');
 
-        $data = Supportneeded::where('uic', $request->uic)
-            ->where('progress', $request->progress)
-            ->get();
+        if ($request->has('uic')) {
+            $uic = $request->query('uic');
+            $data = Supportneeded::where('uic', $uic)
+                ->where('progress', $progress)
+                ->get();
+        } elseif ($request->has('agenda')) {
+            $agenda = $request->query('agenda');
+            $data = Supportneeded::where('agenda', $agenda)
+                ->where('progress', $progress)
+                ->get();
+        } elseif ($request->has('unit')) {
+            $unit = $request->query('unit');
+            $data = Supportneeded::where('unit_or_telda', $unit)
+                ->where('progress', $progress)
+                ->get();
+        } else {
+            return response()->json([], 400); // Bad Request
+        }
 
         return response()->json($data);
     }
