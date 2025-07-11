@@ -91,15 +91,21 @@ class SupportneededController extends Controller
             'response_uic' => 'nullable|string',
         ]);
 
-        $status = null;
+        $escalationUics = ['RLEGS', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'RSMES', 'BPPLP', 'SSS'];
+        $supportNeededUics = ['BS', 'GS', 'RSO WITEL', 'SSGS', 'PRQ'];
+
+        $status = '';
+
         if (empty($validated['unit_or_telda']) && empty($validated['uic'])) {
             $status = '';
-        } elseif (in_array($validated['uic'], ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS', 'TIF', 'TSEL', 'GSD'])) {
-            $status = 'Eskalasi';
         } elseif ($validated['unit_or_telda'] === $validated['uic']) {
             $status = 'Action';
-        } else {
+        } elseif (in_array($validated['uic'], $escalationUics)) {
+            $status = 'Eskalasi';
+        } elseif (in_array($validated['uic'], $supportNeededUics)) {
             $status = 'Support Needed';
+        } else {
+            $status = '';
         }
 
         $validated['status'] = $status;
@@ -149,18 +155,25 @@ class SupportneededController extends Controller
             'response_uic' => 'nullable|string',
         ]);
 
-        $status = null;
+        $escalationUics = ['RLEGS', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'RSMES', 'BPPLP', 'SSS'];
+        $supportNeededUics = ['BS', 'GS', 'RSO WITEL', 'SSGS', 'PRQ'];
+
+        $status = '';
+
         if (empty($validated['unit_or_telda']) && empty($validated['uic'])) {
             $status = '';
-        } elseif (in_array($validated['uic'], ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS', 'TIF', 'TSEL', 'GSD'])) {
-            $status = 'Eskalasi';
         } elseif ($validated['unit_or_telda'] === $validated['uic']) {
             $status = 'Action';
-        } else {
+        } elseif (in_array($validated['uic'], $escalationUics)) {
+            $status = 'Eskalasi';
+        } elseif (in_array($validated['uic'], $supportNeededUics)) {
             $status = 'Support Needed';
+        } else {
+            $status = '';
         }
 
         $validated['status'] = $status;
+
 
         $supportneeded->update($validated);
         return back()->with('success', 'Agenda updated');
