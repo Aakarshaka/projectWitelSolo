@@ -40,35 +40,35 @@
                     <form method="GET" action="{{ route('supportneeded.index') }}" class="filters-form">
                         <div class="filter-group">
                             <label class="filter-label">Witel or Unit</label>
-                            <select class="filter-select" name="unit">
+                            <select class="filter-select" name="unit_or_telda">
                                 <option value="">All Witel or Unit</option>
-                                <option value="TELDA BLORA" {{ request('unit') == 'TELDA BLORA' ? 'selected' : '' }}>TELDA
+                                <option value="TELDA BLORA" {{ request('unit_or_telda') == 'TELDA BLORA' ? 'selected' : '' }}>TELDA
                                     BLORA</option>
-                                <option value="TELDA BOYOLALI" {{ request('unit') == 'TELDA BOYOLALI' ? 'selected' : '' }}>
+                                <option value="TELDA BOYOLALI" {{ request('unit_or_telda') == 'TELDA BOYOLALI' ? 'selected' : '' }}>
                                     TELDA BOYOLALI</option>
-                                <option value="TELDA JEPARA" {{ request('unit') == 'TELDA JEPARA' ? 'selected' : '' }}>TELDA
+                                <option value="TELDA JEPARA" {{ request('unit_or_telda') == 'TELDA JEPARA' ? 'selected' : '' }}>TELDA
                                     JEPARA</option>
-                                <option value="TELDA KLATEN" {{ request('unit') == 'TELDA KLATEN' ? 'selected' : '' }}>TELDA
+                                <option value="TELDA KLATEN" {{ request('unit_or_telda') == 'TELDA KLATEN' ? 'selected' : '' }}>TELDA
                                     KLATEN</option>
-                                <option value="TELDA KUDUS" {{ request('unit') == 'TELDA KUDUS' ? 'selected' : '' }}>TELDA
+                                <option value="TELDA KUDUS" {{ request('unit_or_telda') == 'TELDA KUDUS' ? 'selected' : '' }}>TELDA
                                     KUDUS</option>
-                                <option value="MEA SOLO" {{ request('unit') == 'MEA SOLO' ? 'selected' : '' }}>MEA SOLO
+                                <option value="MEA SOLO" {{ request('unit_or_telda') == 'MEA SOLO' ? 'selected' : '' }}>MEA SOLO
                                 </option>
-                                <option value="TELDA PATI" {{ request('unit') == 'TELDA PATI' ? 'selected' : '' }}>TELDA PATI
+                                <option value="TELDA PATI" {{ request('unit_or_telda') == 'TELDA PATI' ? 'selected' : '' }}>TELDA PATI
                                 </option>
-                                <option value="TELDA PURWODADI" {{ request('unit') == 'TELDA PURWODADI' ? 'selected' : '' }}>
+                                <option value="TELDA PURWODADI" {{ request('unit_or_telda') == 'TELDA PURWODADI' ? 'selected' : '' }}>
                                     TELDA PURWODADI</option>
-                                <option value="TELDA REMBANG" {{ request('unit') == 'TELDA REMBANG' ? 'selected' : '' }}>TELDA
+                                <option value="TELDA REMBANG" {{ request('unit_or_telda') == 'TELDA REMBANG' ? 'selected' : '' }}>TELDA
                                     REMBANG</option>
-                                <option value="TELDA SRAGEN" {{ request('unit') == 'TELDA SRAGEN' ? 'selected' : '' }}>TELDA
+                                <option value="TELDA SRAGEN" {{ request('unit_or_telda') == 'TELDA SRAGEN' ? 'selected' : '' }}>TELDA
                                     SRAGEN</option>
-                                <option value="TELDA WONOGIRI" {{ request('unit') == 'TELDA WONOGIRI' ? 'selected' : '' }}>
+                                <option value="TELDA WONOGIRI" {{ request('unit_or_telda') == 'TELDA WONOGIRI' ? 'selected' : '' }}>
                                     TELDA WONOGIRI</option>
-                                <option value="BS" {{ request('unit') == 'BS' ? 'selected' : '' }}>BS</option>
-                                <option value="GS" {{ request('unit') == 'GS' ? 'selected' : '' }}>GS</option>
-                                <option value="PRQ" {{ request('unit') == 'PRQ' ? 'selected' : '' }}>PRQ</option>
-                                <option value="SSGS" {{ request('unit') == 'SSGS' ? 'selected' : '' }}>SSGS</option>
-                                <option value="RSO WITEL" {{ request('unit') == 'RSO WITEL' ? 'selected' : '' }}>RSO WITEL
+                                <option value="BS" {{ request('unit_or_telda') == 'BS' ? 'selected' : '' }}>BS</option>
+                                <option value="GS" {{ request('unit_or_telda') == 'GS' ? 'selected' : '' }}>GS</option>
+                                <option value="PRQ" {{ request('unit_or_telda') == 'PRQ' ? 'selected' : '' }}>PRQ</option>
+                                <option value="SSGS" {{ request('unit_or_telda') == 'SSGS' ? 'selected' : '' }}>SSGS</option>
+                                <option value="RSO WITEL" {{ request('unit_or_telda') == 'RSO WITEL' ? 'selected' : '' }}>RSO WITEL
                                 </option>
                                 <!-- Tambahkan lainnya sesuai kebutuhan -->
                             </select>
