@@ -42,7 +42,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $uicList = ['BS', 'GS', 'RLEGS', 'RSO', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ', 'RSMES', 'BPPLP', 'SSS'];
+                                            $uicList = ['BS', 'GS', 'RLEGS', 'RSO WITEL','RSO REGIONAL','ED', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ', 'RSMES', 'BPPLP', 'SSS'];
                                         @endphp
                                         @foreach ($uicList as $index => $uic)
                                             @php
@@ -261,7 +261,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $unitList = ['TELDA BLORA', 'TELDA BOYOLALI', 'TELDA JEPARA', 'TELDA KLATEN', 'TELDA KUDUS', 'MEA SOLO', 'TELDA PATI', 'TELDA PURWODADI', 'TELDA REMBANG', 'TELDA SRAGEN', 'TELDA WONOGIRI', 'BS', 'GS', 'PRQ'];
+                                            $unitList = ['RSO WITEL','TELDA BLORA', 'TELDA BOYOLALI', 'TELDA JEPARA', 'TELDA KLATEN', 'TELDA KUDUS', 'MEA SOLO', 'TELDA PATI', 'TELDA PURWODADI', 'TELDA REMBANG', 'TELDA SRAGEN', 'TELDA WONOGIRI', 'BS', 'GS', 'PRQ'];
                                         @endphp
                                         @foreach ($unitList as $index => $unit)
                                             @php
