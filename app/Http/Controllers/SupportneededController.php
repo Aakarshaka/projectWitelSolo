@@ -11,13 +11,12 @@ class SupportneededController extends Controller
     {
         $query = Supportneeded::query();
 
-        // Optional: filtering
         if ($request->type_agenda) {
             $query->where('agenda', $request->type_agenda);
         }
 
-        if ($request->unit_or_witel) {
-            $query->where('unit_or_telda', $request->unit_or_witel);
+        if ($request->unit_or_telda) {
+            $query->where('unit_or_telda', $request->unit_or_telda);
         }
 
         if ($request->uic) {
@@ -36,17 +35,13 @@ class SupportneededController extends Controller
             });
         }
 
-
-        // Data untuk table
         $items = $query->paginate(10);
 
-        // Summary Data
         $allItems = Supportneeded::all();
         $total = $allItems->count();
         $close = $allItems->where('progress', 'Done')->count();
         $closePercentage = $total > 0 ? round(($close / $total) * 100, 1) : 0;
 
-        // Hitung rata-rata progress
         $progressMap = [
             'Open' => 0,
             'Need Discuss' => 25,
@@ -93,8 +88,6 @@ class SupportneededController extends Controller
 
         $escalationUics = ['RLEGS', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'RSMES', 'BPPLP', 'SSS'];
         $supportNeededUics = ['BS', 'GS', 'RSO WITEL', 'SSGS', 'PRQ'];
-
-        $status = '';
 
         if (empty($validated['unit_or_telda']) && empty($validated['uic'])) {
             $status = '';
@@ -158,8 +151,6 @@ class SupportneededController extends Controller
         $escalationUics = ['RLEGS', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'RSMES', 'BPPLP', 'SSS'];
         $supportNeededUics = ['BS', 'GS', 'RSO WITEL', 'SSGS', 'PRQ'];
 
-        $status = '';
-
         if (empty($validated['unit_or_telda']) && empty($validated['uic'])) {
             $status = '';
         } elseif ($validated['unit_or_telda'] === $validated['uic']) {
@@ -174,7 +165,6 @@ class SupportneededController extends Controller
 
         $validated['status'] = $status;
 
-
         $supportneeded->update($validated);
         return back()->with('success', 'Agenda updated');
     }
@@ -183,5 +173,22 @@ class SupportneededController extends Controller
     {
         $supportneeded->delete();
         return back()->with('success', 'Agenda deleted');
+    }
+
+    /**
+     * Method to get detail data for popup by UIC and Progress
+     */
+    public function getDetail(Request $request)
+    {
+        $request->validate([
+            'uic' => 'required|string',
+            'progress' => 'required|string',
+        ]);
+
+        $data = Supportneeded::where('uic', $request->uic)
+            ->where('progress', $request->progress)
+            ->get();
+
+        return response()->json($data);
     }
 }

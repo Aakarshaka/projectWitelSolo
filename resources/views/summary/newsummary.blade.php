@@ -584,4 +584,37 @@
             </div>
         </div>
     </div>
+    <!-- Modal Popup -->
+    <div id="detailModal"
+        style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+        <div style="background:white; padding:20px; border-radius:10px; max-width:600px; width:90%;">
+            <h3 id="modalTitle" style="margin-bottom:10px;">Detail</h3>
+            <div id="modalContent">Loading...</div>
+            <button onclick="closeModal()"
+                style="margin-top:20px; padding:10px 20px; background:#8b1538; color:white; border:none; border-radius:6px;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function showModal(uic, status) {
+            const modal = document.getElementById('detailModal');
+            const title = document.getElementById('modalTitle');
+            const content = document.getElementById('modalContent');
+
+            title.innerText = `Detail ${status} - ${uic}`;
+            content.innerHTML = 'Loading...';
+
+            fetch(`/supportneeded/detail?uic=${uic}&status=${status}`)
+                .then(res => res.text())
+                .then(html => {
+                    content.innerHTML = html;
+                });
+
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+    </script>
 @endsection

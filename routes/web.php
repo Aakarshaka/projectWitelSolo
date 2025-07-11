@@ -60,3 +60,5 @@ Route::get('dashboard/newdashboard', function () {
 Route::get('warroom/newwarroom', function () {
     return view('warroom.newwarroom');
 });
+
+Route::get('/supportneeded/detail', [SupportneededController::class, 'getDetail']);
