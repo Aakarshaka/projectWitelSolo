@@ -186,25 +186,12 @@
                             </div>
                         </td>
                         <td class="col-status">
-                            @php
-                            $escalationUics = ['RSMES', 'RLEGS', 'BPPLP', 'RSO', 'SSS', 'TIF', 'TSEL', 'GSD'];
-
-                            if (empty($item->unit_or_telda) && empty($item->uic)) {
-                            $statusText = '';
-                            $statusClass = '';
-                            } elseif (in_array($item->uic, $escalationUics)) {
-                            $statusText = 'Eskalasi';
-                            $statusClass = 'status-done'; // contoh class-nya
-                            } elseif ($item->unit_or_telda == $item->uic) {
-                            $statusText = 'Action';
-                            $statusClass = 'status-action';
-                            } else {
-                            $statusText = 'Support Needed';
-                            $statusClass = 'status-in-progress';
-                            }
-                            @endphp
-
-                            <span class="status-badge {{ $statusClass }}">{{ $statusText }}</span>
+                            <span class="status-badge 
+                                {{ $item->status == 'Eskalasi' ? 'status-done' : 
+                                ($item->status == 'Action' ? 'status-action' : 
+                                ($item->status == 'Support Needed' ? 'status-in-progress' : 'status-empty')) }}">
+                                {{ $item->status ?: '-' }}
+                            </span>
                         </td>
                         <td class="col-respons">{!! nl2br(e($item->response_uic)) !!}</td>
                         <td class="col-action">

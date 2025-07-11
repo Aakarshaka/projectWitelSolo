@@ -35,7 +35,7 @@ class SupportneededController extends Controller
             });
         }
 
-        $items = $query->paginate(10);
+        $items = $query->get();
 
         $allItems = Supportneeded::all();
         $total = $allItems->count();
