@@ -247,12 +247,12 @@
 
                     <div class="sn-form-group">
                         <label class="sn-form-label">Start Date</label>
-                        <input type="date" class="sn-form-input" name="start_date">
+                        <input type="date" class="sn-form-input" name="start_date" id="add_start_date">
                     </div>
 
                     <div class="sn-form-group">
                         <label class="sn-form-label">End Date</label>
-                        <input type="date" class="sn-form-input" name="end_date">
+                        <input type="date" class="sn-form-input" name="end_date" id="add_end_date">
                     </div>
 
                     <div class="sn-form-group">
@@ -457,15 +457,56 @@
 
         document.getElementById('editSupportForm').action = '/supportneeded/' + data.id;
 
+        // ✅ Set min di sini juga supaya langsung aktif saat modal dibuka
+        const editStartDateInput = document.getElementById('edit_start_date');
+        const editEndDateInput = document.getElementById('edit_end_date');
+
+        if (editStartDateInput && editEndDateInput) {
+            if (editStartDateInput.value) {
+                editEndDateInput.min = editStartDateInput.value;
+                if (editEndDateInput.value && editEndDateInput.value < editStartDateInput.value) {
+                    editEndDateInput.value = '';
+                }
+            } else {
+                editEndDateInput.removeAttribute('min');
+            }
+        }
     }
 
     // Update the Add Support button to use the new modal
     document.addEventListener('DOMContentLoaded', function() {
-        const addButton = document.querySelector('.demo-btn');
-        if (addButton) {
-            addButton.setAttribute('onclick', 'openModal("addSupportModal")');
-            addButton.removeAttribute('data-bs-toggle');
-            addButton.removeAttribute('data-bs-target');
+        // Validasi Add Support Modal
+        const startDateInput = document.getElementById('add_start_date');
+        const endDateInput = document.getElementById('add_end_date');
+
+        if (startDateInput && endDateInput) {
+            startDateInput.addEventListener('change', function() {
+                if (startDateInput.value) {
+                    endDateInput.min = startDateInput.value;
+                    if (endDateInput.value && endDateInput.value < startDateInput.value) {
+                        endDateInput.value = '';
+                    }
+                } else {
+                    endDateInput.removeAttribute('min');
+                }
+            });
+        }
+
+        // Validasi Edit Support Modal
+        const editStartDateInput = document.getElementById('edit_start_date');
+        const editEndDateInput = document.getElementById('edit_end_date');
+
+        if (editStartDateInput && editEndDateInput) {
+            editStartDateInput.addEventListener('change', function() {
+                if (editStartDateInput.value) {
+                    editEndDateInput.min = editStartDateInput.value;
+                    if (editEndDateInput.value && editEndDateInput.value < editStartDateInput.value) {
+                        editEndDateInput.value = '';
+                    }
+                } else {
+                    editEndDateInput.removeAttribute('min');
+                }
+            });
         }
     });
 </script>
