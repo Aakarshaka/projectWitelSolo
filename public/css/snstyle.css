@@ -191,12 +191,17 @@ body {
 }
 
 .search-form .filter-btn {
-    height: 42px;
+    background: #4a0e4e;
+    color: white;
+    border: none;
     padding: 10px 20px;
-    font-size: 14px;
-    font-weight: 500;
     border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-end;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* PERBAIKAN UTAMA: Table wrapper yang lebih baik */

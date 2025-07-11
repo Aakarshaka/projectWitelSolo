@@ -98,8 +98,6 @@
                     </div>
                     <button type="submit" class="filter-btn">FILTER</button>
                 </form>
-            </div>
-            <div class="search-container">
                 <form action="{{ route('supportneeded.index') }}" method="GET" class="search-form">
                     <input type="text" name="search" class="search-box" placeholder="Search agenda or unit..."
                         value="{{ request('search') }}">
