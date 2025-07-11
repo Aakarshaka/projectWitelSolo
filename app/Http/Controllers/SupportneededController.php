@@ -103,12 +103,14 @@ class SupportneededController extends Controller
 
         $validated['status'] = $status;
 
+        // Hitung off_day
         $start = $validated['start_date'] ?? null;
         $end = $validated['end_date'] ?? null;
         $validated['off_day'] = ($start && $end)
             ? \Carbon\Carbon::parse($start)->diffInDays(\Carbon\Carbon::parse($end)) + 1
             : 0;
 
+        // Hitung complete (berdasarkan progress jika kosong)
         if (!isset($validated['complete'])) {
             switch ($validated['progress']) {
                 case 'Open':
@@ -165,6 +167,33 @@ class SupportneededController extends Controller
 
         $validated['status'] = $status;
 
+        // Hitung off_day
+        $start = $validated['start_date'] ?? null;
+        $end = $validated['end_date'] ?? null;
+        $validated['off_day'] = ($start && $end)
+            ? \Carbon\Carbon::parse($start)->diffInDays(\Carbon\Carbon::parse($end)) + 1
+            : 0;
+
+        // Hitung complete (berdasarkan progress jika kosong)
+        if (!isset($validated['complete'])) {
+            switch ($validated['progress']) {
+                case 'Open':
+                    $validated['complete'] = 0;
+                    break;
+                case 'Need Discuss':
+                    $validated['complete'] = 25;
+                    break;
+                case 'Progress':
+                    $validated['complete'] = 75;
+                    break;
+                case 'Done':
+                    $validated['complete'] = 100;
+                    break;
+                default:
+                    $validated['complete'] = 0;
+            }
+        }
+
         $supportneeded->update($validated);
         return back()->with('success', 'Agenda updated');
     }
@@ -181,26 +210,31 @@ class SupportneededController extends Controller
     public function getDetail(Request $request)
     {
         $progress = $request->query('progress');
+        $uic = $request->query('uic');
+        $agenda = $request->query('agenda');
+        $unit = $request->query('unit');
 
-        if ($request->has('uic')) {
-            $uic = $request->query('uic');
+        if (!$progress) {
+            return response()->json(['message' => 'Missing progress parameter'], 400);
+        }
+
+        if ($uic) {
             $data = Supportneeded::where('uic', $uic)
                 ->where('progress', $progress)
                 ->get();
-        } elseif ($request->has('agenda')) {
-            $agenda = $request->query('agenda');
+        } elseif ($agenda) {
             $data = Supportneeded::where('agenda', $agenda)
                 ->where('progress', $progress)
                 ->get();
-        } elseif ($request->has('unit')) {
-            $unit = $request->query('unit');
+        } elseif ($unit) {
             $data = Supportneeded::where('unit_or_telda', $unit)
                 ->where('progress', $progress)
                 ->get();
         } else {
-            return response()->json([], 400); // Bad Request
+            return response()->json(['message' => 'Missing query parameter'], 400);
         }
 
         return response()->json($data);
     }
+
 }

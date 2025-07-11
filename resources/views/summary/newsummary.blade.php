@@ -696,25 +696,53 @@
         }
 
         fetch(url)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error("Failed to fetch");
+                return response.json();
+            })
             .then(data => {
-                if (data.length === 0) {
+                if (!Array.isArray(data) || data.length === 0) {
                     content.innerHTML = '<p>No data found.</p>';
                 } else {
                     let html = '<table style="width:100%; border-collapse:collapse;">';
-                    html += '<tr><th style="border:1px solid #ccc;padding:5px;">Agenda</th><th style="border:1px solid #ccc;padding:5px;">Unit</th><th style="border:1px solid #ccc;padding:5px;">UIC</th></tr>';
-                    data.forEach(item => {
+                    html += `<tr>
+                        <th style="border:1px solid #ccc;padding:5px;">No</th>
+                        <th style="border:1px solid #ccc;padding:5px;">Agenda</th>
+                        <th style="border:1px solid #ccc;padding:5px;">Unit/Telda</th>
+                        <th style="border:1px solid #ccc;padding:5px;">Start Date</th>
+                        <th style="border:1px solid #ccc;padding:5px;">End Date</th>
+                        <th style="border:1px solid #ccc;padding:5px;"># Off Day</th>
+                        <th style="border:1px solid #ccc;padding:5px;">Notes to Follow Up</th>
+                        <th style="border:1px solid #ccc;padding:5px;">UIC</th>
+                        <th style="border:1px solid #ccc;padding:5px;">Progress</th>
+                        <th style="border:1px solid #ccc;padding:5px;">% Complete</th>
+                        <th style="border:1px solid #ccc;padding:5px;">Status</th>
+                        <th style="border:1px solid #ccc;padding:5px;">Response UIC</th>
+                    </tr>`;
+
+                    data.forEach((item, index) => {
                         html += `<tr>
-                            <td style="border:1px solid #ccc;padding:5px;">${item.agenda}</td>
-                            <td style="border:1px solid #ccc;padding:5px;">${item.unit_or_telda}</td>
-                            <td style="border:1px solid #ccc;padding:5px;">${item.uic}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${index + 1}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.agenda || ''}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.unit_or_telda || ''}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.start_date || ''}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.end_date || ''}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.off_day || 0}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.notes_to_follow_up || ''}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.uic || ''}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.progress || ''}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.complete || 0}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.status || ''}</td>
+                            <td style="border:1px solid #ccc;padding:5px;">${item.response_uic || ''}</td>
                         </tr>`;
                     });
+
                     html += '</table>';
                     content.innerHTML = html;
                 }
             })
-            .catch(() => {
+            .catch((error) => {
+                console.error(error);
                 content.innerHTML = '<p>Failed to load data.</p>';
             });
     }
