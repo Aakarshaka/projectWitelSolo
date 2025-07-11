@@ -1,12 +1,287 @@
-.sum-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-    text-align: center;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.sum-text {
-    font-size: 14px;
-    color: #666;
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.main-content-sum {
+    margin-left: 60px;
+    min-height: 100vh;
+    transition: margin-left 0.3s ease;
+}
+
+.container-sum {
+    padding: 20px;
+    width: 100%;
+}
+
+/* Header Styling */
+.summary-header {
+    background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
+    color: white;
+    padding: 15px 30px;
+    margin: -20px -20px 20px -20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(139, 21, 56, 0.3);
+    flex-wrap: wrap;
+}
+
+.summary-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 1px;
+    text-align: left;
+}
+
+.summary-subtitle {
+    font-size: 20px;
+    font-weight: 400;
+    opacity: 0.95;
+    padding: 10px 10px;
+}
+
+/* Table Section Styling */
+.table-section {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 3rem;
+    overflow: hidden;
+    border: 1px solid #e9ecef;
+}
+
+.table-header {
+    background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
+    color: white;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    border-bottom: 3px solid #8b1538;
+}
+
+.table-header h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.table-container {
+    padding: 0;
+}
+
+.table-responsive {
+    margin: 0;
+    border-radius: 0;
+}
+
+/* Enhanced Table Styling */
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    margin: 0;
+    background: white;
+}
+
+.summary-table th,
+.summary-table td {
+    padding: 1rem 0.75rem;
+    text-align: center;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.summary-table th {
+    font-weight: 600;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #495057;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+    border-bottom: 2px solid #8b1538;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.summary-table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.summary-table tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.summary-table tbody tr:nth-child(even) {
+    background-color: #fdfdfd;
+}
+
+/* Entity name column */
+.entity-name {
+    text-align: left !important;
+    font-weight: 500;
+    color: #495057;
+    white-space: nowrap;
+    padding-left: 1.5rem !important;
+    min-width: 150px;
+}
+
+.row-number {
+    font-weight: 600;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    width: 60px;
+}
+
+/* Status badges */
+.status-badge-summary {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    display: inline-block;
+    min-width: 40px;
+}
+
+.status-open-summary {
+    background-color: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.status-progress-summary {
+    background-color: #fef3c7;
+    color: #d97706;
+    border: 1px solid #fed7aa;
+}
+
+.status-done-summary {
+    background-color: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+.status-discuss-summary {
+    background-color: #f3e8ff;
+    color: #7c3aed;
+    border: 1px solid #ddd6fe;
+}
+
+/* Percentage badges */
+.percentage-badge {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+/* Total row styling */
+.total-row {
+    background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%) !important;
+    border-top: 3px solid #8b1538 !important;
+    font-weight: 700 !important;
+}
+
+.total-row td {
+    padding: 1.2rem 0.75rem !important;
+    color: #495057 !important;
+    border-bottom: 2px solid #8b1538 !important;
+}
+
+.total-count {
+    font-weight: 600;
+    color: #495057;
+    background-color: #f8f9fa;
+    border-left: 3px solid #8b1538;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .container-sum {
+        padding: 0 1rem;
+    }
+
+    .summary-title {
+        font-size: 2.2rem;
+    }
+
+    .summary-subtitle {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content-sum {
+        margin-left: 0;
+        padding: 1rem 0;
+    }
+
+    .summary-header {
+        padding: 2rem 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .summary-title {
+        font-size: 1.8rem;
+    }
+
+    .summary-subtitle {
+        font-size: 1rem;
+    }
+
+    .table-section {
+        margin-bottom: 2rem;
+    }
+
+    .table-header {
+        padding: 1rem;
+    }
+
+    .table-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .summary-table {
+        font-size: 0.8rem;
+    }
+
+    .summary-table th,
+    .summary-table td {
+        padding: 0.6rem 0.4rem;
+    }
+
+    .entity-name {
+        padding-left: 0.8rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .container-sum {
+        padding: 0 0.5rem;
+    }
+
+    .summary-table th,
+    .summary-table td {
+        padding: 0.4rem 0.2rem;
+        font-size: 0.75rem;
+    }
 }
