@@ -314,8 +314,6 @@
                 </div>
             </div>
             <div class="sn-modal-footer">
-                <button type="button" class="sn-btn sn-btn-secondary"
-                    onclick="closeModal('addSupportModal')">Cancel</button>
                 <button type="submit" class="sn-btn sn-btn-primary">Add Support</button>
             </div>
         </form>
@@ -425,8 +423,6 @@
                 </div>
             </div>
             <div class="sn-modal-footer">
-                <button type="button" class="sn-btn sn-btn-secondary"
-                    onclick="closeModal('editSupportModal')">Cancel</button>
                 <button type="submit" class="sn-btn sn-btn-primary">Update Support</button>
             </div>
         </form>
