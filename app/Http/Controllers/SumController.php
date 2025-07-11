@@ -31,7 +31,7 @@ class SumController extends Controller
 
         $statuses = [
             'Open' => 'open',
-            'On Progress' => 'progress',
+            'Progress' => 'progress',
             'Need Discuss' => 'discuss',
             'Done' => 'done',
         ];

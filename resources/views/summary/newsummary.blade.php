@@ -751,4 +751,5 @@
         document.getElementById('detailModal').style.display = 'none';
     }
 </script>
+
 @endsection
