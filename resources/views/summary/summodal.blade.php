@@ -2,7 +2,7 @@
 <div id="detailModal" class="modal" style="display:none;">
     <div class="modal-content">
         <span class="close-btn" onclick="closeDetailModal()">&times;</span>
-        <h2>Detail Agenda</h2>
+        <h2 class="modal-title">Detail Agenda</h2>
         <div id="detailContent">
             <p>Loading...</p>
         </div>
@@ -50,12 +50,13 @@
         color: white;
         margin: 5% auto;
         width: 95%;
-        max-width: 1200px;
+        max-height: 80vh;
         border-radius: 2px;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         animation: slideIn 0.3s ease-out;
-        overflow: hidden;
+        overflow: auto;
         padding: 5px;
+        flex-direction: column;
     }
 
     .modal-header {
@@ -89,8 +90,10 @@
 
     .modal-body {
         padding: 30px;
-        max-height: 70vh;
-        overflow-y: auto;
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
 
     .modal-body::-webkit-scrollbar {
@@ -119,23 +122,44 @@
         background-color: white;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         overflow-x: auto;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .modal-title {
+        background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
+        color: white;
+        padding: 20px 30px;
+        margin: 0;
+        font-size: 24px;
+        font-weight: 600;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        flex-shrink: 0;
     }
 
     .table-container1 {
-        overflow-x: auto;
-        margin: 0;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: auto;
+        max-height: 60vh;
+        /* atau tinggi sesuai kebutuhan */
+        background: white;
+        position: relative;
     }
 
     .detail-table th {
         background: #a8a8a9;
-        color: white;
+        color: black;
         padding: 15px 12px;
         text-align: left;
         font-weight: 600;
         border: none;
         white-space: nowrap;
         min-width: 100px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-bottom: 2px solid #999;
     }
 
     .detail-table td {
@@ -235,6 +259,11 @@
         }
 
         .modal-header h2 {
+            font-size: 20px;
+        }
+
+        .modal-title {
+            padding: 15px 20px;
             font-size: 20px;
         }
 
@@ -338,7 +367,7 @@
     function closeDetailModal() {
         document.getElementById('detailModal').style.display = 'none';
     }
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         const modal = document.getElementById('detailModal');
         if (event.target === modal) {
             closeDetailModal();
