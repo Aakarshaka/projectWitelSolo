@@ -13,6 +13,7 @@
         backdrop-filter: blur(3px);
         opacity: 0;
         transition: opacity 0.3s ease;
+
     }
 
     .sn-modal.show {
@@ -225,20 +226,22 @@
                         <label class="sn-form-label">Unit/Telda</label>
                         <select class="sn-form-select" name="unit_or_telda">
                             <option value="">Select Unit/Telda</option>
-                            <option value="BLORA">BLORA</option>
-                            <option value="BOYOLALI">BOYOLALI</option>
-                            <option value="JEPARA">JEPARA</option>
-                            <option value="KLATEN">KLATEN</option>
-                            <option value="KUDUS">KUDUS</option>
+                            <option value="BLORA">TELDA BLORA</option>
+                            <option value="BOYOLALI">TELDA BOYOLALI</option>
+                            <option value="JEPARA">TELDA JEPARA</option>
+                            <option value="KLATEN">TELDA KLATEN</option>
+                            <option value="KUDUS">TELDA KUDUS</option>
                             <option value="MEA SOLO">MEA SOLO</option>
-                            <option value="PATI">PATI</option>
-                            <option value="PURWODADI">PURWODADI</option>
-                            <option value="REMBANG">REMBANG</option>
-                            <option value="SRAGEN">SRAGEN</option>
-                            <option value="WONOGIRI">WONOGIRI</option>
+                            <option value="PATI">TELDA PATI</option>
+                            <option value="PURWODADI">TELDA PURWODADI</option>
+                            <option value="REMBANG">TELDA REMBANG</option>
+                            <option value="SRAGEN">TELDA SRAGEN</option>
+                            <option value="WONOGIRI">TELDA WONOGIRI</option>
                             <option value="BS">BS</option>
                             <option value="GS">GS</option>
                             <option value="PRQ">PRQ</option>
+                            <option value="SSGS">SSGS</option>
+                            <option value="RSO-WITEL">RSO WITEL</option>
                         </select>
                     </div>
 
@@ -259,7 +262,9 @@
                             <option value="BS">BS</option>
                             <option value="GS">GS</option>
                             <option value="RLEGS">RLEGS</option>
-                            <option value="RSO">RSO</option>
+                            <option value="RSO-REG">RSO REGIONAL</option>
+                            <option value="RSO-WITEL">RSO WITEL</option>
+                            <option value="ED">ED</option>
                             <option value="TIF">TIF</option>
                             <option value="TSEL">TSEL</option>
                             <option value="GSD">GSD</option>
@@ -328,20 +333,22 @@
                         <label class="sn-form-label">Unit/Telda</label>
                         <select class="sn-form-select" name="unit_or_telda" id="edit_unit_or_telda">
                             <option value="">Select Unit/Telda</option>
-                            <option value="BLORA">BLORA</option>
-                            <option value="BOYOLALI">BOYOLALI</option>
-                            <option value="JEPARA">JEPARA</option>
-                            <option value="KLATEN">KLATEN</option>
-                            <option value="KUDUS">KUDUS</option>
+                            <option value="BLORA">TELDA BLORA</option>
+                            <option value="BOYOLALI">TELDA BOYOLALI</option>
+                            <option value="JEPARA">TELDA JEPARA</option>
+                            <option value="KLATEN">TELDA KLATEN</option>
+                            <option value="KUDUS">TELDA KUDUS</option>
                             <option value="MEA SOLO">MEA SOLO</option>
-                            <option value="PATI">PATI</option>
-                            <option value="PURWODADI">PURWODADI</option>
-                            <option value="REMBANG">REMBANG</option>
-                            <option value="SRAGEN">SRAGEN</option>
-                            <option value="WONOGIRI">WONOGIRI</option>
+                            <option value="PATI">TELDA PATI</option>
+                            <option value="PURWODADI">TELDA PURWODADI</option>
+                            <option value="REMBANG">TELDA REMBANG</option>
+                            <option value="SRAGEN">TELDA SRAGEN</option>
+                            <option value="WONOGIRI">TELDA WONOGIRI</option>
                             <option value="BS">BS</option>
                             <option value="GS">GS</option>
                             <option value="PRQ">PRQ</option>
+                            <option value="SSGS">SSGS</option>
+                            <option value="RSO-WITEL">RSO WITEL</option>
                         </select>
                     </div>
 
@@ -362,7 +369,9 @@
                             <option value="BS">BS</option>
                             <option value="GS">GS</option>
                             <option value="RLEGS">RLEGS</option>
-                            <option value="RSO">RSO</option>
+                            <option value="RSO-REG">RSO REGIONAL</option>
+                            <option value="RSO-WITEL">RSO WITEL</option>
+                            <option value="ED">ED</option>
                             <option value="TIF">TIF</option>
                             <option value="TSEL">TSEL</option>
                             <option value="GSD">GSD</option>
@@ -383,7 +392,7 @@
                             <option value="Progress">Progress</option>
                             <option value="Done">Done</option>
                         </select>
-                    </div> 
+                    </div>
 
                     <div class="sn-form-group full-width">
                         <label class="sn-form-label">Notes to Follow Up</label>
