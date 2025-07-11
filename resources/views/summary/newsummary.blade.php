@@ -363,8 +363,16 @@
                                                 <td><span
                                                         class="percentage-badge">{{ $rowData['discuss_percent'] ?? 0 }}%</span>
                                                 </td>
-                                                <td><span
-                                                        class="status-badge status-progress">{{ $rowData['progress'] ?? 0 }}</span>
+                                                <td>
+                                                <td class="col-progress">
+                                                    <button
+                                                        onclick="openDetailModal('{{ $item->uic }}', '{{ $item->progress }}')"
+                                                        class="action-btn">
+                                                        {{ $item->progress }}
+                                                    </button>
+                                                </td>
+                                                <span
+                                                    class="status-badge status-progress">{{ $rowData['progress'] ?? 0 }}</span>
                                                 </td>
                                                 <td><span
                                                         class="percentage-badge">{{ $rowData['progress_percent'] ?? 0 }}%</span>
@@ -584,36 +592,79 @@
             </div>
         </div>
     </div>
-    <!-- Modal Popup -->
-    <div id="detailModal"
-        style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
-        <div style="background:white; padding:20px; border-radius:10px; max-width:600px; width:90%;">
-            <h3 id="modalTitle" style="margin-bottom:10px;">Detail</h3>
-            <div id="modalContent">Loading...</div>
-            <button onclick="closeModal()"
-                style="margin-top:20px; padding:10px 20px; background:#8b1538; color:white; border:none; border-radius:6px;">Close</button>
+    <!-- Detail Modal -->
+    <div id="detailModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeDetailModal()">&times;</span>
+            <h2>Detail Agenda</h2>
+            <div id="detailContent">
+                <p>Loading...</p>
+            </div>
         </div>
     </div>
 
-    <script>
-        function showModal(uic, status) {
-            const modal = document.getElementById('detailModal');
-            const title = document.getElementById('modalTitle');
-            const content = document.getElementById('modalContent');
-
-            title.innerText = `Detail ${status} - ${uic}`;
-            content.innerHTML = 'Loading...';
-
-            fetch(`/supportneeded/detail?uic=${uic}&status=${status}`)
-                .then(res => res.text())
-                .then(html => {
-                    content.innerHTML = html;
-                });
-
-            modal.style.display = 'flex';
+    <style>
+        .modal {
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
-        function closeModal() {
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function openDetailModal(uic, progress) {
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('detailContent');
+            content.innerHTML = '<p>Loading...</p>';
+            modal.style.display = 'block';
+
+            fetch(`/supportneeded/detail?uic=${encodeURIComponent(uic)}&progress=${encodeURIComponent(progress)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        content.innerHTML = '<p>No data found.</p>';
+                    } else {
+                        let html = '<table style="width:100%; border-collapse:collapse;">';
+                        html += '<tr><th style="border:1px solid #ccc;padding:5px;">Agenda</th><th style="border:1px solid #ccc;padding:5px;">Unit</th><th style="border:1px solid #ccc;padding:5px;">UIC</th></tr>';
+                        data.forEach(item => {
+                            html += `<tr>
+                                        <td style="border:1px solid #ccc;padding:5px;">${item.agenda}</td>
+                                        <td style="border:1px solid #ccc;padding:5px;">${item.unit_or_telda}</td>
+                                        <td style="border:1px solid #ccc;padding:5px;">${item.uic}</td>
+                                     </tr>`;
+                        });
+                        html += '</table>';
+                        content.innerHTML = html;
+                    }
+                })
+                .catch(() => {
+                    content.innerHTML = '<p>Failed to load data.</p>';
+                });
+        }
+
+        function closeDetailModal() {
             document.getElementById('detailModal').style.display = 'none';
         }
     </script>
