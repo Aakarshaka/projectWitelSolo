@@ -204,7 +204,7 @@ body {
     flex-shrink: 0;
 }
 
-/* PERBAIKAN UTAMA: Table wrapper yang lebih baik */
+/* PERBAIKAN UTAMA: Table container */
 .table-container-sn {
     position: relative;
     width: 100%;
@@ -244,54 +244,105 @@ body {
     background: #f8f6f9;
 }
 
-/* PERBAIKAN: Table dengan width yang sesuai kolom */
+/* PERBAIKAN: Table dengan table-layout fixed dan width yang tepat */
 .table {
     border-collapse: collapse;
     font-size: 13px;
-    table-layout: fixed;
-    width: max-content; /* Membuat table mengikuti total width kolom */
+    table-layout: fixed; /* KUNCI: Menggunakan fixed layout */
+    width: 1460px; /* Total width semua kolom */
     min-width: 100%; /* Minimal selebar container */
 }
 
-/* PERBAIKAN: Definisi width kolom yang lebih presisi */
-.table th.col-no {
-    width: 30px;
-}
-.table th.col-agenda {
-    width: 100px;
-}
-.table th.col-unit {
-    width: 100px;
-}
-.table th.col-start {
-    width: 80px;
-}
-.table th.col-end {
-    width: 100px;
-}
-.table th.col-off {
+/* PERBAIKAN: Definisi width kolom yang ketat */
+.table th.col-no,
+.table td.col-no {
     width: 50px;
+    min-width: 50px;
+    max-width: 50px;
 }
-.table th.col-notes {
-    width: 300px;
-}
-.table th.col-uic {
-    width: 50px;
-}
-.table th.col-progress {
-    width: 100px;
-}
-.table th.col-complete {
-    width: 100px;
-}
-.table th.col-status {
-    width: 100px;
-}
-.table th.col-respons {
-    width: 300px;
-}
-.table th.col-action {
+
+.table th.col-agenda,
+.table td.col-agenda {
     width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+}
+
+.table th.col-unit,
+.table td.col-unit {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.table th.col-start,
+.table td.col-start {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.table th.col-end,
+.table td.col-end {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.table th.col-off,
+.table td.col-off {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.table th.col-notes,
+.table td.col-notes {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+}
+
+.table th.col-uic,
+.table td.col-uic {
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+}
+
+.table th.col-progress,
+.table td.col-progress {
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+}
+
+.table th.col-complete,
+.table td.col-complete {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.table th.col-status,
+.table td.col-status {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.table th.col-respons,
+.table td.col-respons {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+}
+
+.table th.col-action,
+.table td.col-action {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
 }
 
 .table th {
@@ -309,35 +360,47 @@ body {
     white-space: nowrap;
     z-index: 10;
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+    /* PENTING: Mencegah kolom berubah ukuran */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .table td {
     padding: 12px 8px;
     border-bottom: 1px solid #f2e8f3;
     vertical-align: middle;
+    /* PENTING: Mengatur text overflow untuk kolom yang ketat */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* PERBAIKAN: Kolom yang boleh wrap untuk notes dan respons */
+.table td.col-notes,
+.table td.col-respons {
+    white-space: normal;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 /* PERBAIKAN: Alignment untuk kolom tertentu */
-.table td:nth-child(1), /* No */
-        .table td:nth-child(2), /* Agenda */
-        .table td:nth-child(3), /* Unit */
-        .table td:nth-child(4), /* Start */
-        .table td:nth-child(5), /* End */
-        .table td:nth-child(6), /* UIC */
-        .table td:nth-child(8), /* Off */
-        .table td:nth-child(9), /* Progress */
-        .table td:nth-child(10), /* Complete */
-        .table td:nth-child(11), /* Status */
-        .table td:nth-child(13) {
-    /* Action */
+.table td.col-no,
+.table td.col-agenda,
+.table td.col-unit,
+.table td.col-start,
+.table td.col-end,
+.table td.col-uic,
+.table td.col-off,
+.table td.col-progress,
+.table td.col-complete,
+.table td.col-status,
+.table td.col-action {
     text-align: center;
 }
 
-.table td:nth-child(7), /* Notes */
-        .table td:nth-child(12) {
-    /* Respons */
+.table td.col-notes,
+.table td.col-respons {
     text-align: left;
 }
 
@@ -358,6 +421,7 @@ body {
     overflow: hidden;
     position: relative;
     min-width: 80px;
+    max-width: 90px; /* Batasi maksimal width */
 }
 
 .progress-fill {
@@ -420,14 +484,17 @@ body {
 }
 
 /* Action buttons */
-
 .action-btn {
-    padding: 12px 12px;
+    padding: 6px 8px;
     border: none;
     cursor: pointer;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 500;
     text-align: center;
+    border-radius: 4px;
+    margin: 0 2px;
+    display: inline-block;
+    min-width: 35px;
 }
 
 .edit-btn {
@@ -450,7 +517,6 @@ body {
 
 /* Scroll hint */
 .scroll-hint {
-    display: none;
     text-align: center;
     font-size: 12px;
     color: #6d5671;
@@ -537,7 +603,6 @@ body {
         max-width: 200px;
     }
 
-    /* PERBAIKAN: Search form responsif */
     .search-container {
         flex-direction: column;
         align-items: stretch;
@@ -603,16 +668,13 @@ body {
     }
 
     .action-btn {
-        font-size: 10px;
-        padding: 4px 8px;
+        font-size: 9px;
+        padding: 4px 6px;
+        min-width: 30px;
     }
 
     .pagination button {
         padding: 6px 8px;
         font-size: 12px;
-    }
-
-    .scroll-hint {
-        display: block;
     }
 }
