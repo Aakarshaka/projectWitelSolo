@@ -13,7 +13,8 @@ use App\Http\Controllers\{
     SummaryController,
     WitelController,
     SupportneededController,
-    SumController
+    SumController,
+    NewwarroomController
 };
 
 // ==================
@@ -30,11 +31,11 @@ Route::resource('witel', WitelController::class);
 Route::resource('supportneeded', SupportneededController::class);
 
 Route::resource('newsummary', SumController::class);
+Route::resource('newwarroom', NewwarroomController::class);
+Route::post('/warroom/sync', [NewwarroomController::class, 'syncFromSupportneeded'])->name('warroom.sync');
+
+
 
 Route::get('dashboard/newdashboard', function () {
     return view('dashboard.newdashboard');
-});
-
-Route::get('warroom/newwarroom', function () {
-    return view('warroom.newwarroom');
 });
