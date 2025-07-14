@@ -129,7 +129,7 @@
         position: relative;
         width: 100%;
         background: white;
-        border-radius: 12px;
+        border-radius: 0px;
         border: 1px solid #e6e1e8;
         overflow: hidden;
     }

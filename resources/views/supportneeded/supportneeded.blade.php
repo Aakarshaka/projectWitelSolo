@@ -111,89 +111,90 @@
             ← Geser ke kiri/kanan untuk melihat semua Colom →
         </div>
 
-        <div class="table-wrapper" id="tableWrapper">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="col-no">No</th>
-                        <th class="col-agenda">Agenda</th>
-                        <th class="col-unit">Unit/Telda</th>
-                        <th class="col-start">Start Date</th>
-                        <th class="col-end">End Date</th>
-                        <th class="col-off"># Off Day</th>
-                        <th class="col-notes">Notes to Follow Up</th>
-                        <th class="col-uic">UIC</th>
-                        <th class="col-progress">Progress</th>
-                        <th class="col-complete">% Complete</th>
-                        <th class="col-status">Status</th>
-                        <th class="col-respons">Response UIC</th>
-                        <th class="col-action">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($items as $index => $item)
-                    <tr>
-                        <td class="col-no">{{ $index + 1 }}</td>
-                        <td class="col-agenda">{{ $item->agenda }}</td>
-                        <td class="col-unit">{{ $item->unit_or_telda }}</td>
-                        <td class="col-start">
-                            {{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d M Y') : '-'  }}
-                        </td>
-                        <td class="col-end">
-                            {{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d M Y') : '-'  }}
-                        </td>
-                        <td class="col-off">
-                            @if($item->start_date && $item->end_date)
-                            {{ \Carbon\Carbon::parse($item->start_date)->diffInDays(\Carbon\Carbon::parse($item->end_date)) + 1 }}
-                            Day
-                            @else
-                            -
-                            @endif
-                        </td>
-                        <td class="col-notes">{!! nl2br(e($item->notes_to_follow_up)) !!}</td>
-                        <td class="col-uic">{{ $item->uic }}</td>
-                        <td class="col-progress">{{ $item->progress }}</td>
-                        @php
-                        switch ($item->progress) {
-                        case 'Open':
-                        $complete = 0;
-                        $progressColor = 'bg-red';
-                        break;
-                        case 'Need Discuss':
-                        $complete = 25;
-                        $progressColor = 'bg-orange';
-                        break;
-                        case 'Progress':
-                        $complete = 75;
-                        $progressColor = 'bg-yellow';
-                        break;
-                        case 'Done':
-                        $complete = 100;
-                        $progressColor = 'bg-green';
-                        break;
-                        default:
-                        $complete = 0;
-                        $progressColor = 'bg-gray';
-                        }
-                        @endphp
+        <div class="table-container-sn">
+            <div class="table-wrapper" id="tableWrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="col-no">No</th>
+                            <th class="col-agenda">Agenda</th>
+                            <th class="col-unit">Unit/Telda</th>
+                            <th class="col-start">Start Date</th>
+                            <th class="col-end">End Date</th>
+                            <th class="col-off"># Off Day</th>
+                            <th class="col-notes">Notes to Follow Up</th>
+                            <th class="col-uic">UIC</th>
+                            <th class="col-progress">Progress</th>
+                            <th class="col-complete">% Complete</th>
+                            <th class="col-status">Status</th>
+                            <th class="col-respons">Response UIC</th>
+                            <th class="col-action">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($items as $index => $item)
+                        <tr>
+                            <td class="col-no">{{ $index + 1 }}</td>
+                            <td class="col-agenda">{{ $item->agenda }}</td>
+                            <td class="col-unit">{{ $item->unit_or_telda }}</td>
+                            <td class="col-start">
+                                {{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d M Y') : '-'  }}
+                            </td>
+                            <td class="col-end">
+                                {{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d M Y') : '-'  }}
+                            </td>
+                            <td class="col-off">
+                                @if($item->start_date && $item->end_date)
+                                {{ \Carbon\Carbon::parse($item->start_date)->diffInDays(\Carbon\Carbon::parse($item->end_date)) + 1 }}
+                                Day
+                                @else
+                                -
+                                @endif
+                            </td>
+                            <td class="col-notes">{!! nl2br(e($item->notes_to_follow_up)) !!}</td>
+                            <td class="col-uic">{{ $item->uic }}</td>
+                            <td class="col-progress">{{ $item->progress }}</td>
+                            @php
+                            switch ($item->progress) {
+                            case 'Open':
+                            $complete = 0;
+                            $progressColor = 'bg-red';
+                            break;
+                            case 'Need Discuss':
+                            $complete = 25;
+                            $progressColor = 'bg-orange';
+                            break;
+                            case 'Progress':
+                            $complete = 75;
+                            $progressColor = 'bg-yellow';
+                            break;
+                            case 'Done':
+                            $complete = 100;
+                            $progressColor = 'bg-green';
+                            break;
+                            default:
+                            $complete = 0;
+                            $progressColor = 'bg-gray';
+                            }
+                            @endphp
 
-                        <td class="col-complete">
-                            <div class="progress-bar">
-                                <div class="progress-fill {{ $progressColor }}" style="width: {{ $complete }}%"></div>
-                                <div class="progress-text">{{ $complete }}%</div>
-                            </div>
-                        </td>
-                        <td class="col-status">
-                            <span class="status-badge 
+                            <td class="col-complete">
+                                <div class="progress-bar">
+                                    <div class="progress-fill {{ $progressColor }}" style="width: {{ $complete }}%"></div>
+                                    <div class="progress-text">{{ $complete }}%</div>
+                                </div>
+                            </td>
+                            <td class="col-status">
+                                <span class="status-badge 
                                 {{ $item->status == 'Eskalasi' ? 'status-done' : 
                                 ($item->status == 'Action' ? 'status-action' : 
                                 ($item->status == 'Support Needed' ? 'status-in-progress' : 'status-empty')) }}">
-                                {{ $item->status ?: '-' }}
-                            </span>
-                        </td>
-                        <td class="col-respons">{!! nl2br(e($item->response_uic)) !!}</td>
-                        <td class="col-action">
-                            <button type="button" class="action-btn edit-btn save-scroll" onclick="populateEditForm({
+                                    {{ $item->status ?: '-' }}
+                                </span>
+                            </td>
+                            <td class="col-respons">{!! nl2br(e($item->response_uic)) !!}</td>
+                            <td class="col-action">
+                                <button type="button" class="action-btn edit-btn save-scroll" onclick="populateEditForm({
                                                                             id: '{{ $item->id }}',
                                                                             agenda: '{{ $item->agenda }}',
                                                                             unit_or_telda: '{{ $item->unit_or_telda }}',
@@ -204,23 +205,24 @@
                                                                             notes_to_follow_up: `{{ $item->notes_to_follow_up }}`,
                                                                             response_uic: `{{ $item->response_uic }}`
                                                                             }); openModal('editSupportModal');">Edit</button>
-                            <form action="{{ route('supportneeded.destroy', $item->id) }}" method="POST"
-                                style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="action-btn delete-btn save-scroll"
-                                    onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="13" style="text-align:center;">No data available.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
+                                <form action="{{ route('supportneeded.destroy', $item->id) }}" method="POST"
+                                    style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="action-btn delete-btn save-scroll"
+                                        onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="13" style="text-align:center;">No data available.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
 
-            </table>
+                </table>
+            </div>
         </div>
         <div class="sn-footer">Powered by <strong>GIAT CORE</strong></div>
     </div>
