@@ -25,15 +25,20 @@
         border-radius: 12px;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
         max-height: calc(100vh - 100px);
-        overflow-y: auto;
     }
 
     .modal-header {
+        background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
+        color: white;
         padding: 20px 30px;
         border-bottom: 1px solid #e6e1e8;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        /* pastikan di atas isi konten */
     }
 
     .modal-header.bg-warning {
@@ -67,6 +72,12 @@
 
     .modal-body {
         padding: 30px;
+        overflow-y: auto;
+        /* ✅ scroll di sini */
+        flex-grow: 1;
+        /* ✅ biar body ambil sisa tinggi */
+        max-height: calc(90vh - 160px);
+        /* ✅ sesuaikan tinggi header + footer */
     }
 
     .modal-footer {
@@ -75,10 +86,23 @@
         display: flex;
         justify-content: flex-end;
         gap: 10px;
+        position: sticky;
+        bottom: 0;
+        background: white;
+        z-index: 10;
     }
 
     .form-group {
         margin-bottom: 20px;
+    }
+
+    .btn-primary {
+        background: #4a0e4e;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #3a0b3e;
     }
 
     .form-row {
@@ -139,109 +163,106 @@
 </style>
 
 @foreach($warroomData as $item)
-<div class="modal" id="editModal{{ $item->id }}">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ route('newwarroom.update', $item->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-header bg-warning">
-                    <h5 class="modal-title">
-                        <i class="fas fa-edit"></i> Edit Data Warroom
-                    </h5>
-                    <button type="button" class="modal-close"
-                        onclick="closeModal('editModal{{ $item->id }}')">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-row">
+    <div class="modal" id="editModal{{ $item->id }}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('newwarroom.update', $item->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fas fa-edit"></i> Edit Data Warroom
+                        </h5>
+                        <button type="button" class="modal-close"
+                            onclick="closeModal('editModal{{ $item->id }}')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tgl_{{ $item->id }}" class="form-label">Tanggal <span
+                                        class="required">*</span></label>
+                                <input type="date" class="form-control" id="tgl_{{ $item->id }}" name="tgl"
+                                    value="{{ $item->tgl }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="agenda_{{ $item->id }}" class="form-label">Agenda <span
+                                        class="required">*</span></label>
+                                <input type="text" class="form-control" id="agenda_{{ $item->id }}" name="agenda"
+                                    value="{{ $item->agenda }}" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="uic_{{ $item->id }}" class="form-label">UIC <span
+                                        class="required">*</span></label>
+                                <input type="text" class="form-control" id="uic_{{ $item->id }}" name="uic"
+                                    value="{{ $item->uic }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="peserta_{{ $item->id }}" class="form-label">Peserta <span
+                                        class="required">*</span></label>
+                                <input type="text" class="form-control" id="peserta_{{ $item->id }}" name="peserta"
+                                    value="{{ $item->peserta }}" required>
+                            </div>
+                        </div>
                         <div class="form-group">
-                            <label for="tgl_{{ $item->id }}" class="form-label">Tanggal <span
+                            <label for="pembahasan_{{ $item->id }}" class="form-label">Pembahasan <span
                                     class="required">*</span></label>
-                            <input type="date" class="form-control" id="tgl_{{ $item->id }}" name="tgl"
-                                value="{{ $item->tgl }}" required>
+                            <textarea class="form-control" id="pembahasan_{{ $item->id }}" name="pembahasan" rows="3"
+                                required>{{ $item->pembahasan }}</textarea>
                         </div>
                         <div class="form-group">
-                            <label for="agenda_{{ $item->id }}" class="form-label">Agenda <span
+                            <label for="action_plan_{{ $item->id }}" class="form-label">Action Plan <span
                                     class="required">*</span></label>
-                            <input type="text" class="form-control" id="agenda_{{ $item->id }}" name="agenda"
-                                value="{{ $item->agenda }}" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="uic_{{ $item->id }}" class="form-label">UIC <span
-                                    class="required">*</span></label>
-                            <input type="text" class="form-control" id="uic_{{ $item->id }}" name="uic"
-                                value="{{ $item->uic }}" required>
+                            <textarea class="form-control" id="action_plan_{{ $item->id }}" name="action_plan" rows="3"
+                                required>{{ $item->action_plan }}</textarea>
                         </div>
                         <div class="form-group">
-                            <label for="peserta_{{ $item->id }}" class="form-label">Peserta <span
-                                    class="required">*</span></label>
-                            <input type="text" class="form-control" id="peserta_{{ $item->id }}" name="peserta"
-                                value="{{ $item->peserta }}" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="pembahasan_{{ $item->id }}" class="form-label">Pembahasan <span
-                                class="required">*</span></label>
-                        <textarea class="form-control" id="pembahasan_{{ $item->id }}" name="pembahasan" rows="3"
-                            required>{{ $item->pembahasan }}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="action_plan_{{ $item->id }}" class="form-label">Action Plan <span
-                                class="required">*</span></label>
-                        <textarea class="form-control" id="action_plan_{{ $item->id }}" name="action_plan" rows="3"
-                            required>{{ $item->action_plan }}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="support_needed_{{ $item->id }}" class="form-label">Support Needed</label>
-                        <textarea class="form-control" id="support_needed_{{ $item->id }}" name="support_needed"
-                            rows="3">{{ $item->support_needed }}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="info_kompetitor_{{ $item->id }}" class="form-label">Info Kompetitor</label>
-                        <textarea class="form-control" id="info_kompetitor_{{ $item->id }}" name="info_kompetitor"
-                            rows="3">{{ $item->info_kompetitor }}</textarea>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="jumlah_action_plan_{{ $item->id }}" class="form-label">Jumlah Action
-                                Plan</label>
-                            <input type="number" class="form-control" id="jumlah_action_plan_{{ $item->id }}"
-                                name="jumlah_action_plan" value="{{ $item->jumlah_action_plan }}" min="0">
+                            <label for="support_needed_{{ $item->id }}" class="form-label">Support Needed</label>
+                            <textarea class="form-control" id="support_needed_{{ $item->id }}" name="support_needed"
+                                rows="3">{{ $item->support_needed }}</textarea>
                         </div>
                         <div class="form-group">
-                            <label for="status_action_plan_{{ $item->id }}" class="form-label">Status Action
-                                Plan</label>
-                            <select class="form-control" id="status_action_plan_{{ $item->id }}"
-                                name="status_action_plan">
-                                <option value="Open" {{ $item->status_action_plan == 'Open' ? 'selected' : '' }}>Open
-                                </option>
-                                <option value="Progress" {{ $item->status_action_plan == 'Progress' ? 'selected' : '' }}>
-                                    Progress</option>
-                                <option value="Closed" {{ $item->status_action_plan == 'Closed' ? 'selected' : '' }}>
-                                    Closed</option>
-                            </select>
+                            <label for="info_kompetitor_{{ $item->id }}" class="form-label">Info Kompetitor</label>
+                            <textarea class="form-control" id="info_kompetitor_{{ $item->id }}" name="info_kompetitor"
+                                rows="3">{{ $item->info_kompetitor }}</textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="jumlah_action_plan_{{ $item->id }}" class="form-label">Jumlah Action
+                                    Plan</label>
+                                <input type="number" class="form-control" id="jumlah_action_plan_{{ $item->id }}"
+                                    name="jumlah_action_plan" value="{{ $item->jumlah_action_plan }}" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="status_action_plan_{{ $item->id }}" class="form-label">Status Action
+                                    Plan</label>
+                                <select class="form-control" id="status_action_plan_{{ $item->id }}"
+                                    name="status_action_plan">
+                                    <option value="Open" {{ $item->status_action_plan == 'Open' ? 'selected' : '' }}>Open
+                                    </option>
+                                    <option value="Progress" {{ $item->status_action_plan == 'Progress' ? 'selected' : '' }}>
+                                        Progress</option>
+                                    <option value="Closed" {{ $item->status_action_plan == 'Closed' ? 'selected' : '' }}>
+                                        Closed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="update_action_plan_{{ $item->id }}" class="form-label">Update Action Plan</label>
+                            <textarea class="form-control" id="update_action_plan_{{ $item->id }}" name="update_action_plan"
+                                rows="3">{{ $item->update_action_plan }}</textarea>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="update_action_plan_{{ $item->id }}" class="form-label">Update Action Plan</label>
-                        <textarea class="form-control" id="update_action_plan_{{ $item->id }}" name="update_action_plan"
-                            rows="3">{{ $item->update_action_plan }}</textarea>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Simpan Perubahan
+                        </button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('editModal{{ $item->id }}')">
-                        <i class="fas fa-times"></i> Batal
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Simpan Perubahan
-                    </button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 @endforeach
 
 <!-- Modal Tambah -->
@@ -250,7 +271,7 @@
         <div class="modal-content">
             <form action="{{ route('newwarroom.store') }}" method="POST">
                 @csrf
-                <div class="modal-header bg-success">
+                <div class="modal-header">
                     <h5 class="modal-title">
                         <i class="fas fa-plus"></i> Tambah Data Warroom
                     </h5>
@@ -315,10 +336,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('addModal')">
-                        <i class="fas fa-times"></i> Batal
-                    </button>
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i> Simpan
                     </button>
                 </div>
@@ -353,14 +371,14 @@
     }
 
     // Close modal when clicking outside
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (e.target.classList.contains('modal')) {
             closeModal(e.target.id);
         }
     });
 
     // Close modal with Escape key
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
             const activeModal = document.querySelector('.modal.show');
             if (activeModal) {
@@ -369,11 +387,11 @@
         }
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Auto-resize textarea
         const textareas = document.querySelectorAll('textarea');
         textareas.forEach(textarea => {
-            textarea.addEventListener('input', function() {
+            textarea.addEventListener('input', function () {
                 this.style.height = 'auto';
                 this.style.height = this.scrollHeight + 'px';
             });
@@ -382,7 +400,7 @@
         // Form validation
         const forms = document.querySelectorAll('form');
         forms.forEach(form => {
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 const requiredFields = form.querySelectorAll('[required]');
                 let isValid = true;
 
@@ -403,7 +421,7 @@
         });
 
         // Auto dismiss alerts
-        setTimeout(function() {
+        setTimeout(function () {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(alert => {
                 alert.style.display = 'none';

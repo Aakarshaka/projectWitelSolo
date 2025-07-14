@@ -174,8 +174,7 @@
     }
 
     .detail-table tr:hover {
-        background-color: #e3f2fd;
-        transition: background-color 0.2s ease;
+        background: #faf8fb;
     }
 
     .detail-table td:nth-child(1) {

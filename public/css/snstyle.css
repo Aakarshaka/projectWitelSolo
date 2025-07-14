@@ -517,6 +517,7 @@ body {
 
 /* Scroll hint */
 .scroll-hint {
+    display: none;
     text-align: center;
     font-size: 12px;
     color: #6d5671;
@@ -676,5 +677,9 @@ body {
     .pagination button {
         padding: 6px 8px;
         font-size: 12px;
+    }
+
+    .scroll-hint{
+        display: block;
     }
 }

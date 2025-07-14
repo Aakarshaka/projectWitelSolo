@@ -63,11 +63,11 @@
                             <td class="col-uac-wr">{{ $item->update_action_plan }}</td>
                             <td class="col-sap-wr">
                                 @if($item->status_action_plan == 'Open')
-                                <span class="badge bg-warning">Open</span>
+                                <span>Open</span>
                                 @elseif($item->status_action_plan == 'Progress')
-                                <span class="badge bg-info">Progress</span>
+                                <span>Progress</span>
                                 @elseif($item->status_action_plan == 'Closed')
-                                <span class="badge bg-success">Closed</span>
+                                <span>Closed</span>
                                 @else
                                 <span class="badge bg-secondary">{{ $item->status_action_plan }}</span>
                                 @endif
