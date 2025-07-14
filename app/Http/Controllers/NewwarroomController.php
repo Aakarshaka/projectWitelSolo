@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Models\supportneeded;
+use App\Models\Newwarroom;
+use App\Models\Supportneeded;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use App\Models\newwarroom;
-
 
 class NewwarroomController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Tampilkan daftar data warroom.
      */
     public function index()
     {
@@ -20,33 +18,42 @@ class NewwarroomController extends Controller
         return view('warroom.newwarroom', compact('warroomData'));
     }
 
+    /**
+     * Sinkronisasi data dari supportneeded yang status-nya 'Action'.
+     */
     public function syncFromSupportneeded(): RedirectResponse
     {
         $data = Supportneeded::where('status', 'Action')->get();
 
         foreach ($data as $item) {
-            Newwarroom::create([
-                'tgl' => $item->start_date,
-                'agenda' => $item->agenda,
-                'uic' => $item->uic,
-                // kosongkan dulu
-                // kolom lainnya dibiarkan null juga
-            ]);
+            $exists = Newwarroom::where('tgl', $item->start_date)
+                ->where('agenda', $item->agenda)
+                ->where('uic', $item->uic)
+                ->exists();
+
+            if (!$exists) {
+                Newwarroom::create([
+                    'tgl'     => $item->start_date,
+                    'agenda'  => $item->agenda,
+                    'uic'     => $item->uic,
+                    // Kolom lain dibiarkan null
+                ]);
+            }
         }
 
         return redirect()->route('newwarroom.index')->with('success', 'Data berhasil disalin dari Supportneeded.');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Tampilkan form tambah data (kalau pakai modal, bisa kosong).
      */
     public function create()
     {
-        //
+        return view('newwarroom.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Simpan data baru.
      */
     public function store(Request $request)
     {
@@ -70,23 +77,24 @@ class NewwarroomController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Tampilkan detail (tidak digunakan).
      */
-    public function show(newwarroom $newwarroom)
+    public function show(Newwarroom $newwarroom)
     {
         //
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Tampilkan form edit.
      */
-    // Edit
     public function edit(Newwarroom $newwarroom)
     {
         return view('newwarroom.edit', ['data' => $newwarroom]);
     }
 
-    // Update
+    /**
+     * Update data.
+     */
     public function update(Request $request, Newwarroom $newwarroom)
     {
         $validated = $request->validate([
@@ -108,12 +116,13 @@ class NewwarroomController extends Controller
         return redirect()->route('newwarroom.index')->with('success', 'Data berhasil diperbarui.');
     }
 
-    // Destroy
+    /**
+     * Hapus data.
+     */
     public function destroy(Newwarroom $newwarroom)
     {
         $newwarroom->delete();
 
         return redirect()->route('newwarroom.index')->with('success', 'Data berhasil dihapus.');
     }
-
 }

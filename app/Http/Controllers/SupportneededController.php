@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Supportneeded;
+use App\Models\newwarroom;
 use Illuminate\Http\Request;
 
 class SupportneededController extends Controller
@@ -131,8 +132,26 @@ class SupportneededController extends Controller
             }
         }
 
-        Supportneeded::create($validated);
-        return back()->with('success', 'Agenda created');
+        $support = Supportneeded::create($validated);
+
+        // Kalau status = Action → langsung buat di Newwarroom
+        if ($support->status === 'Action') {
+            $exists = Newwarroom::where('tgl', $support->start_date)
+                ->where('agenda', $support->agenda)
+                ->where('uic', $support->uic)
+                ->exists();
+
+            if (!$exists) {
+                Newwarroom::create([
+                    'tgl' => $support->start_date,
+                    'agenda' => $support->agenda,
+                    'uic' => $support->uic,
+                    // lainnya biarkan null
+                ]);
+            }
+        }
+
+        return redirect()->route('supportneeded.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function update(Request $request, Supportneeded $supportneeded)
@@ -197,7 +216,24 @@ class SupportneededController extends Controller
         }
 
         $supportneeded->update($validated);
-        return back()->with('success', 'Agenda updated');
+
+        // Jika status berubah jadi Action, dan belum masuk ke warroom
+        if ($validated['status'] === 'Action') {
+            $exists = Newwarroom::where('tgl', $validated['start_date'])
+                ->where('agenda', $validated['agenda'])
+                ->where('uic', $validated['uic'])
+                ->exists();
+
+            if (!$exists) {
+                Newwarroom::create([
+                    'tgl' => $validated['start_date'],
+                    'agenda' => $validated['agenda'],
+                    'uic' => $validated['uic'],
+                ]);
+            }
+        }
+
+        return redirect()->route('supportneeded.index')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(Supportneeded $supportneeded)
