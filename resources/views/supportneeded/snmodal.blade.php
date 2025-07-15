@@ -268,11 +268,6 @@
                     </div>
 
                     <div class="sn-form-group">
-                        <label class="sn-form-label">End Date</label>
-                        <input type="date" class="sn-form-input" name="end_date" id="add_end_date">
-                    </div>
-
-                    <div class="sn-form-group">
                         <label class="sn-form-label">UIC</label>
                         <select class="sn-form-select" name="uic">
                             <option value="">Select UIC</option>
@@ -379,11 +374,6 @@
                     </div>
 
                     <div class="sn-form-group">
-                        <label class="sn-form-label">End Date</label>
-                        <input type="date" class="sn-form-input" name="end_date" id="edit_end_date">
-                    </div>
-
-                    <div class="sn-form-group">
                         <label class="sn-form-label">UIC</label>
                         <select class="sn-form-select" name="uic" id="edit_uic">
                             <option value="">Select UIC</option>
@@ -450,14 +440,14 @@
     }
 
     // Close modal when clicking outside
-    document.addEventListener('click', function (event) {
+    document.addEventListener('click', function(event) {
         if (event.target.classList.contains('sn-modal')) {
             closeModal(event.target.id);
         }
     });
 
     // Close modal with Escape key
-    document.addEventListener('keydown', function (event) {
+    document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
             const openModal = document.querySelector('.sn-modal.show');
             if (openModal) {
@@ -471,63 +461,22 @@
         document.getElementById('edit_agenda').value = data.agenda || '';
         document.getElementById('edit_unit_or_telda').value = data.unit_or_telda || '';
         document.getElementById('edit_start_date').value = data.start_date || '';
-        document.getElementById('edit_end_date').value = data.end_date || '';
         document.getElementById('edit_uic').value = data.uic || '';
         document.getElementById('edit_progress').value = data.progress || '';
         document.getElementById('edit_notes_to_follow_up').value = data.notes_to_follow_up || '';
         document.getElementById('edit_response_uic').value = data.response_uic || '';
 
         document.getElementById('editSupportForm').action = '/supportneeded/' + data.id;
-
-        // ✅ Set min di sini juga supaya langsung aktif saat modal dibuka
-        const editStartDateInput = document.getElementById('edit_start_date');
-        const editEndDateInput = document.getElementById('edit_end_date');
-
-        if (editStartDateInput && editEndDateInput) {
-            if (editStartDateInput.value) {
-                editEndDateInput.min = editStartDateInput.value;
-                if (editEndDateInput.value && editEndDateInput.value < editStartDateInput.value) {
-                    editEndDateInput.value = '';
-                }
-            } else {
-                editEndDateInput.removeAttribute('min');
-            }
-        }
     }
 
     // Update the Add Support button to use the new modal
-    document.addEventListener('DOMContentLoaded', function () {
-        // Validasi Add Support Modal
+    document.addEventListener('DOMContentLoaded', function() {
         const startDateInput = document.getElementById('add_start_date');
-        const endDateInput = document.getElementById('add_end_date');
 
-        if (startDateInput && endDateInput) {
-            startDateInput.addEventListener('change', function () {
-                if (startDateInput.value) {
-                    endDateInput.min = startDateInput.value;
-                    if (endDateInput.value && endDateInput.value < startDateInput.value) {
-                        endDateInput.value = '';
-                    }
-                } else {
-                    endDateInput.removeAttribute('min');
-                }
-            });
-        }
-
-        // Validasi Edit Support Modal
-        const editStartDateInput = document.getElementById('edit_start_date');
-        const editEndDateInput = document.getElementById('edit_end_date');
-
-        if (editStartDateInput && editEndDateInput) {
-            editStartDateInput.addEventListener('change', function () {
-                if (editStartDateInput.value) {
-                    editEndDateInput.min = editStartDateInput.value;
-                    if (editEndDateInput.value && editEndDateInput.value < editStartDateInput.value) {
-                        editEndDateInput.value = '';
-                    }
-                } else {
-                    editEndDateInput.removeAttribute('min');
-                }
+        if (startDateInput) {
+            // Kalau di masa depan kamu mau kasih validasi start_date khusus, bisa pasang event listener di sini
+            startDateInput.addEventListener('change', function() {
+                // contoh: console.log("Start date selected: " + startDateInput.value);
             });
         }
     });

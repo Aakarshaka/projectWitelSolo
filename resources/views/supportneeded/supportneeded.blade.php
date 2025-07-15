@@ -212,7 +212,6 @@
                                                                             agenda: '{{ $item->agenda }}',
                                                                             unit_or_telda: '{{ $item->unit_or_telda }}',
                                                                             start_date: '{{ $item->start_date }}',
-                                                                            end_date: '{{ $item->end_date }}',
                                                                             uic: '{{ $item->uic }}',
                                                                             progress: '{{ $item->progress }}',
                                                                             notes_to_follow_up: `{{ $item->notes_to_follow_up }}`,
