@@ -305,9 +305,9 @@ body {
 
 .table th.col-uic,
 .table td.col-uic {
-    width: 50px;
-    min-width: 50px;
-    max-width: 50px;
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
 }
 
 .table th.col-progress,
@@ -370,9 +370,10 @@ body {
     border-bottom: 1px solid #f2e8f3;
     vertical-align: middle;
     /* PENTING: Mengatur text overflow untuk kolom yang ketat */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 /* PERBAIKAN: Kolom yang boleh wrap untuk notes dan respons */

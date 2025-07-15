@@ -435,7 +435,7 @@ body {
     position: relative;
     width: 100%;
     background: white;
-    border-radius: 8px;
+    border-radius: 0px;
     border: 1px solid #e6e1e8;
     overflow: hidden;
     margin-bottom: 20px;
@@ -544,9 +544,9 @@ body {
 
 .table-wr th.col-jap-wr,
 .table-wr td.col-jac-wr {
-    width: 80px;
-    min-width: 80px;
-    max-width: 80px;
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
     text-align: center;
 }
 
@@ -579,13 +579,16 @@ body {
     background: #a8a8a9;
     color: #2a1b2d;
     font-weight: 600;
-    padding: 12px 8px;
+    padding: 4px 2px;
     text-align: center;
     border-bottom: 2px solid #e6e1e8;
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.3px;
-    white-space: nowrap;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
     z-index: 10;
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
     overflow: hidden;

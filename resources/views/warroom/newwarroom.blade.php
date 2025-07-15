@@ -66,10 +66,6 @@
 
                         <div class="forum-content-wr">
                             <div class="forum-item-wr">
-                                <div class="forum-item-header-wr">
-                                    <i class="fas fa-list-ul"></i>
-                                    <span class="forum-item-title-wr">Nama Agenda</span>
-                                </div>
                                 <div class="agenda-list-wr">
                                     @if(count($nama_agenda) > 0)
                                         @foreach($nama_agenda as $index => $agenda)
@@ -143,7 +139,6 @@
                             <form method="GET" class="search-form-wr">
                                 <div class="search-inputs-wr">
                                     <div class="search-group-wr">
-                                        <label for="search" class="search-label-wr">Cari Data</label>
                                         <div class="search-input-container-wr">
                                             <input type="text" name="search" class="search-input-wr"
                                                 placeholder="Cari agenda, UIC, peserta, atau pembahasan..."
