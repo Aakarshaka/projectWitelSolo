@@ -252,6 +252,8 @@
                                 name="status_action_plan">
                                 <option value="Open" {{ $item->status_action_plan == 'Open' ? 'selected' : '' }}>Open
                                 </option>
+                                <option value="Eskalasi" {{ $item->status_action_plan == 'Eskalasi' ? 'selected' : '' }}>
+                                    Eskalasi</option>
                                 <option value="Progress" {{ $item->status_action_plan == 'Progress' ? 'selected' : '' }}>
                                     Progress</option>
                                 <option value="Closed" {{ $item->status_action_plan == 'Closed' ? 'selected' : '' }}>
@@ -335,6 +337,7 @@
                             <label for="status_action_plan" class="form-label">Status Action Plan</label>
                             <select class="form-control" id="status_action_plan" name="status_action_plan">
                                 <option value="Open" selected>Open</option>
+                                <option value="Eskalasi">Eskalasi</option>
                                 <option value="Progress">Progress</option>
                                 <option value="Closed">Closed</option>
                             </select>

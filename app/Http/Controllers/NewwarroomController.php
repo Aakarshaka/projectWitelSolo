@@ -12,12 +12,57 @@ class NewwarroomController extends Controller
     /**
      * Tampilkan daftar data warroom.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $warroomData = Newwarroom::all();
-        return view('warroom.newwarroom', compact('warroomData'));
-    }
+        $bulan = $request->input('bulan');
+        $tahun = $request->input('tahun');
+        $search = $request->input('search'); // << Tambahkan ini
 
+        $query = Newwarroom::query();
+
+        if (!empty($bulan)) {
+            $query->whereMonth('tgl', $bulan);
+        }
+
+        if (!empty($tahun)) {
+            $query->whereYear('tgl', $tahun);
+        }
+
+        // 🔍 Tambahkan pencarian global di semua kolom utama
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('agenda', 'like', "%$search%")
+                    ->orWhere('uic', 'like', "%$search%")
+                    ->orWhere('peserta', 'like', "%$search%")
+                    ->orWhere('pembahasan', 'like', "%$search%")
+                    ->orWhere('action_plan', 'like', "%$search%")
+                    ->orWhere('support_needed', 'like', "%$search%")
+                    ->orWhere('info_kompetitor', 'like', "%$search%")
+                    ->orWhere('jumlah_action_plan', 'like', "%$search%")
+                    ->orWhere('update_action_plan', 'like', "%$search%")
+                    ->orWhere('status_action_plan', 'like', "%$search%");
+            });
+        }
+
+        $warroomData = $query->get();
+
+        $jumlah_agenda = $warroomData->count();
+        $nama_agenda = $warroomData->pluck('agenda')->unique()->values();
+        $jumlah_action_plan = $warroomData->sum('jumlah_action_plan');
+        $jumlah_eskalasi = $warroomData->where('status_action_plan', 'Eskalasi')->count();
+
+        return view('warroom.newwarroom', compact(
+            'warroomData',
+            'jumlah_agenda',
+            'nama_agenda',
+            'jumlah_action_plan',
+            'jumlah_eskalasi',
+            'bulan',
+            'tahun',
+            'search' // ⬅ penting dikirim ke blade biar input tetap terisi
+        ));
+    }
+    
     /**
      * Sinkronisasi data dari supportneeded yang status-nya 'Action'.
      */
@@ -33,9 +78,9 @@ class NewwarroomController extends Controller
 
             if (!$exists) {
                 Newwarroom::create([
-                    'tgl'     => $item->start_date,
-                    'agenda'  => $item->agenda,
-                    'uic'     => $item->uic,
+                    'tgl' => $item->start_date,
+                    'agenda' => $item->agenda,
+                    'uic' => $item->uic,
                     // Kolom lain dibiarkan null
                 ]);
             }
