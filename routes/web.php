@@ -14,7 +14,8 @@ use App\Http\Controllers\{
     WitelController,
     SupportneededController,
     SumController,
-    NewwarroomController
+    NewwarroomController,
+    NewdashboardController
 };
 
 // ==================
@@ -35,7 +36,9 @@ Route::resource('newwarroom', NewwarroomController::class);
 Route::post('/warroom/sync', [NewwarroomController::class, 'syncFromSupportneeded'])->name('warroom.sync');
 
 
+Route::get('/dashboard/newdashboard', [NewdashboardController::class, 'index'])->name('dashboard');
 
-Route::get('dashboard/newdashboard', function () {
-    return view('dashboard.newdashboard');
-});
+
+//Route::get('dashboard/newdashboard', function () {
+  //  return view('dashboard.newdashboard');
+//});
