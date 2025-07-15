@@ -84,7 +84,7 @@
                                         {{-- PROGRESS --}}
                                         <td class="col-progress">
                                             <button class="status-badge-summary status-progress-summary"
-                                                onclick="openDetailModal('uic', '{{ $uic }}', 'Progress')">
+                                                onclick="openDetailModal('uic', '{{ $uic }}', 'On Progress')">
                                                 {{ $rowData['progress'] ?? 0 }}
                                             </button>
                                         </td>
@@ -154,11 +154,14 @@
                                 <tbody>
                                     @php
                                     $agendaList = [
-                                    '1 ON 1 UIC',
-                                    '1 ON 1 WITEL',
-                                    'EVP DIRECTION',
-                                    'WBR IT FEB',
-                                    'STRATEGIC MEETING'
+                                    '1 ON 1 AM',
+                                    '1 ON 1 TELDA',
+                                    'WAR',
+                                    'FORUM TIF',
+                                    'FORUM TSEL',
+                                    'FORUM GSD',
+                                    'REVIEW KPI',
+                                    'Others'
                                     ];
                                     @endphp
                                     @foreach ($agendaList as $index => $agenda)
@@ -197,7 +200,7 @@
                                         {{-- PROGRESS --}}
                                         <td class="col-progress">
                                             <button class="status-badge-summary status-progress-summary"
-                                                onclick="openDetailModal('agenda', '{{ $agenda }}', 'Progress')">
+                                                onclick="openDetailModal('agenda', '{{ $agenda }}', 'On Progress')">
                                                 {{ $rowData['progress'] ?? 0 }}
                                             </button>
                                         </td>
@@ -303,7 +306,7 @@
                                         {{-- PROGRESS --}}
                                         <td class="col-progress">
                                             <button class="status-badge-summary status-progress-summary"
-                                                onclick="openDetailModal('unit', '{{ $unit }}', 'Progress')">
+                                                onclick="openDetailModal('unit', '{{ $unit }}', 'On Progress')">
                                                 {{ $rowData['progress'] ?? 0 }}
                                             </button>
                                         </td>

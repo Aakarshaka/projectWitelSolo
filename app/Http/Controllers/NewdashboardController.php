@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Newwarroom;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Newwarroom;
+use App\Models\Supportneeded;
 
 class NewdashboardController extends Controller
 {
@@ -14,8 +15,7 @@ class NewdashboardController extends Controller
         $tahun = $request->input('tahun', now()->year);
         $bulan = $request->input('bulan');
 
-        $baseQuery = Newwarroom::query();
-        $baseQuery->whereYear('tgl', $tahun);
+        $baseQuery = Newwarroom::query()->whereYear('tgl', $tahun);
         if ($bulan) {
             $baseQuery->whereMonth('tgl', $bulan);
         }
@@ -49,9 +49,7 @@ class NewdashboardController extends Controller
         $status_labels = ['Open', 'Progress', 'Eskalasi', 'Closed'];
         $status_counts = [];
         foreach ($status_labels as $label) {
-            $status_counts[] = (clone $baseQuery)
-                ->where('status_action_plan', $label)
-                ->count();
+            $status_counts[] = (clone $baseQuery)->where('status_action_plan', $label)->count();
         }
 
         $trend_action_plan = [];
@@ -83,10 +81,7 @@ class NewdashboardController extends Controller
 
         $completion_rate = $total_agenda > 0 ? round(($total_closed / $total_agenda) * 100, 1) : 0;
 
-        $weekly_data = [];
-        if ($bulan) {
-            $weekly_data = $this->getWeeklyData($tahun, $bulan);
-        }
+        $weekly_data = $bulan ? $this->getWeeklyData($tahun, $bulan) : [];
 
         $priority_labels = ['High', 'Medium', 'Low'];
         $priority_counts = [];
@@ -98,11 +93,39 @@ class NewdashboardController extends Controller
             }
         }
 
+        // ===== Tambahan dari Supportneeded =====
+        $supportItems = Supportneeded::get();
+        $total_support = $supportItems->count();
+        $closed_support = $supportItems->where('progress', 'Done')->count();
+        $close_percentage = $total_support > 0 ? round(($closed_support / $total_support) * 100, 1) : 0;
+
+        $progressMap = [
+            'Open' => 0,
+            'Need Discuss' => 25,
+            'On Progress' => 75,
+            'Done' => 100,
+        ];
+
+        $totalProgress = 0;
+        $count = 0;
+        foreach ($supportItems as $item) {
+            if (isset($progressMap[$item->progress])) {
+                $totalProgress += $progressMap[$item->progress];
+                $count++;
+            }
+        }
+        $avg_support_progress = $count > 0 ? round($totalProgress / $count, 1) : 0;
+
+        $support_status_distribution = Supportneeded::select('status', DB::raw('count(*) as total'))
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
         return view('dashboard.newdashboard', compact(
             'tahun', 'bulan', 'total_agenda', 'total_action_plan', 'total_eskalasi', 'total_closed',
             'bulan_labels', 'jumlah_agenda_per_bulan', 'status_labels', 'status_counts',
             'trend_action_plan', 'top_issues', 'completion_rate', 'weekly_data',
-            'priority_labels', 'priority_counts'
+            'priority_labels', 'priority_counts',
+            'total_support', 'closed_support', 'close_percentage', 'avg_support_progress', 'support_status_distribution'
         ));
     }
 
