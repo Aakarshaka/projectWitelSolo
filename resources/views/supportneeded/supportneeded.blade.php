@@ -29,13 +29,22 @@
             <div class="filters">
                 <form method="GET" action="{{ route('supportneeded.index') }}" class="filters">
                     <div class="filter-group">
-                        <label class="filter-label">Type of Agenda</label>
-                        <select class="filter-select" name="type_agenda">
-                            <option value="">All Agenda</option>
-                            <option value="1 ON 1 UIC" {{ request('type_agenda') == '1 ON 1 UIC' ? 'selected' : '' }}>1 ON 1 UIC</option>
-                            <option value="1 ON 1 WITEL" {{ request('type_agenda') == '1 ON 1 WITEL' ? 'selected' : '' }}>1 ON 1 WITEL</option>
-                            <option value="EVP DIRECTION" {{ request('type_agenda') == 'EVP DIRECTION' ? 'selected' : '' }}>EVP DIRECTION</option>
-                            <option value="WBR IT FEB" {{ request('type_agenda') == 'WBR IT FEB' ? 'selected' : '' }}>WBR IT FEB</option>
+                        <label class="filter-label">Status</label>
+                        <select class="filter-select" name="status">
+                            <option value="">All Status</option>
+                            <option value="Action" {{ request('status') == 'Action' ? 'selected' : '' }}>Action</option>
+                            <option value="Eskalasi" {{ request('status') == 'Eskalasi' ? 'selected' : '' }}>Eskalasi</option>
+                            <option value="Support Needed" {{ request('status') == 'Support Needed' ? 'selected' : '' }}>Support Needed</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Progress</label>
+                        <select class="filter-select" name="progress">
+                            <option value="">All Progress</option>
+                            <option value="Open" {{ request('progress') == 'Open' ? 'selected' : '' }}>Open</option>
+                            <option value="Need Discuss" {{ request('progress') == 'Need Discuss' ? 'selected' : '' }}>Need Discuss</option>
+                            <option value="On Progress" {{ request('progress') == 'On Progress' ? 'selected' : '' }}>On Progress</option>
+                            <option value="Done" {{ request('progress') == 'Done' ? 'selected' : '' }}>Done</option>
                         </select>
                     </div>
                     <div class="filter-group">
@@ -163,7 +172,7 @@
                             $complete = 25;
                             $progressColor = 'bg-orange';
                             break;
-                            case 'Progress':
+                            case 'On Progress':
                             $complete = 75;
                             $progressColor = 'bg-yellow';
                             break;
@@ -217,7 +226,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="13" style="text-align:center;">No data available.</td>
+                            <td colspan="13" style="color: #6b7280; font-style: italic; text-align: center; ">No data available.</td>
                         </tr>
                         @endforelse
                     </tbody>

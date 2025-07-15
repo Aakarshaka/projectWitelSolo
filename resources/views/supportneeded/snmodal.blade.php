@@ -228,11 +228,14 @@
                         <label class="sn-form-label">Agenda</label>
                         <select class="sn-form-select" name="agenda" required>
                             <option value="">Select Agenda</option>
-                            <option value="1 ON 1 UIC">1 ON 1 UIC</option>
-                            <option value="1 ON 1 WITEL">1 ON 1 WITEL</option>
-                            <option value="EVP DIRECTION">EVP DIRECTION</option>
-                            <option value="WBR IT FEB">WBR IT FEB</option>
-                            <option value="STRATEGIC MEETING">STRATEGIC MEETING</option>
+                            <option value="1 ON 1 UIC">1 ON 1 AM</option>
+                            <option value="1 ON 1 TELDA">1 ON 1 TELDA</option>
+                            <option value="WAR">WAR</option>
+                            <option value="FORUM TIF">FORUM TIF</option>
+                            <option value="FORUM TSEL">FORUM TSEL</option>
+                            <option value="FORUM GSD">FORUM GSD</option>
+                            <option value="REVIEW KPI">REVIEW KPI</option>
+                            <option value="OTHERS">OTHERS</option>
                         </select>
                     </div>
 
@@ -295,7 +298,7 @@
                         <select class="sn-form-select" name="progress">
                             <option value="Open">Open</option>
                             <option value="Need Discuss">Need Discuss</option>
-                            <option value="Progress">Progress</option>
+                            <option value="On Progress">On Progress</option>
                             <option value="Done">Done</option>
                         </select>
                     </div>
@@ -335,12 +338,15 @@
                     <div class="sn-form-group">
                         <label class="sn-form-label">Agenda</label>
                         <select class="sn-form-select" name="agenda" id="edit_agenda" required>
-                            <option value="">Select Agenda</option>
-                            <option value="1 ON 1 UIC">1 ON 1 UIC</option>
-                            <option value="1 ON 1 WITEL">1 ON 1 WITEL</option>
-                            <option value="EVP DIRECTION">EVP DIRECTION</option>
-                            <option value="WBR IT FEB">WBR IT FEB</option>
-                            <option value="STRATEGIC MEETING">STRATEGIC MEETING</option>
+                            <option value="" disabled>Select Agenda</option>
+                            <option value="1 ON 1 UIC">1 ON 1 AM</option>
+                            <option value="1 ON 1 TELDA">1 ON 1 TELDA</option>
+                            <option value="WAR">WAR</option>
+                            <option value="FORUM TIF">FORUM TIF</option>
+                            <option value="FORUM TSEL">FORUM TSEL</option>
+                            <option value="FORUM GSD">FORUM GSD</option>
+                            <option value="REVIEW KPI">REVIEW KPI</option>
+                            <option value="OTHERS">OTHERS</option>
                         </select>
                     </div>
 
@@ -404,7 +410,7 @@
                             <option value disabled="">Select Progress</option>
                             <option value="Open">Open</option>
                             <option value="Need Discuss">Need Discuss</option>
-                            <option value="Progress">Progress</option>
+                            <option value="On Progress">On Progress</option>
                             <option value="Done">Done</option>
                         </select>
                     </div>

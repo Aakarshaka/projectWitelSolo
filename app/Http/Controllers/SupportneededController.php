@@ -16,6 +16,14 @@ class SupportneededController extends Controller
             $query->where('agenda', $request->type_agenda);
         }
 
+        if ($request->progress) {
+            $query->where('progress', $request->progress);
+        }
+
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
         if ($request->unit_or_telda) {
             $query->where('unit_or_telda', $request->unit_or_telda);
         }
@@ -46,7 +54,7 @@ class SupportneededController extends Controller
         $progressMap = [
             'Open' => 0,
             'Need Discuss' => 25,
-            'Progress' => 75,
+            'On Progress' => 75,
             'Done' => 100,
         ];
 
@@ -121,7 +129,7 @@ class SupportneededController extends Controller
                 case 'Need Discuss':
                     $validated['complete'] = 25;
                     break;
-                case 'Progress':
+                case 'On Progress':
                     $validated['complete'] = 75;
                     break;
                 case 'Done':
@@ -204,7 +212,7 @@ class SupportneededController extends Controller
                 case 'Need Discuss':
                     $validated['complete'] = 25;
                     break;
-                case 'Progress':
+                case 'On Progress':
                     $validated['complete'] = 75;
                     break;
                 case 'Done':

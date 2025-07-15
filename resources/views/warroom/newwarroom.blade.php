@@ -232,9 +232,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="13" class="text-muted">
-                                        <i class="fas fa-info-circle"></i> Tidak ada data warroom ditemukan.
-                                    </td>
+                                    <td colspan="13" style="color: #6b7280; font-style: italic; text-align: center; ">No data available.</td>
                                 </tr>
                             @endforelse
                         </tbody>
