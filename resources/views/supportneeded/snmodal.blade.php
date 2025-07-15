@@ -228,7 +228,7 @@
                         <label class="sn-form-label">Agenda</label>
                         <select class="sn-form-select" name="agenda" required>
                             <option value="">Select Agenda</option>
-                            <option value="1 ON 1 UIC">1 ON 1 AM</option>
+                            <option value="1 ON 1 AM">1 ON 1 AM</option>
                             <option value="1 ON 1 TELDA">1 ON 1 TELDA</option>
                             <option value="WAR">WAR</option>
                             <option value="FORUM TIF">FORUM TIF</option>
@@ -339,7 +339,7 @@
                         <label class="sn-form-label">Agenda</label>
                         <select class="sn-form-select" name="agenda" id="edit_agenda" required>
                             <option value="" disabled>Select Agenda</option>
-                            <option value="1 ON 1 UIC">1 ON 1 AM</option>
+                            <option value="1 ON 1 AM">1 ON 1 AM</option>
                             <option value="1 ON 1 TELDA">1 ON 1 TELDA</option>
                             <option value="WAR">WAR</option>
                             <option value="FORUM TIF">FORUM TIF</option>
