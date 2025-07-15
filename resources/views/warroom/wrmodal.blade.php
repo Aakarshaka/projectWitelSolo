@@ -1,5 +1,7 @@
 <!-- Modal Edit untuk setiap item -->
 <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
     /* Modal Styles */
     .modal {
         display: none;
@@ -12,6 +14,10 @@
         background-color: rgba(0, 0, 0, 0.5);
     }
 
+    body {
+    font-family: "Poppins", sans-serif;
+    }
+
     .modal.show {
         display: block;
     }
@@ -19,6 +25,7 @@
     .modal-dialog {
         position: relative;
         width: 90%;
+        border-radius: 5px;
         max-width: 800px;
         margin: 50px auto;
         background: white;
