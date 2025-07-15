@@ -6,13 +6,13 @@
 <div class="main-content-wr">
     <div class="container-wr">
         <div class="header-wr">
-            <div>
-                <h1>WARROOM ACTIVITY</h1>
-            </div>
-            <div class="controls">
-                <button type="button" class="btn btn-success" onclick="openModal('addModal')">
-                    <i class="fas fa-plus"></i>ADD+
-                </button>
+            <h1>WARROOM ACTIVITY</h1>
+            <div class="stats-container-wr">
+                <div class="stat-card-wr">
+                    <div class="stat-label-wr">Jumlah Action Plan</div>
+                    <div class="stat-value-wr">8</div>
+                </div>
+                <button class="add-btn-wr" type="button" onclick="openModal('addModal')">ADD+</button>
             </div>
         </div>
 
@@ -73,10 +73,10 @@
                                 @endif
                             </td>
                             <td class="col-action-wr">
-                                <div class="btn-group-vertical">
-                                    <button type="button" class="btn btn-sm btn-warning"
+                                <div class="btn-group-horizontal-wr">
+                                    <button type="button" class="btn-wr btn-sm btn-warning"
                                         onclick="openModal('editModal{{ $item->id }}')">
-                                        <i class="fas fa-edit"></i> Edit
+                                        Edit
                                     </button>
 
                                     <form action="{{ route('newwarroom.destroy', $item->id) }}" method="POST"
@@ -84,8 +84,8 @@
                                         onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i> Delete
+                                        <button type="submit" class="btn-wr btn-sm btn-danger">
+                                            Delete
                                         </button>
                                     </form>
                                 </div>
@@ -107,4 +107,7 @@
 </div>
 
 @include('warroom.wrmodal')
+@push('scripts')
+<script src="{{ asset('js/tablescript.js') }}"></script>
+@endpush
 @endsection

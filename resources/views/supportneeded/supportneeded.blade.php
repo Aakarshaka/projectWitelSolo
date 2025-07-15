@@ -194,6 +194,7 @@
                             </td>
                             <td class="col-respons">{!! nl2br(e($item->response_uic)) !!}</td>
                             <td class="col-action">
+                                <div class="btn-group-horizontal">
                                 <button type="button" class="action-btn edit-btn save-scroll" onclick="populateEditForm({
                                                                             id: '{{ $item->id }}',
                                                                             agenda: '{{ $item->agenda }}',
@@ -212,6 +213,7 @@
                                     <button type="submit" class="action-btn delete-btn save-scroll"
                                         onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
                                 </form>
+                                </div>
                             </td>
                         </tr>
                         @empty
@@ -228,26 +230,7 @@
     </div>
 
     @include('supportneeded.snmodal')
-    <script>
-        const tableWrapper = document.getElementById('tableWrapper');
-
-        // Simpan posisi scroll saat tombol edit/delete diklik
-        document.querySelectorAll('.save-scroll').forEach(button => {
-            button.addEventListener('click', () => {
-                sessionStorage.setItem("tableScrollLeft", tableWrapper.scrollLeft);
-                sessionStorage.setItem("tableScrollTop", tableWrapper.scrollTop);
-            });
-        });
-
-        // Saat halaman dimuat, kembalikan posisi scroll kalau ada
-        window.addEventListener("load", function() {
-            const savedLeft = sessionStorage.getItem("tableScrollLeft");
-            const savedTop = sessionStorage.getItem("tableScrollTop");
-            if (savedLeft !== null) tableWrapper.scrollLeft = parseInt(savedLeft);
-            if (savedTop !== null) tableWrapper.scrollTop = parseInt(savedTop);
-            // Hapus setelah dipakai supaya tidak nyangkut antar navigasi
-            sessionStorage.removeItem("tableScrollLeft");
-            sessionStorage.removeItem("tableScrollTop");
-        });
-    </script>
+    @push('scripts')
+    <script src="{{ asset('js/tablescript.js') }}"></script>
+    @endpush
     @endsection

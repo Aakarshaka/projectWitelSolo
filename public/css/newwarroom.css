@@ -41,10 +41,9 @@ body {
     min-width: 200px;
 }
 
-.btn {
-    padding: 12px 20px;
+.btn-wr {
     border: none;
-    border-radius: 8px;
+    border-radius: 0px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -52,6 +51,15 @@ body {
     text-decoration: none;
     display: inline-block;
     text-align: center;
+    padding: 8px 14px;
+    min-width: 70px;
+    align-items: center;
+}
+
+.btn-group-horizontal-wr {
+    display: flex;
+    gap: 0px;
+    justify-content: center;
 }
 
 .btn-success {
@@ -82,8 +90,25 @@ body {
 }
 
 .btn-sm {
-    padding: 8px 12px;
+    padding: 10px 14px;
     font-size: 12px;
+}
+
+.add-btn-wr {
+    background: #22c55e;
+    color: white;
+    border: none;
+    padding: 25px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.add-btn-wr:hover {
+    background: #16a34a;
 }
 
 .table-container-wr {
@@ -217,9 +242,9 @@ body {
 
 .table-wr th.col-action-wr,
 .table-wr td:nth-child(13) {
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
+    width: 170px;
+    min-width: 170px;
+    max-width: 170px;
 }
 
 .table-wr th {
@@ -314,18 +339,38 @@ body {
     border-bottom: none;
 }
 
-.btn-group-vertical {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
 .text-muted {
     color: #6b7280;
 }
 
-.fas {
-    margin-right: 5px;
+.stats-container-wr {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.stat-card-wr {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px 16px;
+    text-align: center;
+    min-width: 80px;
+    flex-shrink: 0;
+}
+
+.stat-label-wr {
+    font-size: 12px;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.stat-value-wr {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 2px;
 }
 
 .scroll-hint-wr {
@@ -349,6 +394,19 @@ body {
 
     .container-wr {
         padding: 10px;
+    }
+
+    .header-wr {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        margin: -10px -10px 15px -10px;
+        padding: 15px;
+    }
+
+    .header-wr h1 {
+        font-size: 30px;
+        min-width: auto;
     }
 
     .table-wr {
@@ -382,8 +440,37 @@ body {
         min-width: 120px;
         max-width: 120px;
     }
-    
+
     .scroll-hint-wr {
-    display: block;
+        display: block;
+    }
+
+    .stats-container-wr {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .stat-card-wr {
+        min-width: 70px;
+        padding: 6px 12px;
+    }
+
+    .stat-label-wr {
+        font-size: 10px;
+    }
+
+    .stat-value-wr {
+        font-size: 16px;
+    }
+
+    .add-btn-wr {
+        padding: 20px 16px;
+        font-size: 12px;
+    }
+
+    .btn-wr {
+        font-size: 10px;
+        padding: 10px 10px;
+        min-width: 30px;
     }
 }
