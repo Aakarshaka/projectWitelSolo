@@ -36,7 +36,7 @@ Route::resource('newwarroom', NewwarroomController::class);
 Route::post('/warroom/sync', [NewwarroomController::class, 'syncFromSupportneeded'])->name('warroom.sync');
 
 
-Route::get('/dashboard/newdashboard', [NewdashboardController::class, 'index'])->name('dashboard');
+Route::get('newdashboard', [NewdashboardController::class, 'index'])->name('dashboard');
 
 
 //Route::get('dashboard/newdashboard', function () {

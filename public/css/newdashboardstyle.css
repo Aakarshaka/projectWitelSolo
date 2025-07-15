@@ -1,5 +1,5 @@
 .dashboard-header {
-            background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
+            background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%) !important;
             color: white;
             padding: 2rem 1.5rem;
             margin-bottom: 2rem;
@@ -339,5 +339,164 @@
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        .section-header {
+            margin: 2rem 0 1rem 0;
+            padding: 1rem 0;
+        }
+
+        .section-header h3 {
+            color: #374151;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-divider {
+            height: 3px;
+            background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%) !important;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid-d {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card-d {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .stat-card-d.primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .stat-card-d.success { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); }
+        .stat-card-d.warning { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        .stat-card-d.danger { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .stat-card-d.info { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .stat-card-d.secondary { background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%); }
+
+        .stat-content-d {
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-content-d h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .stat-content-d p {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .icon-wrapper {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            opacity: 0.3;
+            font-size: 2rem;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .chart-container h3 {
+            color: #374151;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .chart-container h3 i {
+            margin-right: 0.5rem;
+            color: #667eea;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        .filter-form {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .month-selector, .year-selector {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            color: #374151;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .month-selector:focus, .year-selector:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h2 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-header p {
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid-d {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-form {
+                flex-direction: column;
+                gap: 0.5rem;
             }
         }
