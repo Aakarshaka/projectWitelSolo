@@ -104,8 +104,7 @@
                     <button type="submit" class="filter-btn">SEARCH</button>
                 </form>
             </div>
-
-        </div>
+        </div> 
 
         <div class="scroll-hint">
             ← Geser ke kiri/kanan untuk melihat semua Colom →
