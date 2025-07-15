@@ -113,7 +113,7 @@
                     <button type="submit" class="filter-btn">SEARCH</button>
                 </form>
             </div>
-        </div> 
+        </div>
 
         <div class="scroll-hint">
             ← Geser ke kiri/kanan untuk melihat semua Colom →
@@ -152,8 +152,12 @@
                                 {{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d M Y') : '-'  }}
                             </td>
                             <td class="col-off">
-                                @if($item->start_date && $item->end_date)
+                                @if($item->start_date)
+                                @if($item->progress === 'Done' && $item->end_date)
                                 {{ \Carbon\Carbon::parse($item->start_date)->diffInDays(\Carbon\Carbon::parse($item->end_date)) + 1 }}
+                                @else
+                                {{ ceil(\Carbon\Carbon::parse($item->start_date)->diffInHours(\Carbon\Carbon::now()) / 24) }}
+                                @endif
                                 Day
                                 @else
                                 -
@@ -203,7 +207,7 @@
                             <td class="col-respons">{!! nl2br(e($item->response_uic)) !!}</td>
                             <td class="col-action">
                                 <div class="btn-group-horizontal">
-                                <button type="button" class="action-btn edit-btn save-scroll" onclick="populateEditForm({
+                                    <button type="button" class="action-btn edit-btn save-scroll" onclick="populateEditForm({
                                                                             id: '{{ $item->id }}',
                                                                             agenda: '{{ $item->agenda }}',
                                                                             unit_or_telda: '{{ $item->unit_or_telda }}',
@@ -214,13 +218,13 @@
                                                                             notes_to_follow_up: `{{ $item->notes_to_follow_up }}`,
                                                                             response_uic: `{{ $item->response_uic }}`
                                                                             }); openModal('editSupportModal');">Edit</button>
-                                <form action="{{ route('supportneeded.destroy', $item->id) }}" method="POST"
-                                    style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="action-btn delete-btn save-scroll"
-                                        onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
-                                </form>
+                                    <form action="{{ route('supportneeded.destroy', $item->id) }}" method="POST"
+                                        style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="action-btn delete-btn save-scroll"
+                                            onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

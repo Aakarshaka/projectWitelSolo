@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Supportneeded;
 use App\Models\newwarroom;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class SupportneededController extends Controller
 {
@@ -99,7 +100,6 @@ class SupportneededController extends Controller
         $supportNeededUics = ['BS', 'GS', 'RSO WITEL', 'SSGS', 'PRQ'];
 
         if (empty($validated['unit_or_telda']) || empty($validated['uic'])) {
-            // kalau salah satu kosong, status kosong
             $status = '';
         } elseif ($validated['unit_or_telda'] === $validated['uic']) {
             $status = 'Action';
@@ -113,12 +113,26 @@ class SupportneededController extends Controller
 
         $validated['status'] = $status;
 
-        // Hitung off_day
+        // Logic untuk end_date dan off_day
         $start = $validated['start_date'] ?? null;
-        $end = $validated['end_date'] ?? null;
-        $validated['off_day'] = ($start && $end)
-            ? \Carbon\Carbon::parse($start)->diffInDays(\Carbon\Carbon::parse($end)) + 1
-            : 0;
+
+        // Jika progress = Done, set end_date ke hari ini
+        if ($validated['progress'] === 'Done') {
+            $validated['end_date'] = Carbon::now()->format('Y-m-d');
+        }
+
+        // Hitung off_day dinamis
+        if ($start) {
+            if ($validated['progress'] === 'Done' && $validated['end_date']) {
+                // Jika Done, hitung dari start sampai end_date
+                $validated['off_day'] = Carbon::parse($start)->diffInDays(Carbon::parse($validated['end_date'])) + 1;
+            } else {
+                // Jika belum Done, hitung dari start sampai hari ini
+                $validated['off_day'] = Carbon::parse($start)->diffInDays(Carbon::now()) + 1;
+            }
+        } else {
+            $validated['off_day'] = 0;
+        }
 
         // Hitung complete (berdasarkan progress jika kosong)
         if (!isset($validated['complete'])) {
@@ -154,7 +168,6 @@ class SupportneededController extends Controller
                     'tgl' => $support->start_date,
                     'agenda' => $support->agenda,
                     'uic' => $support->uic,
-                    // lainnya biarkan null
                 ]);
             }
         }
@@ -182,7 +195,6 @@ class SupportneededController extends Controller
         $supportNeededUics = ['BS', 'GS', 'RSO WITEL', 'SSGS', 'PRQ'];
 
         if (empty($validated['unit_or_telda']) || empty($validated['uic'])) {
-            // kalau salah satu kosong, status kosong
             $status = '';
         } elseif ($validated['unit_or_telda'] === $validated['uic']) {
             $status = 'Action';
@@ -196,12 +208,33 @@ class SupportneededController extends Controller
 
         $validated['status'] = $status;
 
-        // Hitung off_day
+        // Logic untuk end_date dan off_day
         $start = $validated['start_date'] ?? null;
-        $end = $validated['end_date'] ?? null;
-        $validated['off_day'] = ($start && $end)
-            ? \Carbon\Carbon::parse($start)->diffInDays(\Carbon\Carbon::parse($end)) + 1
-            : 0;
+
+        // Jika progress berubah menjadi Done, set end_date ke hari ini
+        if ($validated['progress'] === 'Done' && $supportneeded->progress !== 'Done') {
+            $validated['end_date'] = Carbon::now()->format('Y-m-d');
+        }
+        // Jika progress berubah dari Done ke status lain, hapus end_date
+        elseif ($validated['progress'] !== 'Done' && $supportneeded->progress === 'Done') {
+            $validated['end_date'] = null;
+        }
+
+        // Hitung off_day dinamis
+        if ($start) {
+            if ($validated['progress'] === 'Done' && $validated['end_date']) {
+                // Jika Done, hitung dari start sampai end_date
+                $diffInHours = Carbon::parse($start)->diffInHours(Carbon::parse($validated['end_date']));
+            } else {
+                // Jika belum Done, hitung dari start sampai hari ini
+                $diffInHours = Carbon::parse($start)->diffInHours(Carbon::now());
+            }
+
+            // Convert jam ke hari bilangan bulat
+            $validated['off_day'] = ceil($diffInHours / 24);
+        } else {
+            $validated['off_day'] = 0;
+        }
 
         // Hitung complete (berdasarkan progress jika kosong)
         if (!isset($validated['complete'])) {
