@@ -25,7 +25,6 @@
     .modal-dialog {
         position: relative;
         width: 90%;
-        border-radius: 5px;
         max-width: 800px;
         margin: 50px auto;
         background: white;

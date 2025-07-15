@@ -188,16 +188,16 @@
                             @forelse($warroomData as $index => $item)
                                 <tr>
                                     <td class="col-no-wr">{{ $index + 1 }}</td>
-                                    <td class="col-tgl-wr">{{ \Carbon\Carbon::parse($item->tgl)->format('d-m-Y') }}</td>
+                                    <td class="col-tgl-wr">{{ $item->start_date ? \Carbon\Carbon::parse($item->tgl)->format('d-m-Y') : '-' }}</td>
                                     <td class="col-agenda-wr">{{ $item->agenda }}</td>
                                     <td class="col-uic-wr">{{ $item->uic }}</td>
                                     <td class="col-peserta-wr">{{ $item->peserta }}</td>
-                                    <td class="col-pembahasan-wr">{{ $item->pembahasan }}</td>
-                                    <td class="col-ac-wr">{{ $item->action_plan }}</td>
-                                    <td class="col-sn-wr">{{ $item->support_needed }}</td>
-                                    <td class="col-kompetitor-wr">{{ $item->info_kompetitor }}</td>
+                                    <td class="col-pembahasan-wr">{!! nl2br(e($item->pembahasan)) !!}</td>
+                                    <td class="col-ac-wr">{!! nl2br(e($item->action_plan)) !!}</td>
+                                    <td class="col-sn-wr">{!! nl2br(e($item->support_needed)) !!}</td>
+                                    <td class="col-kompetitor-wr">{!! nl2br(e($item->info_kompetitor)) !!}</td>
                                     <td class="col-jac-wr">{{ $item->jumlah_action_plan }}</td>
-                                    <td class="col-uac-wr">{{ $item->update_action_plan }}</td>
+                                    <td class="col-uac-wr">{!! nl2br(e($item->update_action_plan)) !!}</td>
                                     <td class="col-sap-wr">
                                         @if($item->status_action_plan == 'Open')
                                             <span class="status-badge-wr status-open-wr">Open</span>
