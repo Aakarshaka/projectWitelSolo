@@ -98,6 +98,7 @@ class LoginController extends Controller
 
             $allowedEmails = [
                 'valdaveisa751@gmail.com',
+                'aryaid612@gmail.com',
                 'example@gmail.com',
             ];
 
