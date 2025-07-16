@@ -674,13 +674,16 @@
                                     $modelLabels = [
                                         'Supportneeded' => 'Support Needed',
                                         'Newwarroom' => 'Warroom',
+                                        'newwarroom' => 'Warroom',
+                                        'NewWarroom' => 'Warroom',
+                                        'supportneeded' => 'Support Needed',
+                                        'SupportNeeded' => 'Support Needed',
                                     ];
                                 @endphp
-
                                 @foreach($models as $model)
-                                    @php $short = class_basename($model); @endphp
+                                    @php $shortName = class_basename($model); @endphp
                                     <option value="{{ $model }}" {{ request('model_type') == $model ? 'selected' : '' }}>
-                                        {{ $modelLabels[$short] ?? $short }}
+                                        {{ $modelLabels[$shortName] ?? $shortName }}
                                     </option>
                                 @endforeach
                             </select>
@@ -781,8 +784,20 @@
                                         </span>
                                     </td>
                                     <td class="col-data">
+                                        @php
+                                            $modelLabels = [
+                                                'Supportneeded' => 'Support Needed',
+                                                'Newwarroom' => 'Warroom',
+                                                'newwarroom' => 'Warroom',
+                                                'NewWarroom' => 'Warroom',
+                                                'supportneeded' => 'Support Needed',
+                                                'SupportNeeded' => 'Support Needed',
+                                            ];
+                                            $shortModel = class_basename($log->model_type);
+                                            $displayModel = $modelLabels[$shortModel] ?? $shortModel;
+                                        @endphp
                                         <div class="data-info">
-                                            <span class="data-model">{{ class_basename($log->model_type) }}</span>
+                                            <span class="data-model">{{ $displayModel }}</span>
                                             <span class="data-id">#{{ $log->model_id }}</span>
                                         </div>
                                     </td>
