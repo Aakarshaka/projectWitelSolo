@@ -9,177 +9,225 @@ use App\Models\User;
 
 class LoginController extends Controller
 {
-    /**
-     * Redirect ke penyedia (Google atau Microsoft)
-     */
+    private const SUPPORTED_PROVIDERS = ['google', 'microsoft'];
+
+    private const ALLOWED_DOMAINS = [
+        'telkom.id',
+        'student.telkomuniversity.ac.id',
+    ];
+
+    private const ALLOWED_EMAILS = [
+        'valdaveisa751@gmail.com',
+        'aryaid612@gmail.com',
+        'example@gmail.com',
+    ];
+
     public function redirect($provider)
     {
         try {
-            // Validasi provider yang didukung
-            if (!in_array($provider, ['google', 'microsoft'])) {
-                return redirect()->route('login')->withErrors([
-                    'msg' => 'Provider login tidak didukung.'
-                ]);
+            if (!$this->isProviderSupported($provider)) {
+                return $this->redirectToLoginWithError('Provider login tidak didukung.');
             }
 
-            // Konfigurasi khusus untuk Microsoft
             if ($provider === 'microsoft') {
                 return Socialite::driver($provider)
-                    ->scopes(['openid', 'profile', 'email'])
+                    ->scopes(['openid', 'profile', 'email', 'User.Read']) // tambahan scope agar email bisa muncul
                     ->redirect();
             }
 
-            // Untuk Google dan provider lainnya
             return Socialite::driver($provider)->redirect();
-
         } catch (\Exception $e) {
-            Log::error('Error pada redirect OAuth: ' . $e->getMessage(), [
+            Log::error('Error pada redirect OAuth', [
                 'provider' => $provider,
+                'message' => $e->getMessage(),
                 'exception' => $e
             ]);
 
-            return redirect()->route('login')->withErrors([
-                'msg' => 'Terjadi kesalahan saat mengarahkan ke ' . ucfirst($provider) . '.'
-            ]);
+            return $this->redirectToLoginWithError('Terjadi kesalahan saat mengarahkan ke ' . ucfirst($provider));
         }
     }
 
-    /**
-     * Callback dari penyedia
-     */
     public function callback($provider)
     {
         try {
-            // Validasi provider yang didukung
-            if (!in_array($provider, ['google', 'microsoft'])) {
-                return redirect()->route('login')->withErrors([
-                    'msg' => 'Provider login tidak didukung.'
-                ]);
+            if (!$this->isProviderSupported($provider)) {
+                return $this->redirectToLoginWithError('Provider login tidak didukung.');
             }
 
-            // Ambil data user dari Microsoft/Google
+            $socialUser = $this->getSocialUser($provider);
+            if (!$socialUser) {
+                return $this->redirectToLoginWithError('Gagal mengambil data dari ' . ucfirst($provider));
+            }
+
+            $email = $this->validateEmail($socialUser, $provider);
+            if (!$email) {
+                return $this->redirectToLoginWithError('Email tidak ditemukan dari akun ' . ucfirst($provider));
+            }
+
+            if (!$this->isEmailAllowed($email)) {
+                Log::warning('Email tidak diizinkan', [
+                    'email' => $email,
+                    'provider' => $provider,
+                ]);
+
+                return $this->redirectToLoginWithError('Email tidak diizinkan untuk login ke sistem.');
+            }
+
+            $user = $this->createOrUpdateUser($socialUser, $email, $provider);
+            Auth::login($user, true);
+
+            Log::info('User berhasil login', [
+                'user_id' => $user->id,
+                'email' => $email,
+            ]);
+
+            return redirect()->route('dashboard');
+        } catch (\Laravel\Socialite\Two\InvalidStateException $e) {
+            Log::error('Invalid state exception', [
+                'provider' => $provider,
+                'message' => $e->getMessage(),
+                'exception' => $e,
+            ]);
+
+            return $this->redirectToLoginWithError('Sesi login tidak valid. Silakan coba lagi.');
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->logClientException($e, $provider);
+            return $this->redirectToLoginWithError('Gagal autentikasi dengan ' . ucfirst($provider));
+        } catch (\Exception $e) {
+            $this->logGeneralException($e, $provider);
+            return $this->redirectToLoginWithError('Kesalahan sistem. Silakan hubungi administrator.');
+        }
+    }
+
+    private function isProviderSupported($provider): bool
+    {
+        return in_array($provider, self::SUPPORTED_PROVIDERS);
+    }
+
+    private function getSocialUser($provider)
+    {
+        try {
             $socialUser = Socialite::driver($provider)->user();
 
-            // Validasi apakah data user berhasil didapat
             if (!$socialUser) {
-                Log::error('Social user data kosong', ['provider' => $provider]);
-                return redirect()->route('login')->withErrors([
-                    'msg' => 'Gagal mengambil data dari ' . ucfirst($provider) . '.'
-                ]);
+                Log::error('Social user kosong', ['provider' => $provider]);
+                return null;
             }
 
-            // Log data user untuk debugging (hapus setelah selesai development)
-            Log::info('Social user data:', [
+            Log::info('Social user data', [
                 'provider' => $provider,
                 'id' => $socialUser->getId(),
                 'name' => $socialUser->getName(),
                 'email' => $socialUser->getEmail(),
-                'avatar' => $socialUser->getAvatar()
+                'avatar' => $socialUser->getAvatar(),
+                'raw' => $socialUser->user, // full raw data dari Microsoft/Google
             ]);
 
-            // Email dari akun sosial
-            $email = $socialUser->getEmail();
-            if (!$email) {
-                Log::warning('Email tidak ditemukan dari social user', [
-                    'provider' => $provider,
-                    'social_id' => $socialUser->getId()
-                ]);
-                
-                return redirect()->route('login')->withErrors([
-                    'msg' => 'Email tidak ditemukan dari akun ' . ucfirst($provider) . '.'
-                ]);
-            }
-
-            // Daftar domain & email yang diizinkan
-            $allowedDomains = [
-                'telkom.id',
-                'student.telkomuniversity.ac.id',
-            ];
-
-            $allowedEmails = [
-                'valdaveisa751@gmail.com',
-                'aryaid612@gmail.com',
-                'example@gmail.com',
-            ];
-
-            // Ambil domain dari email
-            $domain = strtolower(substr(strrchr($email, '@'), 1));
-
-            // Cek apakah diizinkan
-            if (in_array($domain, $allowedDomains) || in_array($email, $allowedEmails)) {
-                
-                // Buat user baru jika belum ada
-                $user = User::firstOrCreate(
-                    ['email' => $email],
-                    [
-                        'name' => $socialUser->getName() ?? explode('@', $email)[0],
-                        'provider' => $provider,
-                        'provider_id' => $socialUser->getId()
-                    ]
-                );
-
-                // Login dan redirect
-                Auth::login($user, true);
-                
-                Log::info('User berhasil login via ' . $provider, [
-                    'user_id' => $user->id,
-                    'email' => $email
-                ]);
-
-                return redirect()->route('dashboard');
-            }
-
-            // Jika tidak termasuk yang diizinkan
-            Log::warning('Email tidak diizinkan untuk login', [
-                'email' => $email,
-                'domain' => $domain,
-                'provider' => $provider
-            ]);
-
-            return redirect()->route('login')->withErrors([
-                'msg' => 'Email tidak diizinkan untuk login ke sistem.'
-            ]);
-
-        } catch (\Laravel\Socialite\Two\InvalidStateException $e) {
-            Log::error('Invalid state exception: ' . $e->getMessage(), [
-                'provider' => $provider,
-                'exception' => $e
-            ]);
-
-            return redirect()->route('login')->withErrors([
-                'msg' => 'Sesi login tidak valid. Silakan coba lagi.'
-            ]);
-
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
-            $response = $e->getResponse();
-            $body = $response ? json_decode((string) $response->getBody(), true) : null;
-            
-            Log::error('OAuth Client Exception: ' . $e->getMessage(), [
-                'provider' => $provider,
-                'status_code' => $e->getCode(),
-                'response_body' => $body,
-                'exception' => $e
-            ]);
-
-            return redirect()->route('login')->withErrors([
-                'msg' => 'Terjadi kesalahan saat mengautentikasi dengan ' . ucfirst($provider) . '.'
-            ]);
-
+            return $socialUser;
         } catch (\Exception $e) {
-            // Log error lengkap untuk debugging
-            Log::error('OAuth Callback Exception: ' . $e->getMessage(), [
+            Log::error('Error mengambil social user', [
                 'provider' => $provider,
-                'exception_class' => get_class($e),
                 'message' => $e->getMessage(),
-                'code' => $e->getCode(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString()
+                'exception' => $e
             ]);
-
-            return redirect()->route('login')->withErrors([
-                'msg' => 'Terjadi kesalahan sistem. Silakan coba lagi atau hubungi administrator.'
-            ]);
+            return null;
         }
+    }
+
+    private function validateEmail($socialUser, $provider): ?string
+    {
+        $email = $socialUser->getEmail()
+            ?? $socialUser->user['mail'] // Microsoft kadang pakai ini
+            ?? $socialUser->user['userPrincipalName'] // fallback lainnya
+            ?? null;
+
+        if (!$email) {
+            Log::warning('Email tidak ditemukan', [
+                'provider' => $provider,
+                'social_id' => $socialUser->getId(),
+                'raw' => $socialUser->user ?? [],
+            ]);
+            return null;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            Log::warning('Format email tidak valid', [
+                'email' => $email,
+                'provider' => $provider,
+            ]);
+            return null;
+        }
+
+        return strtolower($email);
+    }
+
+    private function isEmailAllowed($email): bool
+    {
+        $domain = $this->getDomainFromEmail($email);
+
+        return in_array($domain, self::ALLOWED_DOMAINS)
+            || in_array($email, self::ALLOWED_EMAILS);
+    }
+
+    private function getDomainFromEmail($email): string
+    {
+        return strtolower(substr(strrchr($email, '@'), 1));
+    }
+
+    private function createOrUpdateUser($socialUser, $email, $provider): User
+    {
+        $userData = [
+            'name' => $socialUser->getName() ?? $this->generateNameFromEmail($email),
+            'provider' => $provider,
+            'provider_id' => $socialUser->getId(),
+            'avatar' => $socialUser->getAvatar(),
+        ];
+
+        $user = User::firstOrNew(['email' => $email]);
+        $user->fill($userData);
+        $user->save();
+
+        return $user;
+    }
+
+    private function generateNameFromEmail($email): string
+    {
+        $name = explode('@', $email)[0];
+        return ucwords(str_replace(['.', '_', '-'], ' ', $name));
+    }
+
+    private function redirectToLoginWithError($message)
+    {
+        return redirect()->route('login')->withErrors(['msg' => $message]);
+    }
+
+    private function logClientException($e, $provider): void
+    {
+        $response = $e->getResponse();
+        $body = $response ? json_decode((string) $response->getBody(), true) : null;
+
+        Log::error('OAuth Client Exception', [
+            'provider' => $provider,
+            'status_code' => $e->getCode(),
+            'response_body' => $body,
+            'exception' => $e
+        ]);
+    }
+
+    private function logGeneralException($e, $provider): void
+    {
+        Log::error('OAuth Callback Exception', [
+            'provider' => $provider,
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => $e->getTraceAsString(),
+        ]);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login')->with('success', 'Berhasil logout.');
     }
 }

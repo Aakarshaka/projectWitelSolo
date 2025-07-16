@@ -21,9 +21,15 @@
     @endif
 
     {{-- Google Login --}}
-    <a href="{{ url('login/google') }}" class="btn-login">
+    <a href="{{ route('login.redirect', ['provider' => 'google']) }}" class="btn-login">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Icon">
         Login with Google
+    </a>
+
+    {{-- Microsoft Login --}}
+    <a href="{{ route('login.redirect', ['provider' => 'microsoft']) }}" class="btn-login">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/microsoft.svg" alt="Microsoft Icon">
+        Login with Microsoft
     </a>
 
     <div class="footer">Powered by <strong>GIAT CORE</strong></div>

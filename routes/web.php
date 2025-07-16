@@ -27,8 +27,10 @@ Route::view('/', 'auth.login');
 Route::view('/auth/login', 'auth.login')->name('login');
 Route::view('/auth/register', 'auth.register')->name('register');
 
-Route::get('/login/{provider}', [LoginController::class, 'redirect']);
-Route::get('/login/{provider}/callback', [LoginController::class, 'callback']);
+// routes/web.php
+Route::get('/login/{provider}/redirect', [LoginController::class, 'redirect'])->name('login.redirect');
+Route::get('/login/{provider}/callback', [LoginController::class, 'callback'])->name('login.callback');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/supportneeded/detail', [SupportneededController::class, 'getDetail'])->name('supportneeded.detail');
 
