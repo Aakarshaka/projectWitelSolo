@@ -670,9 +670,17 @@
                             <label class="filter-label">Model</label>
                             <select class="filter-select" name="model_type">
                                 <option value="">All Models</option>
-                                @foreach($logs->pluck('model_type')->unique()->filter() as $model)
+                                @php
+                                    $modelLabels = [
+                                        'Supportneeded' => 'Support Needed',
+                                        'Newwarroom' => 'Warroom',
+                                    ];
+                                @endphp
+
+                                @foreach($models as $model)
+                                    @php $short = class_basename($model); @endphp
                                     <option value="{{ $model }}" {{ request('model_type') == $model ? 'selected' : '' }}>
-                                        {{ class_basename($model) }}
+                                        {{ $modelLabels[$short] ?? $short }}
                                     </option>
                                 @endforeach
                             </select>
