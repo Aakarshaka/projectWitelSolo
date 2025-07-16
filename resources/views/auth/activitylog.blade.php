@@ -314,19 +314,6 @@
             border-bottom: none;
         }
 
-        .log-avatar-sm {
-            width: 30px;
-            height: 30px;
-            font-size: 12px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            margin-right: 8px;
-        }
-
         .log-user-info {
             display: flex;
             align-items: center;
@@ -970,9 +957,6 @@
                                     </td>
                                     <td class="log-col-user">
                                         <div class="log-user-info">
-                                            <div class="log-avatar-sm">
-                                                <i class="fas fa-user"></i>
-                                            </div>
                                             <span class="log-user-name">{{ $log->user->name ?? 'System' }}</span>
                                         </div>
                                     </td>
