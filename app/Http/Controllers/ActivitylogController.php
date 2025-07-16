@@ -26,18 +26,26 @@ class ActivitylogController extends Controller
             $query->where('model_type', $request->model_type);
         }
 
-        // FILTER: Search all major fields (description, model_type, data, changes)
+        // FILTER: Search all major fields (description, model_type, changes)
         if ($request->filled('description')) {
             $searchTerm = '%' . $request->description . '%';
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('description', 'like', $searchTerm)
                     ->orWhere('model_type', 'like', $searchTerm)
                     ->orWhere('changes', 'like', $searchTerm);
-                // Hapus: ->orWhere('data', 'like', $searchTerm)
             });
         }
 
+        // Ambil logs dengan pagination jika diperlukan
         $logs = $query->latest()->get();
+
+        // Decode JSON changes untuk setiap log
+        $logs->transform(function ($log) {
+            if ($log->changes && is_string($log->changes)) {
+                $log->changes = json_decode($log->changes, true);
+            }
+            return $log;
+        });
 
         // Ambil semua nama model unik
         $models = ActivityLog::select('model_type')->distinct()->pluck('model_type')->filter();
@@ -52,11 +60,30 @@ class ActivitylogController extends Controller
             ->unique()
             ->sort();
 
-        // Hitung jumlah per aksi
-        $countCreate = ActivityLog::where('action', 'create')->count();
-        $countUpdate = ActivityLog::where('action', 'update')->count();
-        $countDelete = ActivityLog::where('action', 'delete')->count();
-        $total = ActivityLog::count();
+        // Hitung jumlah per aksi dengan filter yang sedang aktif
+        $baseQuery = ActivityLog::query();
+        
+        if ($request->filled('bulan')) {
+            $baseQuery->whereMonth('created_at', $request->bulan);
+        }
+        
+        if ($request->filled('model_type')) {
+            $baseQuery->where('model_type', $request->model_type);
+        }
+        
+        if ($request->filled('description')) {
+            $searchTerm = '%' . $request->description . '%';
+            $baseQuery->where(function ($q) use ($searchTerm) {
+                $q->where('description', 'like', $searchTerm)
+                    ->orWhere('model_type', 'like', $searchTerm)
+                    ->orWhere('changes', 'like', $searchTerm);
+            });
+        }
+
+        $countCreate = (clone $baseQuery)->where('action', 'create')->count();
+        $countUpdate = (clone $baseQuery)->where('action', 'update')->count();
+        $countDelete = (clone $baseQuery)->where('action', 'delete')->count();
+        $total = (clone $baseQuery)->count();
 
         return view('auth.activitylog', compact(
             'logs',
@@ -67,5 +94,61 @@ class ActivitylogController extends Controller
             'countDelete',
             'total'
         ));
+    }
+
+    /**
+     * Helper method untuk memformat nilai field untuk tampilan
+     */
+    private function formatFieldValue($value)
+    {
+        if (is_null($value)) {
+            return null;
+        }
+        
+        if (is_bool($value)) {
+            return $value ? 'True' : 'False';
+        }
+        
+        if (is_array($value)) {
+            return json_encode($value, JSON_PRETTY_PRINT);
+        }
+        
+        if ($value === '') {
+            return 'Kosong';
+        }
+        
+        return $value;
+    }
+
+    /**
+     * Method untuk mendapatkan detail perubahan (jika diperlukan via AJAX)
+     */
+    public function getLogDetails(Request $request, $logId)
+    {
+        $log = ActivityLog::with('user')->findOrFail($logId);
+        
+        $changes = [];
+        if ($log->changes && is_string($log->changes)) {
+            $changes = json_decode($log->changes, true);
+        } elseif ($log->changes && is_array($log->changes)) {
+            $changes = $log->changes;
+        }
+
+        $formattedChanges = [];
+        
+        foreach ($changes as $field => $change) {
+            $formattedChanges[$field] = [
+                'old' => $this->formatFieldValue($change['old'] ?? null),
+                'new' => $this->formatFieldValue($change['new'] ?? null)
+            ];
+        }
+
+        return response()->json([
+            'log' => $log,
+            'changes' => $formattedChanges,
+            'action' => $log->action,
+            'model_type' => class_basename($log->model_type),
+            'created_at' => $log->created_at->format('d M Y H:i')
+        ]);
     }
 }

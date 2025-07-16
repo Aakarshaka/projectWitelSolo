@@ -26,13 +26,6 @@
         Login with Google
     </a>
 
-    {{-- Microsoft Login --}}
-    <a href="{{ url('login/microsoft') }}" class="btn-login mt-2">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft Icon"
-            width="20" style="margin-right: 8px;">
-        Login with Microsoft
-    </a>
-
     <div class="footer">Powered by <strong>GIAT CORE</strong></div>
 
 </body>

@@ -43,6 +43,7 @@ Route::post('/warroom/sync', [NewwarroomController::class, 'syncFromSupportneede
 
 Route::get('newdashboard', [NewdashboardController::class, 'index'])->name('dashboard');
 Route::get('activitylog', [ActivityLogController::class, 'index'])->name('activity-log.index');
+Route::get('/activity-log/{log}/details', [ActivitylogController::class, 'getLogDetails'])->name('activity-log.details');
 
 //Route::get('dashboard/newdashboard', function () {
   //  return view('dashboard.newdashboard');
