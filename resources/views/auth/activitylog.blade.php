@@ -1050,7 +1050,7 @@
                     <div class="log-info-grid">
                         <div class="log-info-item">
                             <span class="log-info-label">Waktu</span>
-                            <span class="log-info-value">{{ $log->created_at->format('d M Y H:i') }}</span>
+                            <span class="log-info-value">{{ $log->created_at->timezone('Asia/Jakarta')->format('d M Y H:i') }}</span>
                         </div>
                         <div class="log-info-item">
                             <span class="log-info-label">User</span>
