@@ -13,7 +13,7 @@
     <div class="logo">GIAT<span style="color:#FDD835;">CORE</span></div>
     <div class="subtitle">Akses GIAT CORE dengan akun perusahaan Anda</div>
 
-    <a href="{{ url('dashboard/newdashboard') }}" class="btn-login">
+    <a href="{{ url('newdashboard') }}" class="btn-login">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Icon">
         Login with Google
     </a>

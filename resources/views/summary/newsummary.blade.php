@@ -161,7 +161,7 @@
                                     'FORUM TSEL',
                                     'FORUM GSD',
                                     'REVIEW KPI',
-                                    'Others'
+                                    'OTHERS'
                                     ];
                                     @endphp
                                     @foreach ($agendaList as $index => $agenda)
