@@ -156,6 +156,8 @@ class SupportneededController extends Controller
 
         $support = Supportneeded::create($validated);
 
+        log_activity('create', $support, 'Menambahkan data Support Needed');
+
         // Kalau status = Action → langsung buat di Newwarroom
         if ($support->status === 'Action') {
             $exists = Newwarroom::where('tgl', $support->start_date)
@@ -177,6 +179,8 @@ class SupportneededController extends Controller
 
     public function update(Request $request, Supportneeded $supportneeded)
     {
+        $oldData = $supportneeded->toArray();
+
         $validated = $request->validate([
             'agenda' => 'required|string',
             'unit_or_telda' => 'nullable|string',
@@ -258,6 +262,11 @@ class SupportneededController extends Controller
 
         $supportneeded->update($validated);
 
+        log_activity('update', $supportneeded, 'Memperbarui data Support Needed', [
+            'before' => $oldData,
+            'after' => $supportneeded->toArray(),
+        ]);
+
         // Jika status berubah jadi Action, dan belum masuk ke warroom
         if ($validated['status'] === 'Action') {
             $exists = Newwarroom::where('tgl', $validated['start_date'])
@@ -279,6 +288,7 @@ class SupportneededController extends Controller
 
     public function destroy(Supportneeded $supportneeded)
     {
+        log_activity('delete', $supportneeded, 'Menghapus data Support Needed: ' . $supportneeded->agenda);
         $supportneeded->delete();
         return back()->with('success', 'Agenda deleted');
     }

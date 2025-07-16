@@ -15,7 +15,8 @@ use App\Http\Controllers\{
     SupportneededController,
     SumController,
     NewwarroomController,
-    NewdashboardController
+    NewdashboardController,
+    ActivitylogController
 };
 
 // ==================
@@ -37,7 +38,7 @@ Route::post('/warroom/sync', [NewwarroomController::class, 'syncFromSupportneede
 
 
 Route::get('newdashboard', [NewdashboardController::class, 'index'])->name('dashboard');
-
+Route::get('activitylog', [ActivityLogController::class, 'index'])->name('activity-log.index');
 
 //Route::get('dashboard/newdashboard', function () {
   //  return view('dashboard.newdashboard');

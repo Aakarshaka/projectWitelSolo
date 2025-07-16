@@ -62,7 +62,7 @@ class NewwarroomController extends Controller
             'search' // ⬅ penting dikirim ke blade biar input tetap terisi
         ));
     }
-    
+
     /**
      * Sinkronisasi data dari supportneeded yang status-nya 'Action'.
      */
@@ -116,7 +116,8 @@ class NewwarroomController extends Controller
             'status_action_plan' => 'nullable|string',
         ]);
 
-        Newwarroom::create($validated);
+        $war = Newwarroom::create($validated);
+        log_activity('create', $war, 'Menambahkan data Warroom');
 
         return redirect()->route('newwarroom.index')->with('success', 'Data berhasil ditambahkan.');
     }
@@ -156,7 +157,13 @@ class NewwarroomController extends Controller
             'status_action_plan' => 'nullable|string',
         ]);
 
+        $old = $newwarroom->toArray();
         $newwarroom->update($validated);
+
+        log_activity('update', $newwarroom, 'Mengubah data Warroom', [
+            'before' => $old,
+            'after' => $newwarroom->toArray(),
+        ]);
 
         return redirect()->route('newwarroom.index')->with('success', 'Data berhasil diperbarui.');
     }
@@ -166,6 +173,7 @@ class NewwarroomController extends Controller
      */
     public function destroy(Newwarroom $newwarroom)
     {
+        log_activity('delete', $newwarroom, 'Menghapus data Warroom: ' . $newwarroom->agenda);
         $newwarroom->delete();
 
         return redirect()->route('newwarroom.index')->with('success', 'Data berhasil dihapus.');
