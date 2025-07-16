@@ -13,9 +13,24 @@
     <div class="logo">GIAT<span style="color:#FDD835;">CORE</span></div>
     <div class="subtitle">Akses GIAT CORE dengan akun perusahaan Anda</div>
 
-    <a href="{{ url('newdashboard') }}" class="btn-login">
+    {{-- Error Message --}}
+    @if ($errors->has('msg'))
+        <div class="alert alert-danger text-center w-75 mx-auto mt-3">
+            {{ $errors->first('msg') }}
+        </div>
+    @endif
+
+    {{-- Google Login --}}
+    <a href="{{ url('login/google') }}" class="btn-login">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Icon">
         Login with Google
+    </a>
+
+    {{-- Microsoft Login --}}
+    <a href="{{ url('login/microsoft') }}" class="btn-login mt-2">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft Icon"
+            width="20" style="margin-right: 8px;">
+        Login with Microsoft
     </a>
 
     <div class="footer">Powered by <strong>GIAT CORE</strong></div>

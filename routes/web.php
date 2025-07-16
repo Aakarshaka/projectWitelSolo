@@ -16,7 +16,8 @@ use App\Http\Controllers\{
     SumController,
     NewwarroomController,
     NewdashboardController,
-    ActivitylogController
+    ActivitylogController,
+    LoginController
 };
 
 // ==================
@@ -25,6 +26,9 @@ use App\Http\Controllers\{
 Route::view('/', 'auth.login');
 Route::view('/auth/login', 'auth.login')->name('login');
 Route::view('/auth/register', 'auth.register')->name('register');
+
+Route::get('/login/{provider}', [LoginController::class, 'redirect']);
+Route::get('/login/{provider}/callback', [LoginController::class, 'callback']);
 
 Route::get('/supportneeded/detail', [SupportneededController::class, 'getDetail'])->name('supportneeded.detail');
 
