@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{ asset('css/newdashboardstyle.css') }}">
     <link rel="stylesheet" href="{{ asset('css/newwarroom.css') }}">
     <link rel="stylesheet" href="{{ asset('css/newsummary.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/logstyle.css') }}">
     @stack('styles')
 </head>
 <body>

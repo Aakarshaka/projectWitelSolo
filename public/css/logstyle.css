@@ -1,0 +1,686 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #f8f6f9;
+}
+
+.log-main-content {
+    margin-left: 60px;
+    min-height: 100vh;
+    transition: margin-left 0.3s ease;
+}
+
+.log-container {
+    padding: 20px;
+    width: 100%;
+}
+
+.log-header {
+    background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
+    color: white;
+    padding: 15px 30px;
+    margin: -20px -20px 20px -20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(139, 21, 56, 0.3);
+    flex-wrap: wrap;
+}
+
+.log-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    min-width: 200px;
+}
+
+.log-stats-container {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.log-stat-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px 16px;
+    text-align: center;
+    min-width: 80px;
+    flex-shrink: 0;
+}
+
+.log-stat-label {
+    font-size: 12px;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.log-stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+.log-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.log-filters {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.log-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 120px;
+    flex: 1;
+}
+
+.log-filter-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #6d5671;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.log-filter-select {
+    padding: 8px 12px;
+    border: 1px solid #e6e1e8;
+    border-radius: 6px;
+    background: white;
+    font-size: 14px;
+    color: #2a1b2d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.log-filter-select:focus {
+    outline: none;
+    border-color: #4a0e4e;
+    box-shadow: 0 0 0 3px rgba(74, 14, 78, 0.1);
+}
+
+.log-filter-btn {
+    background: #4a0e4e;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-end;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.log-filter-btn:hover {
+    background: #3a0b3e;
+}
+
+.log-search-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.log-search-form .log-search-box {
+    flex: 1;
+    min-width: 200px;
+    padding: 8px 12px;
+    border: 1px solid #e6e1e8;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.log-search-form .log-search-box:focus {
+    outline: none;
+    border-color: #4a0e4e;
+    box-shadow: 0 0 0 3px rgba(74, 14, 78, 0.1);
+}
+
+.log-table-container {
+    position: relative;
+    width: 100%;
+    background: white;
+    border-radius: 0px;
+    border: 1px solid #e6e1e8;
+    overflow: hidden;
+}
+
+.log-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: calc(100vh - 280px);
+    position: relative;
+}
+
+.log-table-wrapper::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.log-table-wrapper::-webkit-scrollbar-track {
+    background: #f8f6f9;
+}
+
+.log-table-wrapper::-webkit-scrollbar-thumb {
+    background: #4a0e4e;
+    border-radius: 4px;
+}
+
+.log-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #3a0b3e;
+}
+
+.log-table-wrapper::-webkit-scrollbar-corner {
+    background: #f8f6f9;
+}
+
+.log-table {
+    border-collapse: collapse;
+    font-size: 13px;
+    table-layout: fixed;
+    width: 1200px;
+    min-width: 100%;
+}
+
+.log-table th.log-col-no,
+.log-table td.log-col-no {
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+}
+
+.log-table th.log-col-time,
+.log-table td.log-col-time {
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+}
+
+.log-table th.log-col-user,
+.log-table td.log-col-user {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+}
+
+.log-table th.log-col-action,
+.log-table td.log-col-action {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.log-table th.log-col-data,
+.log-table td.log-col-data {
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+}
+
+.log-table th.log-col-description,
+.log-table td.log-col-description {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+}
+
+.log-table th.log-col-changes,
+.log-table td.log-col-changes {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+}
+
+.log-table th {
+    position: sticky;
+    top: 0;
+    background: #a8a8a9;
+    color: #2a1b2d;
+    font-weight: 600;
+    padding: 12px 8px;
+    text-align: center;
+    border-bottom: 2px solid #e6e1e8;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    z-index: 10;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.log-table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #f2e8f3;
+    vertical-align: middle;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+.log-table td.log-col-no,
+.log-table td.log-col-time,
+.log-table td.log-col-user,
+.log-table td.log-col-action,
+.log-table td.log-col-data,
+.log-table td.log-col-changes {
+    text-align: center;
+}
+
+.log-table td.log-col-description {
+    text-align: left;
+}
+
+.log-table tr:hover {
+    background: #faf8fb;
+}
+
+.log-table tr:last-child td {
+    border-bottom: none;
+}
+
+.log-user-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.log-user-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 12px;
+}
+
+.log-time-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.log-time-date {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 11px;
+}
+
+.log-time-hour {
+    font-size: 10px;
+    color: #6c757d;
+}
+
+.log-data-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.log-data-model {
+    font-weight: 600;
+    color: #495057;
+    font-size: 11px;
+}
+
+.log-data-id {
+    font-size: 10px;
+    color: #6c757d;
+}
+
+.log-badge {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 12px;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.log-badge-create {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.log-badge-update {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+    color: white;
+}
+
+.log-badge-delete {
+    background: linear-gradient(135deg, #dc3545 0%, #e91e63 100%);
+    color: white;
+}
+
+.log-btn-detail {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.log-btn-detail:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(0, 123, 255, 0.4);
+    color: white;
+}
+
+.log-no-changes {
+    color: #6c757d;
+    font-style: italic;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.log-empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.log-empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+.log-scroll-hint {
+    display: none;
+    text-align: center;
+    font-size: 12px;
+    color: #6d5671;
+    margin-bottom: 10px;
+    padding: 8px;
+    background: #f8f6f9;
+    border-radius: 6px;
+    border: 1px solid #e6e1e8;
+}
+
+.log-footer {
+    text-align: center;
+    font-size: 15px;
+    color: #6d5671;
+    margin-top: 10px;
+    padding: 10px 0;
+}
+
+.log-changes-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-top: 20px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.log-changes-table th {
+    background: #f8f9fa;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.log-changes-table td {
+    padding: 15px;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: top;
+}
+
+.log-changes-table tr:last-child td {
+    border-bottom: none;
+}
+
+.log-changes-table tr:hover {
+    background: #f8f9fa;
+}
+
+.log-field-name {
+    font-weight: 600;
+    color: #495057;
+    min-width: 120px;
+}
+
+.log-field-value {
+    font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+    font-size: 12px;
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border-left: 4px solid #dee2e6;
+    max-width: 300px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.log-field-value.log-old-value {
+    border-left-color: #dc3545;
+    background: #f8d7da;
+}
+
+.log-field-value.log-new-value {
+    border-left-color: #28a745;
+    background: #d4edda;
+}
+
+.log-info-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.log-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.log-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.log-info-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.log-info-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.log-no-changes-modal {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.log-no-changes-modal i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+/* Mobile responsive */
+@media (max-width: 800px) {
+    .log-main-content {
+        margin-left: 0;
+        margin-bottom: 60px;
+    }
+
+    .log-container {
+        padding: 10px;
+    }
+
+    .log-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        margin: -10px -10px 15px -10px;
+        padding: 15px;
+    }
+
+    .log-header h1 {
+        font-size: 24px;
+        min-width: auto;
+    }
+
+    .log-stats-container {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .log-stat-card {
+        min-width: 70px;
+        padding: 6px 12px;
+    }
+
+    .log-stat-label {
+        font-size: 10px;
+    }
+
+    .log-stat-value {
+        font-size: 16px;
+    }
+
+    .log-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .log-filters {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .log-filter-group {
+        min-width: auto;
+    }
+
+    .log-filter-btn {
+        align-self: center;
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .log-search-form {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .log-search-form .log-search-box {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .log-search-form .log-filter-btn {
+        width: 100%;
+        max-width: 200px;
+        align-self: center;
+    }
+
+    .log-table {
+        font-size: 11px;
+    }
+
+    .log-table th,
+    .log-table td {
+        padding: 8px 6px;
+        font-size: 11px;
+    }
+
+    .log-table th {
+        font-size: 10px;
+    }
+
+    .log-scroll-hint {
+        display: block;
+    }
+
+    .log-modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+
+    .log-modal-header {
+        padding: 15px 20px;
+    }
+
+    .log-modal-title {
+        font-size: 18px;
+    }
+
+    .log-modal-body {
+        padding: 20px;
+    }
+
+    .log-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .log-changes-table {
+        font-size: 12px;
+    }
+
+    .log-changes-table th,
+    .log-changes-table td {
+        padding: 10px;
+    }
+
+    .log-field-value {
+        font-size: 11px;
+        max-width: 100%;
+    }
+}

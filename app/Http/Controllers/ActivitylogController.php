@@ -85,7 +85,7 @@ class ActivitylogController extends Controller
         $countDelete = (clone $baseQuery)->where('action', 'delete')->count();
         $total = (clone $baseQuery)->count();
 
-        return view('auth.activitylog', compact(
+        return view('log.activitylog', compact(
             'logs',
             'models',
             'bulanList',
