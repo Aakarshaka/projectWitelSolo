@@ -12,7 +12,7 @@ class LoginController extends Controller
     private const SUPPORTED_PROVIDERS = ['google', 'microsoft'];
 
     private const ALLOWED_DOMAINS = [
-        'telkom.id',
+        'telkom.co.id',
         'student.telkomuniversity.ac.id',
     ];
 
@@ -56,7 +56,7 @@ class LoginController extends Controller
 
             $socialUser = $this->getSocialUser($provider);
             if (!$socialUser) {
-                return $this->redirectToLoginWithError('Gagal mengambil data dari ' . ucfirst($provider));
+                return $this->redirectToLoginWithError('Gagal mengambil data dari ' . ucfirst($provider) . ',  Silahkan coba lagi');
             }
 
             $email = $this->validateEmail($socialUser, $provider);
@@ -163,10 +163,22 @@ class LoginController extends Controller
 
     private function isEmailAllowed($email): bool
     {
-        $domain = $this->getDomainFromEmail($email);
+        $allowedExactDomains = ['telkom.co.id', 'student.telkomuniversity.ac.id'];
+        $allowedEmails = self::ALLOWED_EMAILS;
 
-        return in_array($domain, self::ALLOWED_DOMAINS)
-            || in_array($email, self::ALLOWED_EMAILS);
+        $domain = strtolower(substr(strrchr($email, "@"), 1));
+
+        // Cek apakah domain persis sesuai yang diizinkan
+        if (in_array($domain, $allowedExactDomains)) {
+            return true;
+        }
+
+        // Jika bukan domain yang diizinkan, cek apakah email spesifiknya diizinkan
+        if (in_array($email, $allowedEmails)) {
+            return true;
+        }
+
+        return false;
     }
 
     private function getDomainFromEmail($email): string
