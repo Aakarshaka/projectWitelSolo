@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class newwarroom extends Model
+class Newwarroom extends Model
 {
     use HasFactory;
 
@@ -21,6 +21,21 @@ class newwarroom extends Model
         'jumlah_action_plan',
         'update_action_plan',
         'status_action_plan',
+        'supportneeded_id', // Tambahkan kolom ini
     ];
-}
 
+    protected $casts = [
+        'tgl' => 'date',
+        'jumlah_action_plan' => 'integer',
+        'supportneeded_id' => 'integer',
+    ];
+
+    /**
+     * Relasi ke model Supportneeded
+     * Tidak menggunakan foreign key constraint, hanya relasi logis
+     */
+    public function supportneeded()
+    {
+        return $this->belongsTo(Supportneeded::class, 'supportneeded_id');
+    }
+}

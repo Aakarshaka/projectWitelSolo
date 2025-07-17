@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Supportneeded;
-use App\Models\newwarroom;
+use App\Models\Newwarroom;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -124,10 +124,8 @@ class SupportneededController extends Controller
         // Hitung off_day dinamis
         if ($start) {
             if ($validated['progress'] === 'Done' && $validated['end_date']) {
-                // Jika Done, hitung dari start sampai end_date
                 $validated['off_day'] = Carbon::parse($start)->diffInDays(Carbon::parse($validated['end_date'])) + 1;
             } else {
-                // Jika belum Done, hitung dari start sampai hari ini
                 $validated['off_day'] = Carbon::parse($start)->diffInDays(Carbon::now()) + 1;
             }
         } else {
@@ -155,24 +153,10 @@ class SupportneededController extends Controller
         }
 
         $support = Supportneeded::create($validated);
-
         log_activity('create', $support, 'Menambahkan data Support Needed');
 
-        // Kalau status = Action → langsung buat di Newwarroom
-        if ($support->status === 'Action') {
-            $exists = Newwarroom::where('tgl', $support->start_date)
-                ->where('agenda', $support->agenda)
-                ->where('uic', $support->uic)
-                ->exists();
-
-            if (!$exists) {
-                Newwarroom::create([
-                    'tgl' => $support->start_date,
-                    'agenda' => $support->agenda,
-                    'uic' => $support->uic,
-                ]);
-            }
-        }
+        // Sinkronkan dengan warroom setelah berhasil create
+        $this->syncToWarroom($support);
 
         return redirect()->route('supportneeded.index')->with('success', 'Data berhasil disimpan.');
     }
@@ -227,14 +211,10 @@ class SupportneededController extends Controller
         // Hitung off_day dinamis
         if ($start) {
             if ($validated['progress'] === 'Done' && $validated['end_date']) {
-                // Jika Done, hitung dari start sampai end_date
                 $diffInHours = Carbon::parse($start)->diffInHours(Carbon::parse($validated['end_date']));
             } else {
-                // Jika belum Done, hitung dari start sampai hari ini
                 $diffInHours = Carbon::parse($start)->diffInHours(Carbon::now());
             }
-
-            // Convert jam ke hari bilangan bulat
             $validated['off_day'] = ceil($diffInHours / 24);
         } else {
             $validated['off_day'] = 0;
@@ -261,34 +241,55 @@ class SupportneededController extends Controller
         }
 
         $supportneeded->update($validated);
-
         log_activity('update', $supportneeded, 'Memperbarui data Support Needed', [
             'before' => $oldData,
             'after' => $supportneeded->toArray(),
         ]);
 
-        // Jika status berubah jadi Action, dan belum masuk ke warroom
-        if ($validated['status'] === 'Action') {
-            $exists = Newwarroom::where('tgl', $validated['start_date'])
-                ->where('agenda', $validated['agenda'])
-                ->where('uic', $validated['uic'])
-                ->exists();
-
-            if (!$exists) {
-                Newwarroom::create([
-                    'tgl' => $validated['start_date'],
-                    'agenda' => $validated['agenda'],
-                    'uic' => $validated['uic'],
-                ]);
-            }
-        }
+        // Sinkronkan dengan warroom setelah update
+        $this->syncToWarroom($supportneeded);
 
         return redirect()->route('supportneeded.index')->with('success', 'Data berhasil diperbarui.');
+    }
+
+    /**
+     * Sinkronkan data supportneeded ke warroom
+     * Method ini diperbaiki untuk mengatasi masalah duplikasi dan null supportneeded_id
+     */
+    private function syncToWarroom(Supportneeded $supportneeded)
+    {
+        if ($supportneeded->status === 'Action') {
+            // Jika status = Action, buat atau update data di warroom
+            Newwarroom::updateOrCreate(
+                ['supportneeded_id' => $supportneeded->id], // Cari berdasarkan supportneeded_id
+                [
+                    'tgl' => $supportneeded->start_date,
+                    'agenda' => $supportneeded->agenda,
+                    'uic' => $supportneeded->uic,
+                    'support_needed' => $supportneeded->notes_to_follow_up,
+                    'peserta' => null, // Set default jika diperlukan
+                    'pembahasan' => null,
+                    'action_plan' => null,
+                    'info_kompetitor' => null,
+                    'jumlah_action_plan' => 0,
+                    'update_action_plan' => null,
+                    'status_action_plan' => $supportneeded->status,
+                    'supportneeded_id' => $supportneeded->id, // Pastikan supportneeded_id diset
+                ]
+            );
+        } else {
+            // Jika status bukan Action, hapus dari warroom jika ada
+            Newwarroom::where('supportneeded_id', $supportneeded->id)->delete();
+        }
     }
 
     public function destroy(Supportneeded $supportneeded)
     {
         log_activity('delete', $supportneeded, 'Menghapus data Support Needed: ' . $supportneeded->agenda);
+
+        // Hapus data warroom yang terkait secara manual (karena tidak ada foreign key constraint)
+        Newwarroom::where('supportneeded_id', $supportneeded->id)->delete();
+
         $supportneeded->delete();
         return back()->with('success', 'Agenda deleted');
     }

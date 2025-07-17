@@ -16,7 +16,7 @@ class NewwarroomController extends Controller
     {
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun');
-        $search = $request->input('search'); // << Tambahkan ini
+        $search = $request->input('search');
 
         $query = Newwarroom::query();
 
@@ -28,7 +28,7 @@ class NewwarroomController extends Controller
             $query->whereYear('tgl', $tahun);
         }
 
-        // 🔍 Tambahkan pencarian global di semua kolom utama
+        // Tambahkan pencarian global di semua kolom utama
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
                 $q->where('agenda', 'like', "%$search%")
@@ -59,34 +59,46 @@ class NewwarroomController extends Controller
             'jumlah_eskalasi',
             'bulan',
             'tahun',
-            'search' // ⬅ penting dikirim ke blade biar input tetap terisi
+            'search'
         ));
     }
 
     /**
      * Sinkronisasi data dari supportneeded yang status-nya 'Action'.
+     * Method ini diperbaiki untuk menghindari duplikasi dan memastikan supportneeded_id diset
      */
     public function syncFromSupportneeded(): RedirectResponse
     {
         $data = Supportneeded::where('status', 'Action')->get();
 
         foreach ($data as $item) {
-            $exists = Newwarroom::where('tgl', $item->start_date)
-                ->where('agenda', $item->agenda)
-                ->where('uic', $item->uic)
-                ->exists();
-
-            if (!$exists) {
-                Newwarroom::create([
+            // Gunakan updateOrCreate untuk menghindari duplikasi
+            Newwarroom::updateOrCreate(
+                ['supportneeded_id' => $item->id], // Cari berdasarkan supportneeded_id
+                [
                     'tgl' => $item->start_date,
                     'agenda' => $item->agenda,
                     'uic' => $item->uic,
-                    // Kolom lain dibiarkan null
-                ]);
-            }
+                    'support_needed' => $item->notes_to_follow_up,
+                    'peserta' => null, // Set default jika diperlukan
+                    'pembahasan' => null,
+                    'action_plan' => null,
+                    'info_kompetitor' => null,
+                    'jumlah_action_plan' => 0,
+                    'update_action_plan' => null,
+                    'status_action_plan' => $item->status,
+                    'supportneeded_id' => $item->id, // Pastikan supportneeded_id diset
+                ]
+            );
         }
 
-        return redirect()->route('newwarroom.index')->with('success', 'Data berhasil disalin dari Supportneeded.');
+        // Hapus data warroom yang supportneeded-nya sudah tidak berstatus 'Action'
+        $actionIds = Supportneeded::where('status', 'Action')->pluck('id');
+        Newwarroom::whereNotNull('supportneeded_id')
+            ->whereNotIn('supportneeded_id', $actionIds)
+            ->delete();
+
+        return redirect()->route('newwarroom.index')->with('success', 'Data berhasil disinkronkan.');
     }
 
     /**
@@ -114,6 +126,7 @@ class NewwarroomController extends Controller
             'jumlah_action_plan' => 'nullable|integer',
             'update_action_plan' => 'nullable|string',
             'status_action_plan' => 'nullable|string',
+            'supportneeded_id' => 'nullable|integer|exists:supportneeded,id', // Tambahkan validasi
         ]);
 
         $war = Newwarroom::create($validated);
@@ -155,6 +168,7 @@ class NewwarroomController extends Controller
             'jumlah_action_plan' => 'nullable|integer',
             'update_action_plan' => 'nullable|string',
             'status_action_plan' => 'nullable|string',
+            'supportneeded_id' => 'nullable|integer|exists:supportneeded,id', // Tambahkan validasi
         ]);
 
         $old = $newwarroom->toArray();
