@@ -1,7 +1,7 @@
 <nav id="sidebar">
     <ul>
         <li>
-            <img src="{{ asset('images/giatlogo.png') }}" class="logo-img">
+            <img src="{{ asset('images/giatlogo.png') }}" class="sidebar-logo-img">
             <button onclick="toggleSidebar()" id="toggle-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-left-icon lucide-chevrons-left">
                     <path d="m11 17-5-5 5-5" />
