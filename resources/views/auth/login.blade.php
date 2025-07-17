@@ -21,13 +21,6 @@
         <div class="subtitle">Akses GIAT CORE dengan akun perusahaan Anda</div>
     </div>
 
-    {{-- Error Message --}}
-    @if ($errors->has('msg'))
-        <div class="error-message">
-            {{ $errors->first('msg') }}
-        </div>
-    @endif
-
     <!-- Login Options -->
     <div class="login-container">
         <div class="login-grid">
@@ -60,6 +53,13 @@
             </a>
         </div>
     </div>
+    
+    {{-- Error Message --}}
+    @if ($errors->has('msg'))
+        <div class="error-message">
+            {{ $errors->first('msg') }}
+        </div>
+    @endif
 
     <!-- Footer -->
     <div class="footer">Powered by <strong>GIAT CORE</strong></div>
