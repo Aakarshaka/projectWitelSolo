@@ -2,16 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
-    SnunitController,
-    SnamController,
-    SnteldaController,
-    TiftaController,
-    TselController,
-    TregController,
-    GsdController,
-    WarroomController,
-    SummaryController,
-    WitelController,
     SupportneededController,
     SumController,
     NewwarroomController,
@@ -28,12 +18,10 @@ Route::view('/', 'auth.login');
 Route::view('/auth/login', 'auth.login')->name('login');
 Route::get('/login/{provider}/redirect', [LoginController::class, 'redirect'])->name('login.redirect');
 Route::get('/login/{provider}/callback', [LoginController::class, 'callback'])->name('login.callback');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Group route yang butuh login
 Route::middleware(['auth'])->group(function () {
     Route::get('/supportneeded/detail', [SupportneededController::class, 'getDetail'])->name('supportneeded.detail');
-    Route::resource('witel', WitelController::class);
     Route::resource('supportneeded', SupportneededController::class);
     Route::resource('newsummary', SumController::class);
     Route::resource('newwarroom', NewwarroomController::class);

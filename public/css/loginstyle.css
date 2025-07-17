@@ -17,19 +17,84 @@ body {
     align-items: center;
     color: #fff;
     font-family: "Inter", sans-serif;
+    overflow: hidden;
 }
 
 @keyframes gradientShift {
     0% {
         background-position: 0% 50%;
     }
-
     50% {
         background-position: 100% 50%;
     }
-
     100% {
         background-position: 0% 50%;
+    }
+}
+
+/* Fade in animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulseGlow {
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(253, 216, 53, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(253, 216, 53, 0.5);
     }
 }
 
@@ -37,6 +102,7 @@ body {
 .login-logo-section {
     text-align: center;
     margin-bottom: 20px;
+    animation: fadeInDown 0.8s ease-out;
 }
 
 .login-logo-container {
@@ -51,11 +117,10 @@ body {
     width: 250px;
     height: auto;
     filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.3));
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .login-logo-img:hover {
-    transform: scale(1.05);
     filter: drop-shadow(0 12px 40px rgba(0, 0, 0, 0.4));
 }
 
@@ -63,6 +128,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    animation: fadeInRight 0.8s ease-out 0.4s both;
 }
 
 .login-logo-text {
@@ -72,6 +138,7 @@ body {
     text-shadow: 0 4px 16px rgba(253, 216, 53, 0.3);
     letter-spacing: 2px;
     line-height: 1;
+    transition: all 0.3s ease;
 }
 
 .login-logo-subtitle {
@@ -82,6 +149,9 @@ body {
     margin-top: -10px;
     text-align: center;
     justify-content: center;
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 0.8s both;
 }
 
 .subtitle {
@@ -89,6 +159,14 @@ body {
     color: rgba(255, 255, 255, 0.8);
     font-weight: 400;
     letter-spacing: 0.3px;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 1s both;
+    transition: all 0.3s ease;
+}
+
+.subtitle:hover {
+    color: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
 }
 
 /* Error Message */
@@ -103,12 +181,22 @@ body {
     font-size: 14px;
     backdrop-filter: blur(10px);
     max-width: 400px;
+    opacity: 0;
+    animation: fadeInUp 0.5s ease-out 0.3s both;
+    transition: all 0.3s ease;
+}
+
+.error-message:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
 }
 
 /* Login Container */
 .login-container {
     width: 100%;
     max-width: 400px;
+    opacity: 0;
+    animation: fadeInScale 0.8s ease-out 0.6s both;
 }
 
 .login-grid {
@@ -121,6 +209,12 @@ body {
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.login-grid:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
 }
 
 .login-option {
@@ -130,20 +224,51 @@ body {
     text-align: center;
     text-decoration: none;
     color: #fff;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    overflow: hidden;
+}
+
+.login-option:nth-child(1) {
+    animation: fadeInLeft 0.6s ease-out 0.8s both;
+}
+
+.login-option:nth-child(2) {
+    animation: fadeInRight 0.6s ease-out 1s both;
 }
 
 .login-option:last-child {
     border-right: none;
 }
 
+.login-option::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(253, 216, 53, 0.1),
+        transparent
+    );
+    transition: left 0.6s ease;
+}
+
+.login-option:hover::before {
+    left: 100%;
+}
+
 .login-option:hover {
     background: rgba(255, 255, 255, 0.08);
     color: #fdd835;
-    transform: translateY(-1px);
-    box-shadow: inset 0 0 0 1px rgba(253, 216, 53, 0.1);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: inset 0 0 0 1px rgba(253, 216, 53, 0.2),
+        0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .provider-icon {
@@ -156,18 +281,24 @@ body {
     justify-content: center;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .login-option:hover .provider-icon {
-    transform: scale(1.05);
+    transform: scale(1.15) rotate(5deg);
     background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 16px rgba(253, 216, 53, 0.3);
 }
 
 .provider-icon svg {
     width: 24px;
     height: 24px;
+    transition: all 0.3s ease;
+}
+
+.login-option:hover .provider-icon svg {
+    transform: scale(1.1);
 }
 
 .provider-name {
@@ -175,6 +306,12 @@ body {
     font-weight: 500;
     margin-bottom: 4px;
     letter-spacing: 0.2px;
+    transition: all 0.3s ease;
+}
+
+.login-option:hover .provider-name {
+    transform: translateY(-2px);
+    font-weight: 600;
 }
 
 .provider-desc {
@@ -182,6 +319,12 @@ body {
     opacity: 0.7;
     font-weight: 400;
     letter-spacing: 0.1px;
+    transition: all 0.3s ease;
+}
+
+.login-option:hover .provider-desc {
+    opacity: 1;
+    transform: translateY(-1px);
 }
 
 /* Footer */
@@ -191,13 +334,66 @@ body {
     font-size: 12px;
     color: rgba(255, 255, 255, 0.5);
     letter-spacing: 0.3px;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 1.2s both;
+    transition: all 0.3s ease;
+}
+
+.footer:hover {
+    color: rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px);
 }
 
 .footer strong {
     color: #fdd835;
+    transition: all 0.3s ease;
 }
 
-/* Responsive design */
+.footer:hover strong {
+    text-shadow: 0 0 10px rgba(253, 216, 53, 0.5);
+}
+
+/* Loading animation for page transition */
+.page-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.page-loading.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(253, 216, 53, 0.3);
+    border-top: 3px solid #fdd835;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Enhanced mobile responsiveness */
 @media (max-width: 800px) {
     .login-container {
         margin: 0 20px;
@@ -239,5 +435,34 @@ body {
 
     .login-option:last-child {
         border-bottom: none;
+    }
+
+    .login-option:nth-child(1) {
+        animation: fadeInUp 0.6s ease-out 0.8s both;
+    }
+
+    .login-option:nth-child(2) {
+        animation: fadeInUp 0.6s ease-out 1s both;
+    }
+
+    .login-option:hover {
+        transform: translateY(-2px) scale(1.01);
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .login-logo-img:hover {
+        transform: scale(1.02);
+    }
+
+    .login-option:hover {
+        transform: translateY(-1px);
     }
 }
