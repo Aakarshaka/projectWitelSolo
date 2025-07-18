@@ -71,16 +71,19 @@
             </a>
         </li>
 
-
+        <!-- Form logout yang benar -->
         <li style="margin-top: auto;">
-            <a href="{{ url('/') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 7v4" />
-                    <path d="M7.998 9.003a5 5 0 1 0 8-.005" />
-                    <circle cx="12" cy="12" r="10" />
-                </svg>
-                <div class="tooltip">Logout</div>
-            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: inline;">
+                @csrf
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16,17 21,12 16,7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                    <div class="tooltip">Logout</div>
+                </a>
+            </form>
         </li>
 
     </ul>

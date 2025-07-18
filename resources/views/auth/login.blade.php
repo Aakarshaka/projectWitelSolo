@@ -21,11 +21,19 @@
         <div class="subtitle">Access GIAT CORE with your company account</div>
     </div>
 
+    <!-- Success Message -->
+    @if(session('message'))
+        <div class="alert alert-success text-center" style="margin: 20px auto; max-width: 400px;">
+            {{ session('message') }}
+        </div>
+    @endif
+
     <!-- Login Form -->
     <div class="login-container">
-        <form class="login-form" action="#" method="POST">
+        <form class="login-form" action="{{ route('login.post') }}" method="POST">
+            @csrf
             <div class="form-group">
-                <input type="text" class="form-input" placeholder="Username or Email" name="username" required>
+                <input type="text" class="form-input" placeholder="Username or Email" name="username" value="{{ old('username') }}" required>
             </div>
             
             <div class="form-group">
@@ -46,10 +54,14 @@
         </div>
     </div>
 
-    <!-- Error Message (example) -->
-    <!-- <div class="error-message">
-        Invalid username or password
-    </div> -->
+    <!-- Error Message -->
+    @if($errors->any())
+        <div class="error-message">
+            @foreach($errors->all() as $error)
+                {{ $error }}
+            @endforeach
+        </div>
+    @endif
 
     <!-- Footer -->
     <div class="footer">Powered by <strong>GIAT CORE</strong></div>

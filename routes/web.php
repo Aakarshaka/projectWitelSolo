@@ -7,30 +7,49 @@ use App\Http\Controllers\{
     NewwarroomController,
     NewdashboardController,
     ActivitylogController,
-    LoginController
+    AuthController
 };
 
 // ==================
-// Auth Routes
+// Public Routes (Accessible to all)
 // ==================
-// Route login tetap tanpa middleware
-Route::view('/', 'auth.login');
-Route::view('/auth/login', 'auth.login')->name('login');
-Route::get('/login/{provider}/redirect', [LoginController::class, 'redirect'])->name('login.redirect');
-Route::get('/login/{provider}/callback', [LoginController::class, 'callback'])->name('login.callback');
+Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect()->route('newdashboard');
+    }
+    return redirect()->route('login');
+})->name('home');
 
-// Group route yang butuh login
-Route::middleware(['auth'])->group(function () {
-    Route::get('/supportneeded/detail', [SupportneededController::class, 'getDetail'])->name('supportneeded.detail');
-    Route::resource('supportneeded', SupportneededController::class);
-    Route::resource('newsummary', SumController::class);
-    Route::resource('newwarroom', NewwarroomController::class);
-    Route::post('/warroom/sync', [NewwarroomController::class, 'syncFromSupportneeded'])->name('warroom.sync');
-    Route::get('newdashboard', [NewdashboardController::class, 'index'])->name('dashboard');
-    Route::get('activitylog', [ActivityLogController::class, 'index'])->name('activity-log.index');
-    Route::get('/activity-log/{log}/details', [ActivitylogController::class, 'getLogDetails'])->name('activity-log.details');
+// ==================
+// Auth Routes (Guest Only)
+// ==================
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
 
-//Route::get('dashboard/newdashboard', function () {
-  //  return view('dashboard.newdashboard');
-//});
+// ==================
+// Authenticated Routes
+// ==================
+Route::middleware(['auth'])->group(function () {
+    // Logout route - menggunakan POST untuk keamanan
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    
+    // Dashboard route
+    Route::get('/newdashboard', [NewdashboardController::class, 'index'])->name('newdashboard');
+    
+    // Support needed routes
+    Route::get('/supportneeded/detail', [SupportneededController::class, 'getDetail'])->name('supportneeded.detail');
+    Route::resource('supportneeded', SupportneededController::class);
+    
+    // Summary routes
+    Route::resource('newsummary', SumController::class);
+    
+    // Warroom routes
+    Route::resource('newwarroom', NewwarroomController::class);
+    Route::post('/warroom/sync', [NewwarroomController::class, 'syncFromSupportneeded'])->name('warroom.sync');
+    
+    // Activity log routes
+    Route::get('/activitylog', [ActivityLogController::class, 'index'])->name('activity-log.index');
+    Route::get('/activity-log/{log}/details', [ActivitylogController::class, 'getLogDetails'])->name('activity-log.details');
+});
