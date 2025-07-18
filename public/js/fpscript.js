@@ -10,6 +10,7 @@ const userEmailSpan = document.getElementById("userEmail");
 const verifyBtn = document.getElementById("verifyBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 const resendLink = document.getElementById("resendLink");
+const resetPasswordBtn = document.getElementById("resetPasswordBtn");
 
 // OTP inputs
 const otpInputs = document.querySelectorAll('input[id^="otp"]');
@@ -18,13 +19,14 @@ const otpInputs = document.querySelectorAll('input[id^="otp"]');
 let isEmailVerified = false;
 let currentStep = 1;
 let userEmail = "";
-let otpToken = "";
+let resetToken = "";
 
 // Initialize
 document.addEventListener("DOMContentLoaded", function () {
     showStep(1);
     setupPasswordToggle("newPassword", "newPasswordToggle");
     setupPasswordToggle("confirmNewPassword", "confirmNewPasswordToggle");
+    setupOTPNavigation();
 });
 
 // Password toggle functionality
@@ -270,52 +272,49 @@ emailVerifyBtn.addEventListener("click", function () {
         emailVerifyBtn.textContent = "Sending...";
         emailVerifyBtn.disabled = true;
 
-        // Simulate API call for sending OTP
-        setTimeout(() => {
-            userEmailSpan.textContent = userEmail;
-            otpModal.classList.add("show");
-            setupOTPNavigation();
-            clearOTPInputs();
-            showStep(2);
-            alert("Verification code has been sent to your email!");
-            emailVerifyBtn.textContent = originalText;
-            emailVerifyBtn.disabled = false;
-        }, 1500);
-
-        // Real API call implementation:
-        /*
-                fetch("/auth/forgot-password-otp", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                    },
-                    body: JSON.stringify({
-                        email: emailInput.value,
-                    }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        userEmailSpan.textContent = emailInput.value;
-                        otpModal.classList.add("show");
-                        setupOTPNavigation();
-                        clearOTPInputs();
-                        showStep(2);
-                        alert("Verification code has been sent to your email!");
-                    } else {
-                        alert("Error: " + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert("An error occurred. Please try again.");
-                })
-                .finally(() => {
-                    emailVerifyBtn.textContent = originalText;
-                    emailVerifyBtn.disabled = false;
-                });
-                */
+        // Real API call for sending OTP
+        fetch("/forget-password/send-otp", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
+            body: JSON.stringify({
+                email: emailInput.value,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    userEmailSpan.textContent = emailInput.value;
+                    otpModal.classList.add("show");
+                    clearOTPInputs();
+                    showStep(2);
+                    alert("Verification code has been sent to your email!");
+                } else {
+                    showError(
+                        emailInput,
+                        document.getElementById("emailError"),
+                        data.message
+                    );
+                    clearSuccess(document.getElementById("emailSuccess"));
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                showError(
+                    emailInput,
+                    document.getElementById("emailError"),
+                    "An error occurred. Please try again."
+                );
+                clearSuccess(document.getElementById("emailSuccess"));
+            })
+            .finally(() => {
+                emailVerifyBtn.textContent = originalText;
+                emailVerifyBtn.disabled = false;
+            });
     }
 });
 
@@ -332,60 +331,44 @@ verifyBtn.addEventListener("click", function () {
     verifyBtn.textContent = "Verifying...";
     verifyBtn.disabled = true;
 
-    // Simulate API call for OTP verification
-    setTimeout(() => {
-        // For demo purposes, any 6-digit code is valid
-        if (otpValue === "123456" || otpValue.length === 6) {
-            isEmailVerified = true;
-            otpToken = "demo-token-" + Date.now();
-            otpModal.classList.remove("show");
-            showStep(3);
-            alert(
-                "Email verified successfully! You can now reset your password."
-            );
-        } else {
-            alert("Invalid verification code. Please try again.");
+    // Real API call for OTP verification
+    fetch("/auth/verify-forget-password-otp", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
+        },
+        body: JSON.stringify({
+            email: userEmail,
+            otp: otpValue,
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                isEmailVerified = true;
+                resetToken = data.reset_token;
+                otpModal.classList.remove("show");
+                showStep(3);
+                alert(
+                    "Email verified successfully! You can now reset your password."
+                );
+            } else {
+                alert("Error: " + data.message);
+                clearOTPInputs();
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
             clearOTPInputs();
-        }
-        verifyBtn.textContent = originalText;
-        verifyBtn.disabled = false;
-    }, 1500);
-
-    // Real API call implementation:
-    /*
-            fetch("/auth/verify-otp", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                },
-                body: JSON.stringify({
-                    email: userEmail,
-                    otp: otpValue,
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    isEmailVerified = true;
-                    otpToken = data.token;
-                    otpModal.classList.remove("show");
-                    showStep(3);
-                    alert("Email verified successfully! You can now reset your password.");
-                } else {
-                    alert("Error: " + data.message);
-                    clearOTPInputs();
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("An error occurred. Please try again.");
-            })
-            .finally(() => {
-                verifyBtn.textContent = originalText;
-                verifyBtn.disabled = false;
-            });
-            */
+        })
+        .finally(() => {
+            verifyBtn.textContent = originalText;
+            verifyBtn.disabled = false;
+        });
 });
 
 // Cancel OTP verification
@@ -393,6 +376,8 @@ cancelBtn.addEventListener("click", function () {
     otpModal.classList.remove("show");
     showStep(1);
     clearOTPInputs();
+    isEmailVerified = false;
+    resetToken = "";
 });
 
 // Resend OTP
@@ -403,125 +388,140 @@ resendLink.addEventListener("click", function (e) {
     resendLink.textContent = "Sending...";
     resendLink.style.pointerEvents = "none";
 
-    // Simulate API call for resending OTP
-    setTimeout(() => {
-        clearOTPInputs();
-        alert("New verification code has been sent to your email!");
-        resendLink.textContent = originalText;
-        resendLink.style.pointerEvents = "auto";
-    }, 1500);
-
-    // Real API call implementation:
-    /*
-            fetch("/auth/resend-otp", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                },
-                body: JSON.stringify({
-                    email: userEmail,
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    clearOTPInputs();
-                    alert("New verification code has been sent to your email!");
-                } else {
-                    alert("Error: " + data.message);
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("An error occurred. Please try again.");
-            })
-            .finally(() => {
-                resendLink.textContent = originalText;
-                resendLink.style.pointerEvents = "auto";
-            });
-            */
+    // Real API call for resending OTP
+    fetch("/auth/resend-forget-password-otp", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
+        },
+        body: JSON.stringify({
+            email: userEmail,
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                clearOTPInputs();
+                alert("New verification code has been sent to your email!");
+            } else {
+                alert("Error: " + data.message);
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
+        })
+        .finally(() => {
+            resendLink.textContent = originalText;
+            resendLink.style.pointerEvents = "auto";
+        });
 });
 
-// Password reset form submission
-passwordForm.addEventListener("submit", function (e) {
+// Reset password form submission
+resetPasswordBtn.addEventListener("click", function (e) {
     e.preventDefault();
 
     if (!isEmailVerified) {
-        alert("Please verify your email first");
+        alert("Please verify your email first.");
         return;
     }
 
-    const isNewPasswordValid = validateNewPassword();
-    const isConfirmPasswordValid = validateConfirmNewPassword();
-
-    if (!isNewPasswordValid || !isConfirmPasswordValid) {
+    if (!resetToken) {
+        alert("Invalid reset token. Please try again.");
         return;
     }
 
-    const resetPasswordBtn = document.getElementById("resetPasswordBtn");
+    if (!validateNewPassword() || !validateConfirmNewPassword()) {
+        return;
+    }
+
     const originalText = resetPasswordBtn.textContent;
     resetPasswordBtn.textContent = "Resetting...";
     resetPasswordBtn.disabled = true;
 
-    // Simulate API call for password reset
-    setTimeout(() => {
-        alert(
-            "Password reset successfully! You can now login with your new password."
-        );
-        // Redirect to login page
-        window.location.href = "/login";
-    }, 2000);
-
-    // Real API call implementation:
-    /*
-            fetch("/auth/reset-password", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                },
-                body: JSON.stringify({
-                    email: userEmail,
-                    token: otpToken,
-                    password: newPasswordInput.value,
-                    password_confirmation: confirmNewPasswordInput.value,
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Password reset successfully! You can now login with your new password.");
+    // Real API call for password reset
+    fetch("/auth/reset-password", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
+        },
+        body: JSON.stringify({
+            email: userEmail,
+            token: resetToken,
+            password: newPasswordInput.value,
+            password_confirmation: confirmNewPasswordInput.value,
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                alert(
+                    "Password reset successfully! Redirecting to login page..."
+                );
+                // Redirect to login page after successful reset
+                setTimeout(() => {
                     window.location.href = "/login";
-                } else {
-                    alert("Error: " + data.message);
+                }, 2000);
+            } else {
+                alert("Error: " + data.message);
+
+                // Handle validation errors
+                if (data.errors) {
+                    // Clear previous errors
+                    clearError(
+                        newPasswordInput,
+                        document.getElementById("newPasswordError")
+                    );
+                    clearError(
+                        confirmNewPasswordInput,
+                        document.getElementById("confirmNewPasswordError")
+                    );
+
+                    // Show specific validation errors
+                    if (data.errors.password) {
+                        showError(
+                            newPasswordInput,
+                            document.getElementById("newPasswordError"),
+                            data.errors.password[0]
+                        );
+                    }
+                    if (data.errors.password_confirmation) {
+                        showError(
+                            confirmNewPasswordInput,
+                            document.getElementById("confirmNewPasswordError"),
+                            data.errors.password_confirmation[0]
+                        );
+                    }
                 }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("An error occurred. Please try again.");
-            })
-            .finally(() => {
-                resetPasswordBtn.textContent = originalText;
-                resetPasswordBtn.disabled = false;
-            });
-            */
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
+        })
+        .finally(() => {
+            resetPasswordBtn.textContent = originalText;
+            resetPasswordBtn.disabled = false;
+        });
 });
 
-// Close modal when clicking outside
-otpModal.addEventListener("click", function (e) {
-    if (e.target === otpModal) {
-        otpModal.classList.remove("show");
-        showStep(1);
-        clearOTPInputs();
-    }
-});
+// Form submission handlers
+if (emailForm) {
+    emailForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        emailVerifyBtn.click();
+    });
+}
 
-// Handle escape key to close modal
-document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && otpModal.classList.contains("show")) {
-        otpModal.classList.remove("show");
-        showStep(1);
-        clearOTPInputs();
-    }
-});
+if (passwordForm) {
+    passwordForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        resetPasswordBtn.click();
+    });
+}

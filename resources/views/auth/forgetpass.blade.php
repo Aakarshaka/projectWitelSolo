@@ -11,7 +11,6 @@
 </head>
 
 <body>
-    <!-- Logo Section -->
     <div class="forgot-logo-section">
         <div class="forgot-subtitle">Reset your password</div>
     </div>
@@ -118,7 +117,7 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('js/registerscript.js') }}"></script>
+    <script src="{{ asset('js/fpscript.js') }}"></script>
 </body>
 
 </html>

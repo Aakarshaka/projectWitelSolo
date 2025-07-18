@@ -19,7 +19,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             return redirect()->route('newdashboard');
         }
-        
+
         return view('auth.login');
     }
 
@@ -43,7 +43,7 @@ class AuthController extends Controller
 
         // Tentukan field login (email atau name)
         $loginField = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
-        
+
         // Cari user berdasarkan email atau name
         $user = User::where($loginField, $request->username)->first();
 
@@ -55,11 +55,11 @@ class AuthController extends Controller
                     // Update password dengan hash yang benar
                     $user->password = Hash::make($request->password);
                     $user->save();
-                    
+
                     // Login user
                     Auth::login($user);
                     $request->session()->regenerate();
-                    
+
                     return redirect()->route('newdashboard');
                 }
             } else {
@@ -87,7 +87,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             return redirect()->route('newdashboard');
         }
-        
+
         return view('auth.register');
     }
 
@@ -163,7 +163,6 @@ class AuthController extends Controller
                 'success' => true,
                 'message' => 'Account created successfully!'
             ]);
-
         } catch (\Exception $e) {
             \Log::error('Registration failed:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return response()->json([
@@ -192,7 +191,7 @@ class AuthController extends Controller
 
         // Generate OTP 6 digit
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-        
+
         // Simpan OTP ke cache dengan expiry 5 menit
         $cacheKey = 'otp_' . $request->email;
         Cache::put($cacheKey, $otp, 300); // 5 menit
@@ -200,7 +199,7 @@ class AuthController extends Controller
         try {
             // Kirim email OTP
             $this->sendOTPEmail($request->email, $otp);
-            
+
             // Log OTP untuk development (hapus di production)
             \Log::info("OTP for {$request->email}: {$otp}");
 
@@ -209,7 +208,6 @@ class AuthController extends Controller
                 'message' => 'OTP sent successfully to your email',
                 // 'otp' => $otp // Hapus ini di production
             ]);
-
         } catch (\Exception $e) {
             \Log::error('Failed to send OTP:', ['error' => $e->getMessage()]);
             return response()->json([
@@ -227,8 +225,8 @@ class AuthController extends Controller
         try {
             Mail::send('emails.otp', ['otp' => $otp], function ($message) use ($email) {
                 $message->to($email)
-                        ->subject('Email Verification - GIAT CORE')
-                        ->from(config('mail.from.address'), config('mail.from.name'));
+                    ->subject('Email Verification - GIAT CORE')
+                    ->from(config('mail.from.address'), config('mail.from.name'));
             });
         } catch (\Exception $e) {
             \Log::error('Mail sending failed:', ['error' => $e->getMessage()]);
@@ -307,7 +305,261 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect()->route('login')->with('message', 'Logout berhasil');
+    }
+
+    /**
+     * ===========================================================================================================================
+     * Show forget password form
+     * ===========================================================================================================================
+     */
+    public function showForgetPassword()
+    {
+        // Jika sudah login, redirect ke dashboard
+        if (Auth::check()) {
+            return redirect()->route('newdashboard');
+        }
+
+        return view('auth.forgetpass');
+    }
+
+    /**
+     * Send OTP for password reset
+     */
+    public function sendForgetPasswordOTP(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email'
+        ], [
+            'email.required' => 'Email is required',
+            'email.email' => 'Please enter a valid email address',
+            'email.exists' => 'Email not found in our records'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        // Generate OTP 6 digit
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        // Simpan OTP ke cache dengan expiry 10 menit untuk reset password
+        $cacheKey = 'fpotp_' . $request->email;
+        Cache::put($cacheKey, $otp, 600); // 10 menit
+
+        try {
+            // Kirim email OTP untuk reset password
+            $this->sendForgetPasswordOTPEmail($request->email, $otp);
+
+            // Log OTP untuk development (hapus di production)
+            \Log::info("Forget Password OTP for {$request->email}: {$otp}");
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Password reset code sent successfully to your email',
+                // 'otp' => $otp // Hapus ini di production
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Failed to send forget password OTP:', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send reset code. Please try again.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Verify OTP for password reset
+     */
+    public function verifyForgetPasswordOTP(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+            'fpotp' => 'required|string|size:6'
+        ], [
+            'email.required' => 'Email is required',
+            'email.email' => 'Please enter a valid email address',
+            'email.exists' => 'Email not found in our records',
+            'fpotp.required' => 'OTP is required',
+            'fpotp.size' => 'OTP must be 6 digits'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        $cacheKey = 'fpotp_' . $request->email;
+        $storedOTP = Cache::get($cacheKey);
+
+        if (!$storedOTP) {
+            return response()->json([
+                'success' => false,
+                'message' => 'OTP expired. Please request a new one.'
+            ], 400);
+        }
+
+        if ($storedOTP !== $request->fpotp) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid OTP. Please try again.'
+            ], 400);
+        }
+
+        // OTP valid, hapus dari cache
+        Cache::forget($cacheKey);
+
+        // Generate reset token dan simpan ke cache
+        $resetToken = Str::random(60);
+        $resetTokenKey = 'password_reset_token_' . $request->email;
+        Cache::put($resetTokenKey, $resetToken, 900); // 15 menit untuk reset password
+
+        return response()->json([
+            'success' => true,
+            'message' => 'OTP verified successfully!',
+            'reset_token' => $resetToken
+        ]);
+    }
+
+    /**
+     * Reset password
+     */
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+            'token' => 'required|string',
+            'password' => [
+                'required',
+                'string',
+                'min:6',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/'
+            ],
+            'password_confirmation' => 'required|string|same:password',
+        ], [
+            'email.required' => 'Email is required',
+            'email.email' => 'Please enter a valid email address',
+            'email.exists' => 'Email not found in our records',
+            'token.required' => 'Reset token is required',
+            'password.required' => 'Password is required',
+            'password.min' => 'Password must be at least 6 characters long',
+            'password.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+            'password_confirmation.required' => 'Please confirm your password',
+            'password_confirmation.same' => 'Passwords do not match',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Verify reset token
+        $resetTokenKey = 'password_reset_token_' . $request->email;
+        $storedToken = Cache::get($resetTokenKey);
+
+        if (!$storedToken || $storedToken !== $request->token) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid or expired reset token. Please request a new password reset.'
+            ], 400);
+        }
+
+        try {
+            // Update password
+            $user = User::where('email', $request->email)->first();
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            // Hapus reset token dari cache
+            Cache::forget($resetTokenKey);
+
+            // Log password reset
+            \Log::info("Password reset successfully for user: {$request->email}");
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Password reset successfully! You can now login with your new password.'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Password reset failed:', ['error' => $e->getMessage(), 'email' => $request->email]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to reset password. Please try again.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Resend OTP for password reset
+     */
+    public function resendForgetPasswordOTP(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email'
+        ], [
+            'email.required' => 'Email is required',
+            'email.email' => 'Please enter a valid email address',
+            'email.exists' => 'Email not found in our records'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        // Generate OTP 6 digit baru
+        $fpotp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        // Simpan OTP ke cache dengan expiry 10 menit
+        $cacheKey = 'fpotp_' . $request->email;
+        Cache::put($cacheKey, $fpotp, 600); // 10 menit
+
+        try {
+            // Kirim email OTP untuk reset password
+            $this->sendForgetPasswordOTPEmail($request->email, $fpotp);
+
+            // Log OTP untuk development (hapus di production)
+            \Log::info("Resend Forget Password OTP for {$request->email}: {$fpotp}");
+
+            return response()->json([
+                'success' => true,
+                'message' => 'New password reset code sent successfully to your email',
+                // 'otp' => $otp // Hapus ini di production
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Failed to resend forget password OTP:', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send reset code. Please try again.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Kirim email OTP untuk reset password
+     */
+    private function sendForgetPasswordOTPEmail($email, $fpotp)
+    {
+        try {
+            Mail::send('emails.fpotp', ['fpotp' => $fpotp], function ($message) use ($email) {
+                $message->to($email)
+                    ->subject('Password Reset Code - GIAT CORE')
+                    ->from(config('mail.from.address'), config('mail.from.name'));
+            });
+        } catch (\Exception $e) {
+            \Log::error('Forget password OTP mail sending failed:', ['error' => $e->getMessage()]);
+            throw $e;
+        }
     }
 }

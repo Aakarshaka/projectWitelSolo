@@ -35,6 +35,23 @@ Route::get('/newwarroom/export', function () {
     return Excel::download(new NewwarroomExport, 'newwarroom.xlsx');
 })->name('newwarroom.export');
 
+Route::middleware('guest')->group(function () {
+    // Form input email lupa password
+    Route::get('/forgetpass', [AuthController::class, 'showForgetPassword'])->name('forgetpass');
+
+    // Kirim OTP ke email (via AJAX atau POST)
+    Route::post('/forget-password/send-otp', [AuthController::class, 'sendForgetPasswordOTP'])->name('forget-password.send-otp');
+
+    // Verifikasi OTP (via POST, akan generate reset_token)
+    Route::post('/forget-password/verify-otp', [AuthController::class, 'verifyForgetPasswordOTP'])->name('forget-password.verify-otp');
+
+    // Reset password (via POST dengan reset_token dari OTP)
+    Route::post('/forget-password/reset', [AuthController::class, 'resetPassword'])->name('forget-password.reset');
+
+    // Kirim ulang OTP
+    Route::post('/forget-password/resend-otp', [AuthController::class, 'resendForgetPasswordOTP'])->name('forget-password.resend-otp');
+});
+
 Route::middleware(['guest'])->group(function () {
     // Login routes
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -80,4 +97,3 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/activity-log/{log}/details', [ActivitylogController::class, 'getLogDetails'])->name('activity-log.details');
 
 });
-
