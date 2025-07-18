@@ -499,12 +499,40 @@
             });
     });
 
-    // PERBAIKAN: Tambahkan event listener untuk menutup modal
-    document.addEventListener('click', function (e) {
-        if (e.target.classList.contains('modal') || e.target.classList.contains('modal-close')) {
-            otpModal.classList.remove('show');
+    // PERBAIKAN: Tambahkan berbagai cara untuk menutup modal
+
+    // 1. Tutup modal saat klik di luar area modal (overlay)
+    otpModal.addEventListener('click', function (e) {
+        if (e.target === otpModal) {
+            closeOTPModal();
         }
     });
+
+    // 2. Tutup modal saat klik tombol close (X)
+    const closeModalBtn = document.querySelector('#otpModal .close, #otpModal .modal-close, #otpModal [data-close]');
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeOTPModal);
+    }
+
+    // 3. Tutup modal dengan tombol ESC
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && otpModal.classList.contains('show')) {
+            closeOTPModal();
+        }
+    });
+
+    // 4. Fungsi untuk menutup modal
+    function closeOTPModal() {
+        otpModal.classList.remove('show');
+        // Clear OTP inputs saat modal ditutup
+        otpInputs.forEach(input => input.value = '');
+    }
+
+    // 5. Tambahkan tombol cancel jika ada
+    const cancelBtn = document.querySelector('#otpModal .cancel-btn, #otpModal .btn-cancel');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeOTPModal);
+    }
 
     // Form submission - Updated to use AJAX
     form.addEventListener('submit', function (e) {
