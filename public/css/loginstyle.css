@@ -305,37 +305,30 @@ body {
 
     .login-container {
         margin: 0 20px;
-        max-width: 100%;
     }
 
+    /* Logo container tetap dalam posisi yang sama, hanya ukuran yang diperkecil */
     .login-logo-container {
-        gap: 15px;
-        flex-direction: column;
-        align-items: center;
+        gap: 15px; /* Sedikit mengurangi gap */
     }
 
     .login-logo-img {
-        width: 120px;
-    }
-
-    .login-logo-text-container {
-        align-items: center;
-        text-align: center;
+        width: 150px; /* Ukuran logo diperkecil */
     }
 
     .login-logo-text {
-        font-size: 50px;
-        letter-spacing: 1px;
+        font-size: 65px; /* Ukuran teks diperkecil */
+        letter-spacing: 1px; /* Mengurangi letter spacing */
     }
 
     .login-logo-subtitle {
-        font-size: 10px;
-        letter-spacing: 1.5px;
+        font-size: 8.8px; /* Ukuran subtitle diperkecil */
+        letter-spacing: 1.5px; /* Mengurangi letter spacing */
         margin-top: -5px;
     }
 
     .subtitle {
-        font-size: 12px;
+        font-size: 13px; /* Ukuran subtitle diperkecil */
     }
 
     .form-input {
