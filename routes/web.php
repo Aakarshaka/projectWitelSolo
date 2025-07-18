@@ -24,8 +24,21 @@ Route::get('/', function () {
 // Auth Routes (Guest Only)
 // ==================
 Route::middleware(['guest'])->group(function () {
+    // Login routes
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    
+    // Register routes
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+    
+    // OTP routes
+    Route::post('/auth/send-otp', [AuthController::class, 'sendOTP'])->name('auth.send-otp');
+    Route::post('/auth/verify-otp', [AuthController::class, 'verifyOTP'])->name('auth.verify-otp');
+    Route::post('/auth/check-email-verification', [AuthController::class, 'checkEmailVerification'])->name('auth.check-email-verification');
+    
+    // Alternative register route (untuk kompatibilitas)
+    Route::get('auth/register', [AuthController::class, 'showRegister']);
 });
 
 // ==================
@@ -52,8 +65,4 @@ Route::middleware(['auth'])->group(function () {
     // Activity log routes
     Route::get('/activitylog', [ActivityLogController::class, 'index'])->name('activity-log.index');
     Route::get('/activity-log/{log}/details', [ActivitylogController::class, 'getLogDetails'])->name('activity-log.details');
-});
-
-Route::get('auth/register', function () {
-  return view('auth.register');
 });
