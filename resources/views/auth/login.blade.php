@@ -18,7 +18,6 @@
                 <div class="login-logo-subtitle">(Collaboration Needed' Request)</div>
             </div>
         </div>
-        <div class="subtitle">Access GIAT CORE with your company account</div>
     </div>
 
     @if(session('message'))

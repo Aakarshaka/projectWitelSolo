@@ -113,7 +113,6 @@ class AuthController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|min:2|max:255', // Ini untuk full name di form
             'username' => 'required|string|min:3|max:255|unique:users,name|regex:/^[a-zA-Z0-9_]+$/', // Validasi username, cek unique di kolom name
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => [
@@ -124,8 +123,6 @@ class AuthController extends Controller
             ],
             'confirmPassword' => 'required|string|same:password',
         ], [
-            'name.required' => 'Name is required',
-            'name.min' => 'Name must be at least 2 characters long',
             'username.required' => 'Username is required',
             'username.min' => 'Username must be at least 3 characters long',
             'username.unique' => 'Username already exists',

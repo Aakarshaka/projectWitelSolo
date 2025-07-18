@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Exports\SupportneededExport;
 use App\Exports\NewwarroomExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\{
     SupportneededController,
     SumController,

@@ -364,7 +364,10 @@ document.getElementById("resendLink").addEventListener("click", function (e) {
                 .getAttribute("content"),
         },
         body: JSON.stringify({
+            username: usernameInput.value,
             email: emailInput.value,
+            password: passwordInput.value,
+            confirmPassword: confirmPasswordInput.value,
         }),
     })
         .then((response) => response.json())
@@ -412,7 +415,7 @@ document.addEventListener("keydown", function (e) {
 });
 
 // 3. Cancel button functionality
-document.getElementById("cancelBtn").addEventListener("click", function(e) {
+document.getElementById("cancelBtn").addEventListener("click", function (e) {
     e.preventDefault();
     closeOTPModal();
 });
@@ -464,9 +467,14 @@ form.addEventListener("submit", function (e) {
 
                     form.reset();
 
-                    const inputs = document.querySelectorAll(".regis-form-input");
-                    const errors = document.querySelectorAll(".regis-error-message");
-                    const successes = document.querySelectorAll(".regis-success-message");
+                    const inputs =
+                        document.querySelectorAll(".regis-form-input");
+                    const errors = document.querySelectorAll(
+                        ".regis-error-message"
+                    );
+                    const successes = document.querySelectorAll(
+                        ".regis-success-message"
+                    );
 
                     inputs.forEach((input) => {
                         input.classList.remove("error", "success");
@@ -484,7 +492,8 @@ form.addEventListener("submit", function (e) {
 
                     emailVerifyBtn.textContent = "Verify";
                     emailVerifyBtn.disabled = false;
-                    emailVerifyBtn.style.background = "linear-gradient(135deg, #10b981, #059669)";
+                    emailVerifyBtn.style.background =
+                        "linear-gradient(135deg, #10b981, #059669)";
                     isEmailVerified = false;
 
                     setTimeout(() => {
@@ -493,14 +502,20 @@ form.addEventListener("submit", function (e) {
                 } else {
                     if (data.errors) {
                         Object.keys(data.errors).forEach((field) => {
-                            const errorElement = document.getElementById(field + "Error");
+                            const errorElement = document.getElementById(
+                                field + "Error"
+                            );
                             if (errorElement) {
-                                errorElement.textContent = data.errors[field][0];
+                                errorElement.textContent =
+                                    data.errors[field][0];
                                 errorElement.classList.add("show");
                             }
                         });
                     } else {
-                        alert(data.message || "Registration failed. Please try again.");
+                        alert(
+                            data.message ||
+                                "Registration failed. Please try again."
+                        );
                     }
                 }
             })
