@@ -49,12 +49,12 @@
         <!-- Register Section -->
         <div class="register-section">
             <span class="register-text">Don't have an account?</span>
-            <a href="#" class="register-link">Sign up here</a>
+            <a href="{{ url('/register') }}" class="register-link">Sign up here</a>
         </div>
 
         <div class="register-section" style="margin-top: 5px;">
             <span class="register-text">Forgot your password?</span>
-            <a href="#" class="register-link">Forget Password</a>
+            <a href="{{ url('/forgetpass') }}" class="register-link">Forget Password</a>
         </div>
     </div>
 

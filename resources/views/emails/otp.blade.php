@@ -25,10 +25,12 @@
             margin-bottom: 30px;
         }
         .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #10b981;
-            margin-bottom: 10px;
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
         .otp-code {
             font-size: 32px;
@@ -61,12 +63,26 @@
             color: #6b7280;
             font-size: 14px;
         }
+        
+        /* Responsive design for mobile */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            .logo {
+                max-width: 150px;
+            }
+            .otp-code {
+                font-size: 24px;
+                letter-spacing: 3px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">GIAT CORE</div>
+            <img src="{{ asset('images/giatlogo.png') }}" alt="GIAT CORE" class="logo">
             <h1>Email Verification</h1>
         </div>
         

@@ -25,11 +25,9 @@ body {
     0% {
         background-position: 0% 50%;
     }
-
     50% {
         background-position: 100% 50%;
     }
-
     100% {
         background-position: 0% 50%;
     }
@@ -40,7 +38,6 @@ body {
         opacity: 0;
         transform: translateY(30px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -52,7 +49,6 @@ body {
         opacity: 0;
         transform: translateY(-30px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -64,7 +60,6 @@ body {
         opacity: 0;
         transform: scale(0.9);
     }
-
     to {
         opacity: 1;
         transform: scale(1);
@@ -72,20 +67,13 @@ body {
 }
 
 /* Logo Section */
-.regis-logo-section {
+.forgot-logo-section {
     text-align: center;
     margin-bottom: 30px;
     animation: fadeInDown 0.8s ease-out;
 }
 
-.regis-logo-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0px;
-}
-
-.regis-subtitle {
+.forgot-subtitle {
     font-size: 15px;
     color: rgba(255, 255, 255, 0.8);
     font-weight: 400;
@@ -95,13 +83,13 @@ body {
     transition: all 0.3s ease;
 }
 
-.regis-subtitle:hover {
+.forgot-subtitle:hover {
     color: rgba(255, 255, 255, 1);
     transform: translateY(-2px);
 }
 
-/* Registration Form */
-.regis-container {
+/* Form Container */
+.forgot-container {
     width: 100%;
     max-width: 450px;
     opacity: 0;
@@ -109,43 +97,35 @@ body {
     margin-bottom: 100px;
 }
 
-.regis-form {
+.forgot-form {
     display: flex;
     flex-direction: column;
     gap: 18px;
 }
 
-.regis-form-group {
+.forgot-form-group {
     position: relative;
     opacity: 0;
     animation: fadeInUp 0.6s ease-out calc(0.8s + var(--delay)) both;
 }
 
-.regis-form-group:nth-child(1) {
+.forgot-form-group:nth-child(1) {
     --delay: 0.1s;
 }
 
-.regis-form-group:nth-child(2) {
+.forgot-form-group:nth-child(2) {
     --delay: 0.2s;
 }
 
-.regis-form-group:nth-child(3) {
+.forgot-form-group:nth-child(3) {
     --delay: 0.3s;
 }
 
-.regis-form-group:nth-child(4) {
+.forgot-form-group:nth-child(4) {
     --delay: 0.4s;
 }
 
-.regis-form-group:nth-child(5) {
-    --delay: 0.5s;
-}
-
-.regis-form-group:nth-child(6) {
-    --delay: 0.6s;
-}
-
-.regis-form-input {
+.forgot-form-input {
     width: 100%;
     padding: 16px 20px;
     background: rgba(255, 255, 255, 0.1);
@@ -158,33 +138,33 @@ body {
     transition: all 0.3s ease;
 }
 
-.regis-form-input:focus {
+.forgot-form-input:focus {
     outline: none;
     border-color: #fdd835;
     box-shadow: 0 0 0 3px rgba(253, 216, 53, 0.1);
     background: rgba(255, 255, 255, 0.15);
 }
 
-.regis-form-input::placeholder {
+.forgot-form-input::placeholder {
     color: rgba(255, 255, 255, 0.6);
 }
 
-.regis-form-input:hover {
+.forgot-form-input:hover {
     border-color: rgba(255, 255, 255, 0.3);
     background: rgba(255, 255, 255, 0.12);
 }
 
-.regis-form-input.error {
+.forgot-form-input.error {
     border-color: #ef4444;
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
-.regis-form-input.success {
+.forgot-form-input.success {
     border-color: #10b981;
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
-.regis-error-message {
+.forgot-error-message {
     color: #fca5a5;
     font-size: 12px;
     margin-top: 5px;
@@ -192,11 +172,11 @@ body {
     transition: all 0.3s ease;
 }
 
-.regis-error-message.show {
+.forgot-error-message.show {
     opacity: 1;
 }
 
-.regis-success-message {
+.forgot-success-message {
     color: #86efac;
     font-size: 12px;
     margin-top: 5px;
@@ -204,7 +184,7 @@ body {
     transition: all 0.3s ease;
 }
 
-.regis-success-message.show {
+.forgot-success-message.show {
     opacity: 1;
 }
 
@@ -269,7 +249,7 @@ body {
     color: #fdd835;
 }
 
-.regis-button {
+.forgot-button {
     width: 100%;
     padding: 16px 20px;
     background: linear-gradient(135deg, #fdd835, #f9a825);
@@ -286,37 +266,37 @@ body {
     letter-spacing: 0.5px;
 }
 
-.regis-button:hover {
+.forgot-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(253, 216, 53, 0.4);
     background: linear-gradient(135deg, #f9a825, #fdd835);
 }
 
-.regis-button:active {
+.forgot-button:active {
     transform: translateY(0);
 }
 
-.regis-button:disabled {
+.forgot-button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
 }
 
 /* Login Link Section */
-.regis-login-section {
+.forgot-login-section {
     text-align: center;
     margin-top: 25px;
     opacity: 0;
     animation: fadeInUp 0.6s ease-out 1.2s both;
 }
 
-.regis-login-text {
+.forgot-login-text {
     color: rgba(255, 255, 255, 0.7);
     font-size: 14px;
     display: inline;
 }
 
-.regis-login-link {
+.forgot-login-link {
     color: #fdd835;
     text-decoration: none;
     font-weight: 500;
@@ -325,10 +305,36 @@ body {
     margin-left: 5px;
 }
 
-.regis-login-link:hover {
+.forgot-login-link:hover {
     color: #fff;
     text-shadow: 0 0 10px rgba(253, 216, 53, 0.5);
     transform: translateY(-1px);
+}
+
+/* Step indicators */
+.step-indicator {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 10px;
+}
+
+.step {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.step.active {
+    background: #fdd835;
+    box-shadow: 0 0 10px rgba(253, 216, 53, 0.5);
+}
+
+.step.completed {
+    background: #10b981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
 }
 
 /* OTP Modal */
@@ -473,7 +479,7 @@ body {
 }
 
 /* Footer */
-.regis-footer {
+.forgot-footer {
     position: absolute;
     bottom: 24px;
     font-size: 12px;
@@ -484,61 +490,47 @@ body {
     transition: all 0.3s ease;
 }
 
-.regis-footer:hover {
+.forgot-footer:hover {
     color: rgba(255, 255, 255, 0.8);
-    transform: translateX(-50%) translateY(-2px);
+    transform: translateY(-2px);
 }
 
-.regis-footer strong {
+.forgot-footer strong {
     color: #fdd835;
     transition: all 0.3s ease;
 }
 
-.regis-footer:hover strong {
+.forgot-footer:hover strong {
     text-shadow: 0 0 10px rgba(253, 216, 53, 0.5);
 }
 
-/* Status icons */
-.status-icon {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-    transition: all 0.3s ease;
+/* Hidden forms */
+.form-step {
+    display: none;
 }
 
-.status-icon.success {
-    color: #10b981;
+.form-step.active {
+    display: block;
 }
 
-.status-icon.error {
-    color: #ef4444;
-}
-
-/* Enhanced mobile responsiveness */
+/* Mobile responsiveness */
 @media (max-width: 800px) {
-    .regis-container {
+    .forgot-container {
         margin: 0 20px;
         max-width: 100%;
         margin-bottom: 80px;
     }
 
-    .regis-logo-text {
-        font-size: 45px;
-        letter-spacing: 1px;
-    }
-
-    .regis-subtitle {
+    .forgot-subtitle {
         font-size: 12px;
     }
 
-    .regis-form-input {
+    .forgot-form-input {
         padding: 14px 18px;
         font-size: 15px;
     }
 
-    .regis-button {
+    .forgot-button {
         padding: 14px 18px;
         font-size: 15px;
     }
@@ -552,8 +544,8 @@ body {
         gap: 5px;
     }
 
-    .regis-login-text,
-    .regis-login-link {
+    .forgot-login-text,
+    .forgot-login-link {
         font-size: 13px;
     }
 
@@ -569,14 +561,5 @@ body {
 
     .otp-input-container {
         gap: 8px;
-    }
-}
-
-/* Reduced motion preferences */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
     }
 }
