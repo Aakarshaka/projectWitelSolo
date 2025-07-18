@@ -4,9 +4,9 @@
 
 @section('content')
 <!-- Header Section -->
-<div class="warroom-header">
+<div class="dash-header">
     <div class="header-left">
-        <h1 class="warroom-title">DASHBOARD</h1>
+        <h1 class="dash-title">DASHBOARD</h1>
     </div>
 </div>
 
@@ -41,7 +41,7 @@
 
 <style>
 /* Header Styles */
-.warroom-header {
+.dash-header {
     background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
     color: white;
     padding: 20px 30px;
@@ -61,7 +61,7 @@
     gap: 20px;
 }
 
-.warroom-title {
+.dash-title {
     font-size: 2rem;
     font-weight: bold;
     margin: 0;
@@ -232,7 +232,7 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .warroom-header {
+    .dash-header {
         padding: 20px 25px;
         margin-left: 80px;
     }
@@ -244,12 +244,12 @@
 }
 
 @media (max-width: 768px) {
-    .warroom-header {
+    .dash-header {
         padding: 15px 20px;
         margin-left: 0; /* Hilangkan margin di mobile */
     }
     
-    .warroom-title {
+    .dash-title {
         font-size: 1.6rem;
     }
     
@@ -298,12 +298,12 @@
 }
 
 @media (max-width: 480px) {
-    .warroom-header {
+    .dash-header {
         padding: 15px;
         margin-left: 0;
     }
     
-    .warroom-title {
+    .dash-title {
         font-size: 1.4rem;
     }
     
@@ -356,7 +356,7 @@
         width: calc(100% - 80px);
     }
     
-    .warroom-header {
+    .dash-header {
         margin-left: 80px;
         width: calc(100% - 80px);
     }
