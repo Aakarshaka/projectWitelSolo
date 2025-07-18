@@ -1,0 +1,648 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(-45deg, #8b0000, #4a0e4e, #8b0000, #4a0e4e);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-family: "Inter", sans-serif;
+    overflow-x: hidden;
+    padding: 20px;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Logo Section */
+.regis-logo-section {
+    text-align: center;
+    margin-bottom: 30px;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.regis-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.regis-logo-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.regis-logo-text {
+    font-size: 80px;
+    font-weight: bold;
+    color: #fdd835;
+    text-shadow: 0 4px 16px rgba(253, 216, 53, 0.3);
+    letter-spacing: 2px;
+    line-height: 1;
+    transition: all 0.3s ease;
+}
+
+.regis-subtitle {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 1s both;
+    transition: all 0.3s ease;
+}
+
+.regis-subtitle:hover {
+    color: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+}
+
+/* Registration Form */
+.regis-container {
+    width: 100%;
+    max-width: 450px;
+    opacity: 0;
+    animation: fadeInScale 0.8s ease-out 0.6s both;
+    margin-bottom: 100px;
+}
+
+.regis-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.regis-form-group {
+    position: relative;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out calc(0.8s + var(--delay)) both;
+}
+
+.regis-form-group:nth-child(1) {
+    --delay: 0.1s;
+}
+
+.regis-form-group:nth-child(2) {
+    --delay: 0.2s;
+}
+
+.regis-form-group:nth-child(3) {
+    --delay: 0.3s;
+}
+
+.regis-form-group:nth-child(4) {
+    --delay: 0.4s;
+}
+
+.regis-form-group:nth-child(5) {
+    --delay: 0.5s;
+}
+
+.regis-form-group:nth-child(6) {
+    --delay: 0.6s;
+}
+
+.regis-form-input {
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 16px;
+    font-family: "Inter", sans-serif;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.regis-form-input:focus {
+    outline: none;
+    border-color: #fdd835;
+    box-shadow: 0 0 0 3px rgba(253, 216, 53, 0.1);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.regis-form-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.regis-form-input:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.regis-form-input.error {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.regis-form-input.success {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.regis-error-message {
+    color: #fca5a5;
+    font-size: 12px;
+    margin-top: 5px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.regis-error-message.show {
+    opacity: 1;
+}
+
+.regis-success-message {
+    color: #86efac;
+    font-size: 12px;
+    margin-top: 5px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.regis-success-message.show {
+    opacity: 1;
+}
+
+/* Email verification group */
+.email-verification-group {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.email-input-container {
+    flex: 1;
+    position: relative;
+}
+
+.email-verify-btn {
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "Inter", sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.email-verify-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}
+
+.email-verify-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Password input with toggle */
+.password-input-container {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.password-toggle:hover {
+    color: #fdd835;
+}
+
+.regis-button {
+    width: 100%;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #fdd835, #f9a825);
+    border: none;
+    border-radius: 12px;
+    color: #000;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Inter", sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(253, 216, 53, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.regis-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(253, 216, 53, 0.4);
+    background: linear-gradient(135deg, #f9a825, #fdd835);
+}
+
+.regis-button:active {
+    transform: translateY(0);
+}
+
+.regis-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Login Link Section */
+.regis-login-section {
+    text-align: center;
+    margin-top: 25px;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 1.2s both;
+}
+
+.regis-login-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    display: inline;
+}
+
+.regis-login-link {
+    color: #fdd835;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    margin-left: 5px;
+}
+
+.regis-login-link:hover {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(253, 216, 53, 0.5);
+    transform: translateY(-1px);
+}
+
+/* OTP Modal */
+.otp-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.otp-modal.show {
+    display: flex;
+}
+
+.otp-modal-content {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    animation: fadeInScale 0.3s ease-out;
+}
+
+.otp-modal-header {
+    margin-bottom: 30px;
+}
+
+.otp-modal-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fdd835;
+    margin-bottom: 10px;
+}
+
+.otp-modal-subtitle {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+}
+
+.otp-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.otp-input {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    font-family: "Inter", sans-serif;
+    transition: all 0.3s ease;
+}
+
+.otp-input:focus {
+    outline: none;
+    border-color: #fdd835;
+    box-shadow: 0 0 0 3px rgba(253, 216, 53, 0.1);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.otp-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.otp-verify-btn {
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #fdd835, #f9a825);
+    border: none;
+    border-radius: 10px;
+    color: #000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "Inter", sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.otp-verify-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(253, 216, 53, 0.4);
+}
+
+.otp-cancel-btn {
+    padding: 12px 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: "Inter", sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.otp-cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.otp-resend {
+    margin-top: 20px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.otp-resend-link {
+    color: #fdd835;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.otp-resend-link:hover {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(253, 216, 53, 0.5);
+}
+
+/* Footer */
+.regis-footer {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.3px;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 1.4s both;
+    transition: all 0.3s ease;
+}
+
+.regis-footer:hover {
+    color: rgba(255, 255, 255, 0.8);
+    transform: translateX(-50%) translateY(-2px);
+}
+
+.regis-footer strong {
+    color: #fdd835;
+    transition: all 0.3s ease;
+}
+
+.regis-footer:hover strong {
+    text-shadow: 0 0 10px rgba(253, 216, 53, 0.5);
+}
+
+/* Status icons */
+.status-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.status-icon.success {
+    color: #10b981;
+}
+
+.status-icon.error {
+    color: #ef4444;
+}
+
+/* Enhanced mobile responsiveness */
+@media (max-width: 800px) {
+    .regis-container {
+        margin: 0 20px;
+        max-width: 100%;
+        margin-bottom: 80px;
+    }
+
+    .regis-logo-text {
+        font-size: 45px;
+        letter-spacing: 1px;
+    }
+
+    .regis-subtitle {
+        font-size: 12px;
+    }
+
+    .regis-form-input {
+        padding: 14px 18px;
+        font-size: 15px;
+    }
+
+    .regis-button {
+        padding: 14px 18px;
+        font-size: 15px;
+    }
+
+    .email-verify-btn {
+        padding: 14px 15px;
+        font-size: 12px;
+        min-width: 80px;
+    }
+
+    .email-verification-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .regis-login-text,
+    .regis-login-link {
+        font-size: 13px;
+    }
+
+    .otp-modal-content {
+        padding: 30px 25px;
+    }
+
+    .otp-input {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .otp-input-container {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .regis-logo-text {
+        font-size: 35px;
+    }
+
+    .regis-subtitle {
+        font-size: 11px;
+    }
+
+    .regis-form-input {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    .regis-button {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    .email-verify-btn {
+        padding: 12px 12px;
+        font-size: 11px;
+        min-width: 70px;
+    }
+
+    .regis-login-text,
+    .regis-login-link {
+        font-size: 12px;
+    }
+
+    .otp-modal-content {
+        padding: 25px 20px;
+    }
+
+    .otp-input {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+
+    .otp-input-container {
+        gap: 6px;
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

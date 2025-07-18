@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | GIAT CORE</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/loginstyle.css') }}" rel="stylesheet">
 </head>
 
@@ -21,7 +21,6 @@
         <div class="subtitle">Access GIAT CORE with your company account</div>
     </div>
 
-    <!-- Success Message -->
     @if(session('message'))
         <div class="alert alert-success text-center" style="margin: 20px auto; max-width: 400px;">
             {{ session('message') }}
@@ -54,7 +53,6 @@
         </div>
     </div>
 
-    <!-- Error Message -->
     @if($errors->any())
         <div class="error-message">
             @foreach($errors->all() as $error)

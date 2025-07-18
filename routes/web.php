@@ -53,3 +53,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/activitylog', [ActivityLogController::class, 'index'])->name('activity-log.index');
     Route::get('/activity-log/{log}/details', [ActivitylogController::class, 'getLogDetails'])->name('activity-log.details');
 });
+
+Route::get('auth/register', function () {
+  return view('auth.register');
+});
