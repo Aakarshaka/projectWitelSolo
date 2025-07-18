@@ -20,6 +20,10 @@
                         <div class="stat-label-wr">Jumlah Agenda</div>
                         <div class="stat-value-wr">{{ $jumlah_agenda }}</div>
                     </div>
+                    <a href="{{ url('/newwarroom/export') }}" class="add-btn" type="button">
+                        Export to Excel
+                    </a>
+
                     <button class="add-btn-wr" type="button" onclick="openModal('addModal')">ADD+</button>
                 </div>
             </div>
@@ -227,7 +231,8 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="13" style="color: #6b7280; font-style: italic; text-align: center; ">No data available.</td>
+                                    <td colspan="13" style="color: #6b7280; font-style: italic; text-align: center; ">No data
+                                        available.</td>
                                 </tr>
                             @endforelse
                         </tbody>

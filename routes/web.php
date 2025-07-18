@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Exports\SupportneededExport;
+use App\Exports\NewwarroomExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\{
     SupportneededController,
     SumController,
@@ -23,6 +26,14 @@ Route::get('/', function () {
 // ==================
 // Auth Routes (Guest Only)
 // ==================
+Route::get('/supportneeded/export', function () {
+    return Excel::download(new SupportneededExport, 'supportneeded.xlsx');
+})->name('supportneeded.export');
+
+Route::get('/newwarroom/export', function () {
+    return Excel::download(new NewwarroomExport, 'newwarroom.xlsx');
+})->name('newwarroom.export');
+
 Route::middleware(['guest'])->group(function () {
     // Login routes
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -53,7 +64,8 @@ Route::middleware(['auth'])->group(function () {
     
     // Support needed routes
     Route::get('/supportneeded/detail', [SupportneededController::class, 'getDetail'])->name('supportneeded.detail');
-    Route::resource('supportneeded', SupportneededController::class);
+    Route::resource('supportneeded', SupportneededController::class)->except(['show']);
+
     
     // Summary routes
     Route::resource('newsummary', SumController::class);
@@ -65,4 +77,6 @@ Route::middleware(['auth'])->group(function () {
     // Activity log routes
     Route::get('/activitylog', [ActivityLogController::class, 'index'])->name('activity-log.index');
     Route::get('/activity-log/{log}/details', [ActivitylogController::class, 'getLogDetails'])->name('activity-log.details');
+
 });
+
