@@ -10,7 +10,7 @@
 }
 
 /* Header Styles */
-.dash-header-wr {
+.dash-header-d {
     background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
     color: white;
     padding: 20px 30px;
@@ -19,7 +19,7 @@
     overflow: hidden;
 }
 
-.header-content-wr {
+.header-content-d {
     position: relative;
     z-index: 2;
     display: flex;
@@ -29,39 +29,39 @@
     gap: 15px;
 }
 
-.dash-title-wr {
+.dash-title-d {
     font-size: 28px;
     font-weight: 700;
     margin: 0;
     letter-spacing: -0.5px;
 }
 
-.header-info-wr {
+.header-info-d {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.welcome-text-wr {
+.welcome-text-d {
     font-size: 14px;
     opacity: 0.9;
     font-weight: 400;
 }
 
 /* Dashboard Container */
-.dash-container-wr {
+.dash-container-d {
     padding: 20px;
     width: 100%;
 }
 
-.dashboard-grid-wr {
+.dashboard-grid-d {
     display: grid;
     gap: 25px;
     grid-template-columns: 1fr;
 }
 
 /* Hero Section */
-.hero-section-wr {
+.hero-section-d {
     background: white;
     border-radius: 12px;
     padding: 40px;
@@ -75,12 +75,12 @@
     transition: all 0.3s ease;
 }
 
-.hero-section-wr:hover {
+.hero-section-d:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(139, 21, 56, 0.1);
 }
 
-.hero-section-wr::before {
+.hero-section-d::before {
     content: "";
     position: absolute;
     top: 0;
@@ -96,7 +96,7 @@
     transform: translate(50%, -50%);
 }
 
-.hero-content-wr {
+.hero-content-d {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -105,7 +105,7 @@
     z-index: 2;
 }
 
-.hero-icon-wr {
+.hero-icon-d {
     width: 80px;
     height: 80px;
     background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
@@ -118,14 +118,14 @@
     box-shadow: 0 8px 25px rgba(139, 21, 56, 0.3);
 }
 
-.hero-text-wr h2 {
+.hero-text-d h2 {
     font-size: 24px;
     font-weight: 600;
     color: #2c3e50;
     margin: 0 0 8px 0;
 }
 
-.hero-text-wr p {
+.hero-text-d p {
     font-size: 14px;
     color: #6b7280;
     margin: 0;
@@ -133,12 +133,12 @@
     max-width: 400px;
 }
 
-.hero-action-wr {
+.hero-action-d {
     position: relative;
     z-index: 2;
 }
 
-.primary-btn-wr {
+.primary-btn-d {
     display: inline-flex;
     align-items: center;
     gap: 12px;
@@ -154,7 +154,7 @@
     overflow: hidden;
 }
 
-.primary-btn-wr::before {
+.primary-btn-d::before {
     content: "";
     position: absolute;
     top: 0;
@@ -170,27 +170,27 @@
     transition: left 0.5s ease;
 }
 
-.primary-btn-wr:hover {
+.primary-btn-d:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(139, 21, 56, 0.4);
 }
 
-.primary-btn-wr:hover::before {
+.primary-btn-d:hover::before {
     left: 100%;
 }
 
-.btn-icon-wr {
+.btn-icon-d {
     font-size: 16px;
 }
 
 /* Stats Grid */
-.stats-grid-wr {
+.stats-grid-d {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
 }
 
-.stat-item-wr {
+.stat-item-d {
     background: white;
     border-radius: 12px;
     padding: 25px;
@@ -203,24 +203,24 @@
     overflow: hidden;
 }
 
-.stat-item-wr:hover {
+.stat-item-d:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(139, 21, 56, 0.1);
 }
 
-.stat-item-wr:nth-child(1) .stat-icon-wr {
+.stat-item-d:nth-child(1) .stat-icon-d {
     background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
 }
 
-.stat-item-wr:nth-child(2) .stat-icon-wr {
+.stat-item-d:nth-child(2) .stat-icon-d {
     background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
 }
 
-.stat-item-wr:nth-child(3) .stat-icon-wr {
+.stat-item-d:nth-child(3) .stat-icon-d {
     background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
 }
 
-.stat-icon-wr {
+.stat-icon-d {
     width: 50px;
     height: 50px;
     border-radius: 12px;
@@ -232,19 +232,19 @@
     flex-shrink: 0;
 }
 
-.stat-info-wr {
+.stat-info-d {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.stat-number-wr {
+.stat-number-d {
     font-size: 24px;
     font-weight: 700;
     color: #2c3e50;
 }
 
-.stat-label-wr {
+.stat-label-d {
     font-size: 12px;
     color: #6b7280;
     font-weight: 500;
@@ -253,27 +253,27 @@
 }
 
 /* Quick Access */
-.quick-access-wr {
+.quick-access-d {
     background: white;
     border-radius: 12px;
     padding: 30px;
     border: 1px solid #e6e1e8;
 }
 
-.section-title-wr {
+.section-title-d {
     font-size: 18px;
     font-weight: 600;
     color: #8b1538;
     margin: 0 0 20px 0;
 }
 
-.access-grid-wr {
+.access-grid-d {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
 }
 
-.access-item-wr {
+.access-item-d {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -286,13 +286,13 @@
     text-align: center;
 }
 
-.access-item-wr:hover {
+.access-item-d:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(139, 21, 56, 0.1);
     border-color: #8b1538;
 }
 
-.access-icon-wr {
+.access-icon-d {
     width: 40px;
     height: 40px;
     background: #f8f6f9;
@@ -305,13 +305,13 @@
     transition: all 0.3s ease;
 }
 
-.access-item-wr:hover .access-icon-wr {
+.access-item-d:hover .access-icon-d {
     background: #8b1538;
     color: white;
     transform: scale(1.1);
 }
 
-.access-item-wr span {
+.access-item-d span {
     font-size: 13px;
     font-weight: 500;
     color: #4a0e4e;
@@ -323,59 +323,59 @@
         padding: 1rem 0;
     }
 
-    .dash-header-wr {
+    .dash-header-d {
         padding: 20px;
         margin: -20px -20px 15px -20px;
     }
 
-    .header-content-wr {
+    .header-content-d {
         flex-direction: column;
         text-align: center;
         gap: 10px;
     }
 
-    .dash-title-wr {
+    .dash-title-d {
         font-size: 24px;
     }
 
-    .dash-container-wr {
+    .dash-container-d {
         padding: 20px;
     }
 
-    .hero-section-wr {
+    .hero-section-d {
         flex-direction: column;
         padding: 25px;
         text-align: center;
     }
 
-    .hero-content-wr {
+    .hero-content-d {
         flex-direction: column;
         text-align: center;
     }
 
-    .hero-text-wr h2 {
+    .hero-text-d h2 {
         font-size: 20px;
     }
 
-    .stats-grid-wr {
+    .stats-grid-d {
         grid-template-columns: 1fr;
         gap: 15px;
     }
 
-    .stat-item-wr {
+    .stat-item-d {
         padding: 20px;
     }
 
-    .access-grid-wr {
+    .access-grid-d {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
     }
 
-    .access-item-wr {
+    .access-item-d {
         padding: 15px;
     }
 
-    .quick-access-wr {
+    .quick-access-d {
         padding: 20px;
     }
 }

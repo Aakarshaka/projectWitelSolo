@@ -5,66 +5,66 @@
 @section('content')
 <!-- Header Section -->
 <div class="main-content-dash">
-    <div class="dash-header-wr">
-        <div class="header-content-wr">
-            <h1 class="dash-title-wr">DASHBOARD</h1>
-            <div class="header-info-wr">
-                <span class="welcome-text-wr">Selamat datang, {{ auth()->user()->name ?? 'User' }}</span>
+    <div class="dash-header-d">
+        <div class="header-content-d">
+            <h1 class="dash-title-d">DASHBOARD</h1>
+            <div class="header-info-d">
+                <span class="welcome-text-d">Selamat datang, {{ auth()->user()->name ?? 'User' }}</span>
             </div>
         </div>
     </div>
 
     <!-- Main Dashboard Content -->
-    <div class="dash-container-wr">
-        <div class="dashboard-grid-wr">
+    <div class="dash-container-d">
+        <div class="dashboard-grid-d">
             <!-- Hero Section -->
-            <div class="hero-section-wr">
-                <div class="hero-content-wr">
-                    <div class="hero-icon-wr">
+            <div class="hero-section-d">
+                <div class="hero-content-d">
+                    <div class="hero-icon-d">
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <div class="hero-text-wr">
+                    <div class="hero-text-d">
                         <h2>Giat Core System</h2>
                         <p>Akses sistem BPP melalui dashboard utama untuk monitoring dan analisis data</p>
                     </div>
                 </div>
-                <div class="hero-action-wr">
-                    <a href="http://10.60.170.171/bpp-dashboard/" class="primary-btn-wr" target="_blank">
-                        <span class="btn-icon-wr">
+                <div class="hero-action-d">
+                    <a href="http://10.60.170.171/bpp-dashboard/" class="primary-btn-d" target="_blank">
+                        <span class="btn-icon-d">
                             <i class="fas fa-external-link-alt"></i>
                         </span>
-                        <span class="btn-text-wr">Buka BPP Dashboard</span>
+                        <span class="btn-text-d">Buka BPP Dashboard</span>
                     </a>
                 </div>
             </div>
 
             <!-- Quick Stats -->
-            <div class="stats-grid-wr">
-                <div class="stat-item-wr">
-                    <div class="stat-icon-wr">
+            <div class="stats-grid-d">
+                <div class="stat-item-d">
+                    <div class="stat-icon-d">
                         <i class="fas fa-users"></i>
                     </div>
-                    <div class="stat-info-wr">
-                        <span class="stat-number-wr">{{ $total_users ?? 0 }}</span>
-                        <span class="stat-label-wr">Total User</span>
+                    <div class="stat-info-d">
+                        <span class="stat-number-d">{{ $total_users ?? 0 }}</span>
+                        <span class="stat-label-d">Total User</span>
                     </div>
                 </div>
-                <div class="stat-item-wr">
-                    <div class="stat-icon-wr">
+                <div class="stat-item-d">
+                    <div class="stat-icon-d">
                         <i class="fas fa-user-check"></i>
                     </div>
-                    <div class="stat-info-wr">
-                        <span class="stat-number-wr">{{ $active_users ?? 0 }}</span>
-                        <span class="stat-label-wr">User Aktif</span>
+                    <div class="stat-info-d">
+                        <span class="stat-number-d">{{ $active_users ?? 0 }}</span>
+                        <span class="stat-label-d">User Aktif</span>
                     </div>
                 </div>
-                <div class="stat-item-wr">
-                    <div class="stat-icon-wr">
+                <div class="stat-item-d">
+                    <div class="stat-icon-d">
                         <i class="fas fa-history"></i>
                     </div>
-                    <div class="stat-info-wr">
-                        <span class="stat-number-wr">{{ $total_activity_logs ?? 0 }}</span>
-                        <span class="stat-label-wr">Total Perubahan</span>
+                    <div class="stat-info-d">
+                        <span class="stat-number-d">{{ $total_activity_logs ?? 0 }}</span>
+                        <span class="stat-label-d">Total Perubahan</span>
                     </div>
                 </div>
             </div>
