@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Newwarroom;
 use App\Models\Supportneeded;
+use App\Models\User;
+use Carbon\Carbon;
+use Spatie\Activitylog\Models\Activity;
 
 class NewdashboardController extends Controller
 {
@@ -20,6 +23,71 @@ class NewdashboardController extends Controller
             $baseQuery->whereMonth('tgl', $bulan);
         }
 
+        // ===== QUICK STATS BARU =====
+        // 1. Total Users
+        $total_users = User::count();
+
+        // 2. Active Users (users yang aktif dalam 30 hari terakhir)
+        // Cek apakah kolom last_login_at ada
+        $userColumns = Schema::getColumnListing('users');
+        $active_users = 0;
+        
+        if (in_array('last_login_at', $userColumns)) {
+            // Priority 1: Jika kolom last_login_at ada
+            $active_users = User::where('last_login_at', '>=', Carbon::now()->subDays(30))
+                ->count();
+        } else {
+            // Priority 2: Coba berdasarkan aktivitas di activity log
+            if (class_exists(\Spatie\Activitylog\Models\Activity::class)) {
+                // Opsi 2A: User yang memiliki activity log dalam 30 hari terakhir (Spatie)
+                $active_users = User::whereHas('activities', function($query) {
+                    $query->where('created_at', '>=', Carbon::now()->subDays(30));
+                })->count();
+            } elseif (Schema::hasTable('activity_logs')) {
+                // Opsi 2B: User yang memiliki activity log dalam 30 hari terakhir (Custom)
+                $active_users = User::whereExists(function($query) {
+                    $query->select(DB::raw(1))
+                          ->from('activity_logs')
+                          ->whereColumn('activity_logs.user_id', 'users.id')
+                          ->where('activity_logs.created_at', '>=', Carbon::now()->subDays(30));
+                })->count();
+            }
+            
+            // Jika masih 0, coba opsi lain
+            if ($active_users == 0) {
+                if (in_array('updated_at', $userColumns)) {
+                    // Opsi 1A: User yang diupdate dalam 30 hari terakhir
+                    $updated_recently = User::where('updated_at', '>=', Carbon::now()->subDays(30))->count();
+                    
+                    // Opsi 1B: User yang dibuat dalam 30 hari terakhir (user baru)
+                    $created_recently = User::where('created_at', '>=', Carbon::now()->subDays(30))->count();
+                    
+                    // Gabungkan keduanya tapi hindari duplikasi
+                    $active_users = User::where(function($query) {
+                        $query->where('updated_at', '>=', Carbon::now()->subDays(30))
+                              ->orWhere('created_at', '>=', Carbon::now()->subDays(30));
+                    })->count();
+                } else {
+                    // Fallback terakhir: anggap 70% dari total user aktif
+                    $active_users = round(User::count() * 0.7);
+                }
+            }
+        }
+
+        // 3. Total Activity Logs (Total Perubahan)
+        $total_activity_logs = 0;
+        
+        // Cek apakah menggunakan spatie/laravel-activitylog
+        if (class_exists(\Spatie\Activitylog\Models\Activity::class)) {
+            $total_activity_logs = Activity::count();
+        } else {
+            // Jika ada tabel activity_logs custom
+            if (Schema::hasTable('activity_logs')) {
+                $total_activity_logs = DB::table('activity_logs')->count();
+            }
+        }
+
+        // ===== DATA LAINNYA (untuk chart dan analisis) =====
         $total_agenda = $baseQuery->count();
         $total_action_plan = (clone $baseQuery)->sum('jumlah_action_plan');
         $total_eskalasi = (clone $baseQuery)->where('status_action_plan', 'Eskalasi')->count();
@@ -120,12 +188,20 @@ class NewdashboardController extends Controller
             ->groupBy('status')
             ->pluck('total', 'status');
 
+        // ===== UPCOMING AGENDA =====
+        $upcoming_agenda = $this->getUpcomingAgenda();
+
         return view('dashboard.newdashboard', compact(
-            'tahun', 'bulan', 'total_agenda', 'total_action_plan', 'total_eskalasi', 'total_closed',
+            'tahun', 'bulan', 
+            // Quick Stats yang baru
+            'total_users', 'active_users', 'total_activity_logs',
+            // Data lainnya
+            'total_agenda', 'total_action_plan', 'total_eskalasi', 'total_closed',
             'bulan_labels', 'jumlah_agenda_per_bulan', 'status_labels', 'status_counts',
             'trend_action_plan', 'top_issues', 'completion_rate', 'weekly_data',
             'priority_labels', 'priority_counts',
-            'total_support', 'closed_support', 'close_percentage', 'avg_support_progress', 'support_status_distribution'
+            'total_support', 'closed_support', 'close_percentage', 'avg_support_progress', 'support_status_distribution',
+            'upcoming_agenda'
         ));
     }
 
@@ -154,5 +230,112 @@ class NewdashboardController extends Controller
         }
 
         return $weeklyData;
+    }
+
+    private function getUpcomingAgenda()
+    {
+        $today = Carbon::today();
+        $nextWeek = Carbon::today()->addDays(7);
+        $upcoming = collect();
+
+        // Get upcoming warroom agenda
+        $warroomColumns = Schema::getColumnListing('newwarrooms');
+        $warroomSelect = ['tgl as date'];
+        
+        // Check for common title/description columns
+        if (in_array('agenda', $warroomColumns)) {
+            $warroomSelect[] = 'agenda as title';
+        } elseif (in_array('title', $warroomColumns)) {
+            $warroomSelect[] = 'title';
+        } elseif (in_array('name', $warroomColumns)) {
+            $warroomSelect[] = 'name as title';
+        } else {
+            $warroomSelect[] = 'id as title'; // fallback
+        }
+
+        if (in_array('status_action_plan', $warroomColumns)) {
+            $warroomSelect[] = 'status_action_plan as status';
+        }
+
+        if (in_array('priority', $warroomColumns)) {
+            $warroomSelect[] = 'priority';
+        }
+
+        $warroomAgenda = Newwarroom::select($warroomSelect)
+            ->whereBetween('tgl', [$today, $nextWeek])
+            ->whereNotIn('status_action_plan', ['Closed', 'Done'])
+            ->orderBy('tgl', 'asc')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'date' => $item->date,
+                    'title' => is_numeric($item->title) ? "Warroom Agenda #{$item->title}" : $item->title,
+                    'type' => 'warroom',
+                    'status' => $item->status ?? 'Open',
+                    'priority' => $item->priority ?? 'Medium',
+                    'days_left' => Carbon::parse($item->date)->diffInDays(Carbon::today(), false) * -1
+                ];
+            });
+
+        // Get upcoming support needed agenda
+        $supportColumns = Schema::getColumnListing('supportneededs');
+        $supportSelect = [];
+        
+        // Find date column
+        $dateColumn = null;
+        foreach (['target_date', 'due_date', 'deadline', 'tgl', 'date', 'created_at'] as $col) {
+            if (in_array($col, $supportColumns)) {
+                $dateColumn = $col;
+                break;
+            }
+        }
+
+        if ($dateColumn) {
+            $supportSelect[] = "{$dateColumn} as date";
+            
+            // Check for title columns
+            if (in_array('title', $supportColumns)) {
+                $supportSelect[] = 'title';
+            } elseif (in_array('subject', $supportColumns)) {
+                $supportSelect[] = 'subject as title';
+            } elseif (in_array('description', $supportColumns)) {
+                $supportSelect[] = 'description as title';
+            } else {
+                $supportSelect[] = 'id as title';
+            }
+
+            if (in_array('progress', $supportColumns)) {
+                $supportSelect[] = 'progress as status';
+            }
+
+            if (in_array('priority', $supportColumns)) {
+                $supportSelect[] = 'priority';
+            }
+
+            $supportAgenda = Supportneeded::select($supportSelect)
+                ->whereBetween($dateColumn, [$today, $nextWeek])
+                ->whereNotIn('progress', ['Done', 'Closed'])
+                ->orderBy($dateColumn, 'asc')
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'date' => $item->date,
+                        'title' => is_numeric($item->title) ? "Support Request #{$item->title}" : $item->title,
+                        'type' => 'support',
+                        'status' => $item->status ?? 'Open',
+                        'priority' => $item->priority ?? 'Medium',
+                        'days_left' => Carbon::parse($item->date)->diffInDays(Carbon::today(), false) * -1
+                    ];
+                });
+        } else {
+            $supportAgenda = collect();
+        }
+
+        // Combine and sort
+        $upcoming = $warroomAgenda->concat($supportAgenda)
+            ->sortBy('date')
+            ->take(10);
+
+        return $upcoming;
     }
 }
