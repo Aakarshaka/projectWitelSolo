@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="png" href="{{ asset('images/favgiatlogo.png') }}">
     <title>Login | GIAT CORE</title>
     <link href="{{ asset('css/loginstyle.css') }}" rel="stylesheet">
 </head>
@@ -21,9 +22,9 @@
     </div>
 
     @if(session('message'))
-        <div class="alert alert-success text-center" style="margin: 20px auto; max-width: 400px;">
-            {{ session('message') }}
-        </div>
+    <div class="alert alert-success text-center" style="margin: 20px auto; max-width: 400px;">
+        {{ session('message') }}
+    </div>
     @endif
 
     <!-- Login Form -->
@@ -33,11 +34,11 @@
             <div class="form-group">
                 <input type="text" class="form-input" placeholder="Username or Email" name="username" value="{{ old('username') }}" required>
             </div>
-            
+
             <div class="form-group">
                 <input type="password" class="form-input" placeholder="Password" name="password" required>
             </div>
-            
+
             <div class="form-group">
                 <button type="submit" class="login-button">
                     Login
@@ -58,11 +59,11 @@
     </div>
 
     @if($errors->any())
-        <div class="error-message">
-            @foreach($errors->all() as $error)
-                {{ $error }}
-            @endforeach
-        </div>
+    <div class="error-message">
+        @foreach($errors->all() as $error)
+        {{ $error }}
+        @endforeach
+    </div>
     @endif
 
     <!-- Footer -->
