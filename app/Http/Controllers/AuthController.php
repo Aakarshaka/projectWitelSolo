@@ -379,13 +379,13 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users,email',
-            'fpotp' => 'required|string|size:6'
+            'otp' => 'required|string|size:6'
         ], [
             'email.required' => 'Email is required',
             'email.email' => 'Please enter a valid email address',
             'email.exists' => 'Email not found in our records',
-            'fpotp.required' => 'OTP is required',
-            'fpotp.size' => 'OTP must be 6 digits'
+            'otp.required' => 'OTP is required',
+            'otp.size' => 'OTP must be 6 digits'
         ]);
 
         if ($validator->fails()) {
@@ -405,7 +405,7 @@ class AuthController extends Controller
             ], 400);
         }
 
-        if ($storedOTP !== $request->fpotp) {
+        if ($storedOTP !== $request->otp) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid OTP. Please try again.'
@@ -519,18 +519,18 @@ class AuthController extends Controller
         }
 
         // Generate OTP 6 digit baru
-        $fpotp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
         // Simpan OTP ke cache dengan expiry 10 menit
         $cacheKey = 'fpotp_' . $request->email;
-        Cache::put($cacheKey, $fpotp, 600); // 10 menit
+        Cache::put($cacheKey, $otp, 600); // 10 menit
 
         try {
             // Kirim email OTP untuk reset password
-            $this->sendForgetPasswordOTPEmail($request->email, $fpotp);
+            $this->sendForgetPasswordOTPEmail($request->email, $otp);
 
             // Log OTP untuk development (hapus di production)
-            \Log::info("Resend Forget Password OTP for {$request->email}: {$fpotp}");
+            \Log::info("Resend Forget Password OTP for {$request->email}: {$otp}");
 
             return response()->json([
                 'success' => true,
@@ -549,10 +549,10 @@ class AuthController extends Controller
     /**
      * Kirim email OTP untuk reset password
      */
-    private function sendForgetPasswordOTPEmail($email, $fpotp)
+    private function sendForgetPasswordOTPEmail($email, $otp)
     {
         try {
-            Mail::send('emails.fpotp', ['fpotp' => $fpotp], function ($message) use ($email) {
+            Mail::send('emails.fpotp', ['otp' => $otp], function ($message) use ($email) {
                 $message->to($email)
                     ->subject('Password Reset Code - GIAT CORE')
                     ->from(config('mail.from.address'), config('mail.from.name'));

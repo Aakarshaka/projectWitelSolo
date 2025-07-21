@@ -27,7 +27,7 @@
                         <i class="fas fa-chart-line"></i>
                     </div>
                     <h3>BPP Dashboard</h3>
-                    <p>Akses dashboard utama sistem BPP untuk monitoring dan analisis data</p>
+                    <p>Akses dashboard utama sistem BPP</p>
                 </div>
                 
                 <a href="http://10.60.170.171/bpp-dashboard/" class="btn btn-primary" target="_blank">

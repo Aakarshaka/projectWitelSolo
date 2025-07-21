@@ -318,7 +318,7 @@ emailVerifyBtn.addEventListener("click", function () {
     }
 });
 
-// OTP verification
+// OTP verification - PERBAIKAN UTAMA
 verifyBtn.addEventListener("click", function () {
     const otpValue = getOTPValue();
 
@@ -331,7 +331,7 @@ verifyBtn.addEventListener("click", function () {
     verifyBtn.textContent = "Verifying...";
     verifyBtn.disabled = true;
 
-    // Real API call for OTP verification
+    // Real API call for OTP verification - ENDPOINT SUDAH DIPERBAIKI
     fetch("/auth/verify-forget-password-otp", {
         method: "POST",
         headers: {
@@ -342,7 +342,7 @@ verifyBtn.addEventListener("click", function () {
         },
         body: JSON.stringify({
             email: userEmail,
-            otp: otpValue,
+            otp: otpValue,  // PERBAIKAN: menggunakan 'otp' bukan 'fpotp'
         }),
     })
         .then((response) => response.json())
@@ -371,16 +371,7 @@ verifyBtn.addEventListener("click", function () {
         });
 });
 
-// Cancel OTP verification
-cancelBtn.addEventListener("click", function () {
-    otpModal.classList.remove("show");
-    showStep(1);
-    clearOTPInputs();
-    isEmailVerified = false;
-    resetToken = "";
-});
-
-// Resend OTP
+// Resend OTP - ENDPOINT SUDAH DIPERBAIKI
 resendLink.addEventListener("click", function (e) {
     e.preventDefault();
 
@@ -388,7 +379,7 @@ resendLink.addEventListener("click", function (e) {
     resendLink.textContent = "Sending...";
     resendLink.style.pointerEvents = "none";
 
-    // Real API call for resending OTP
+    // Real API call for resending OTP - ENDPOINT SUDAH DIPERBAIKI
     fetch("/auth/resend-forget-password-otp", {
         method: "POST",
         headers: {
@@ -420,7 +411,7 @@ resendLink.addEventListener("click", function (e) {
         });
 });
 
-// Reset password form submission
+// Reset password form submission - ENDPOINT SUDAH DIPERBAIKI
 resetPasswordBtn.addEventListener("click", function (e) {
     e.preventDefault();
 
@@ -442,7 +433,7 @@ resetPasswordBtn.addEventListener("click", function (e) {
     resetPasswordBtn.textContent = "Resetting...";
     resetPasswordBtn.disabled = true;
 
-    // Real API call for password reset
+    // Real API call for password reset - ENDPOINT SUDAH DIPERBAIKI
     fetch("/auth/reset-password", {
         method: "POST",
         headers: {
