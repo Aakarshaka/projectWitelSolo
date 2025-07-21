@@ -243,9 +243,8 @@
                 </table>
             </div>
         </div>
-
-        <div class="log-footer">Powered by <strong>GIAT CORE</strong></div>
     </div>
+    <div class="log-footer">Powered by <strong>GIAT CORE</strong></div>
 </div>
 @include('log.logmodal')
 @endsection

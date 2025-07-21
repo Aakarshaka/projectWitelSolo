@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 /* Main Layout */
-.main-content-dash {
+.dash-main-content {
     margin-left: 60px;
     min-height: 100vh;
     transition: margin-left 0.3s ease;
@@ -10,7 +10,7 @@
 }
 
 /* Header Styles */
-.dash-header-d {
+.dash-header {
     background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
     color: white;
     padding: 20px 30px;
@@ -19,7 +19,7 @@
     overflow: hidden;
 }
 
-.header-content-d {
+.dash-header-content {
     position: relative;
     z-index: 2;
     display: flex;
@@ -29,39 +29,39 @@
     gap: 15px;
 }
 
-.dash-title-d {
+.dash-title {
     font-size: 28px;
     font-weight: 700;
     margin: 0;
     letter-spacing: -0.5px;
 }
 
-.header-info-d {
+.dash-header-info {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.welcome-text-d {
+.dash-welcome-text {
     font-size: 14px;
     opacity: 0.9;
     font-weight: 400;
 }
 
 /* Dashboard Container */
-.dash-container-d {
+.dash-container {
     padding: 20px;
     width: 100%;
 }
 
-.dashboard-grid-d {
+.dash-grid {
     display: grid;
     gap: 25px;
     grid-template-columns: 1fr;
 }
 
 /* Hero Section */
-.hero-section-d {
+.dash-hero-section {
     background: white;
     border-radius: 12px;
     padding: 40px;
@@ -75,12 +75,12 @@
     transition: all 0.3s ease;
 }
 
-.hero-section-d:hover {
+.dash-hero-section:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(139, 21, 56, 0.1);
 }
 
-.hero-section-d::before {
+.dash-hero-section::before {
     content: "";
     position: absolute;
     top: 0;
@@ -96,7 +96,7 @@
     transform: translate(50%, -50%);
 }
 
-.hero-content-d {
+.dash-hero-content {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -105,7 +105,7 @@
     z-index: 2;
 }
 
-.hero-icon-d {
+.dash-hero-icon {
     width: 80px;
     height: 80px;
     background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
@@ -118,14 +118,14 @@
     box-shadow: 0 8px 25px rgba(139, 21, 56, 0.3);
 }
 
-.hero-text-d h2 {
+.dash-hero-text h2 {
     font-size: 24px;
     font-weight: 600;
     color: #2c3e50;
     margin: 0 0 8px 0;
 }
 
-.hero-text-d p {
+.dash-hero-text p {
     font-size: 14px;
     color: #6b7280;
     margin: 0;
@@ -133,12 +133,12 @@
     max-width: 400px;
 }
 
-.hero-action-d {
+.dash-hero-action {
     position: relative;
     z-index: 2;
 }
 
-.primary-btn-d {
+.dash-primary-btn {
     display: inline-flex;
     align-items: center;
     gap: 12px;
@@ -154,7 +154,7 @@
     overflow: hidden;
 }
 
-.primary-btn-d::before {
+.dash-primary-btn::before {
     content: "";
     position: absolute;
     top: 0;
@@ -170,27 +170,27 @@
     transition: left 0.5s ease;
 }
 
-.primary-btn-d:hover {
+.dash-primary-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(139, 21, 56, 0.4);
 }
 
-.primary-btn-d:hover::before {
+.dash-primary-btn:hover::before {
     left: 100%;
 }
 
-.btn-icon-d {
+.dash-btn-icon {
     font-size: 16px;
 }
 
 /* Stats Grid */
-.stats-grid-d {
+.dash-stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
 }
 
-.stat-item-d {
+.dash-stat-item {
     background: white;
     border-radius: 12px;
     padding: 25px;
@@ -203,24 +203,24 @@
     overflow: hidden;
 }
 
-.stat-item-d:hover {
+.dash-stat-item:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(139, 21, 56, 0.1);
 }
 
-.stat-item-d:nth-child(1) .stat-icon-d {
+.dash-stat-item:nth-child(1) .dash-stat-icon {
     background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
 }
 
-.stat-item-d:nth-child(2) .stat-icon-d {
+.dash-stat-item:nth-child(2) .dash-stat-icon {
     background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
 }
 
-.stat-item-d:nth-child(3) .stat-icon-d {
+.dash-stat-item:nth-child(3) .dash-stat-icon {
     background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
 }
 
-.stat-icon-d {
+.dash-stat-icon {
     width: 50px;
     height: 50px;
     border-radius: 12px;
@@ -232,19 +232,19 @@
     flex-shrink: 0;
 }
 
-.stat-info-d {
+.dash-stat-info {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.stat-number-d {
+.dash-stat-number {
     font-size: 24px;
     font-weight: 700;
     color: #2c3e50;
 }
 
-.stat-label-d {
+.dash-stat-label {
     font-size: 12px;
     color: #6b7280;
     font-weight: 500;
@@ -253,27 +253,27 @@
 }
 
 /* Quick Access */
-.quick-access-d {
+.dash-quick-access {
     background: white;
     border-radius: 12px;
     padding: 30px;
     border: 1px solid #e6e1e8;
 }
 
-.section-title-d {
+.dash-section-title {
     font-size: 18px;
     font-weight: 600;
     color: #8b1538;
     margin: 0 0 20px 0;
 }
 
-.access-grid-d {
+.dash-access-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
 }
 
-.access-item-d {
+.dash-access-item {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -286,13 +286,13 @@
     text-align: center;
 }
 
-.access-item-d:hover {
+.dash-access-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(139, 21, 56, 0.1);
     border-color: #8b1538;
 }
 
-.access-icon-d {
+.dash-access-icon {
     width: 40px;
     height: 40px;
     background: #f8f6f9;
@@ -305,77 +305,85 @@
     transition: all 0.3s ease;
 }
 
-.access-item-d:hover .access-icon-d {
+.dash-access-item:hover .dash-access-icon {
     background: #8b1538;
     color: white;
     transform: scale(1.1);
 }
 
-.access-item-d span {
+.dash-access-item span {
     font-size: 13px;
     font-weight: 500;
     color: #4a0e4e;
 }
 
+.dash-footer {
+    text-align: center;
+    font-size: 15px;
+    color: #6d5671;
+    margin-top: 10px;
+    padding: 10px 0;
+}
+
 @media (max-width: 800px) {
-    .main-content-dash {
+    .dash-main-content {
         margin-left: 0;
         padding: 1rem 0;
     }
 
-    .dash-header-d {
+    .dash-header {
         padding: 20px;
         margin: -20px -20px 15px -20px;
     }
 
-    .header-content-d {
+    .dash-header-content {
         flex-direction: column;
         text-align: center;
         gap: 10px;
     }
 
-    .dash-title-d {
+    .dash-title {
         font-size: 24px;
     }
 
-    .dash-container-d {
+    .dash-container {
         padding: 20px;
     }
 
-    .hero-section-d {
+    .dash-hero-section {
         flex-direction: column;
         padding: 25px;
         text-align: center;
     }
 
-    .hero-content-d {
+    .dash-hero-content {
         flex-direction: column;
         text-align: center;
     }
 
-    .hero-text-d h2 {
+    .dash-hero-text h2 {
         font-size: 20px;
     }
 
-    .stats-grid-d {
+    .dash-stats-grid {
         grid-template-columns: 1fr;
         gap: 15px;
     }
 
-    .stat-item-d {
+    .dash-stat-item {
         padding: 20px;
     }
 
-    .access-grid-d {
+    .dash-access-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
     }
 
-    .access-item-d {
+    .dash-access-item {
         padding: 15px;
     }
 
-    .quick-access-d {
+    .dash-quick-access {
         padding: 20px;
     }
 }

@@ -23,58 +23,11 @@ class NewdashboardController extends Controller
             $baseQuery->whereMonth('tgl', $bulan);
         }
 
-        // ===== QUICK STATS BARU =====
+        // ===== QUICK STATS =====
         // 1. Total Users
         $total_users = User::count();
 
-        // 2. Active Users (users yang aktif dalam 30 hari terakhir)
-        // Cek apakah kolom last_login_at ada
-        $userColumns = Schema::getColumnListing('users');
-        $active_users = 0;
-        
-        if (in_array('last_login_at', $userColumns)) {
-            // Priority 1: Jika kolom last_login_at ada
-            $active_users = User::where('last_login_at', '>=', Carbon::now()->subDays(30))
-                ->count();
-        } else {
-            // Priority 2: Coba berdasarkan aktivitas di activity log
-            if (class_exists(\Spatie\Activitylog\Models\Activity::class)) {
-                // Opsi 2A: User yang memiliki activity log dalam 30 hari terakhir (Spatie)
-                $active_users = User::whereHas('activities', function($query) {
-                    $query->where('created_at', '>=', Carbon::now()->subDays(30));
-                })->count();
-            } elseif (Schema::hasTable('activity_logs')) {
-                // Opsi 2B: User yang memiliki activity log dalam 30 hari terakhir (Custom)
-                $active_users = User::whereExists(function($query) {
-                    $query->select(DB::raw(1))
-                          ->from('activity_logs')
-                          ->whereColumn('activity_logs.user_id', 'users.id')
-                          ->where('activity_logs.created_at', '>=', Carbon::now()->subDays(30));
-                })->count();
-            }
-            
-            // Jika masih 0, coba opsi lain
-            if ($active_users == 0) {
-                if (in_array('updated_at', $userColumns)) {
-                    // Opsi 1A: User yang diupdate dalam 30 hari terakhir
-                    $updated_recently = User::where('updated_at', '>=', Carbon::now()->subDays(30))->count();
-                    
-                    // Opsi 1B: User yang dibuat dalam 30 hari terakhir (user baru)
-                    $created_recently = User::where('created_at', '>=', Carbon::now()->subDays(30))->count();
-                    
-                    // Gabungkan keduanya tapi hindari duplikasi
-                    $active_users = User::where(function($query) {
-                        $query->where('updated_at', '>=', Carbon::now()->subDays(30))
-                              ->orWhere('created_at', '>=', Carbon::now()->subDays(30));
-                    })->count();
-                } else {
-                    // Fallback terakhir: anggap 70% dari total user aktif
-                    $active_users = round(User::count() * 0.7);
-                }
-            }
-        }
-
-        // 3. Total Activity Logs (Total Perubahan)
+        // 2. Total Activity Logs (Total Perubahan)
         $total_activity_logs = 0;
         
         // Cek apakah menggunakan spatie/laravel-activitylog
@@ -193,8 +146,8 @@ class NewdashboardController extends Controller
 
         return view('dashboard.newdashboard', compact(
             'tahun', 'bulan', 
-            // Quick Stats yang baru
-            'total_users', 'active_users', 'total_activity_logs',
+            // Quick Stats
+            'total_users', 'total_activity_logs',
             // Data lainnya
             'total_agenda', 'total_action_plan', 'total_eskalasi', 'total_closed',
             'bulan_labels', 'jumlah_agenda_per_bulan', 'status_labels', 'status_counts',
