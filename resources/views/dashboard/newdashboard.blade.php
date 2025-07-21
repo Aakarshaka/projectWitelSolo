@@ -94,8 +94,7 @@
                     <div class="access-icon-wr">
                         <i class="fas fa-bell"></i>
                     </div>
-                    <h3>BPP Dashboard</h3>
-                    <p>Akses dashboard utama sistem BPP untuk monitoring dan analisis data</p>
+                    <span>Notifications</span>
                 </div>
             </div>
         </div>
