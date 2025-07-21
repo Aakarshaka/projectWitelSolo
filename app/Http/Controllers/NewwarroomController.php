@@ -44,7 +44,11 @@ class NewwarroomController extends Controller
             });
         }
 
-        $warroomData = $query->get();
+        // Tambahkan pengurutan berdasarkan tgl (tanggal)
+        // Data dengan tgl null akan ditampilkan di akhir
+        $warroomData = $query->orderByRaw('tgl IS NULL')
+                            ->orderBy('tgl', 'asc')
+                            ->get();
 
         $jumlah_agenda = $warroomData->count();
         $nama_agenda = $warroomData->pluck('agenda')->unique()->values();
@@ -69,7 +73,10 @@ class NewwarroomController extends Controller
      */
     public function syncFromSupportneeded(): RedirectResponse
     {
-        $data = Supportneeded::where('status', 'Action')->get();
+        $data = Supportneeded::where('status', 'Action')
+                            ->orderByRaw('start_date IS NULL')
+                            ->orderBy('start_date', 'asc')
+                            ->get();
 
         foreach ($data as $item) {
             // Gunakan updateOrCreate untuk menghindari duplikasi

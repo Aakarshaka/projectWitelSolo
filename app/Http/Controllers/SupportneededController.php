@@ -45,7 +45,11 @@ class SupportneededController extends Controller
             });
         }
 
-        $items = $query->get();
+        // Tambahkan pengurutan berdasarkan start_date
+        // Data dengan start_date null akan ditampilkan di akhir
+        $items = $query->orderByRaw('start_date IS NULL')
+                      ->orderBy('start_date', 'asc')
+                      ->get();
 
         $allItems = Supportneeded::all();
         $total = $allItems->count();
@@ -308,21 +312,22 @@ class SupportneededController extends Controller
             return response()->json(['message' => 'Missing progress parameter'], 400);
         }
 
+        $query = Supportneeded::where('progress', $progress);
+
         if ($uic) {
-            $data = Supportneeded::where('uic', $uic)
-                ->where('progress', $progress)
-                ->get();
+            $query->where('uic', $uic);
         } elseif ($agenda) {
-            $data = Supportneeded::where('agenda', $agenda)
-                ->where('progress', $progress)
-                ->get();
+            $query->where('agenda', $agenda);
         } elseif ($unit) {
-            $data = Supportneeded::where('unit_or_telda', $unit)
-                ->where('progress', $progress)
-                ->get();
+            $query->where('unit_or_telda', $unit);
         } else {
             return response()->json(['message' => 'Missing query parameter'], 400);
         }
+
+        // Tambahkan pengurutan berdasarkan start_date juga di method getDetail
+        $data = $query->orderByRaw('start_date IS NULL')
+                     ->orderBy('start_date', 'asc')
+                     ->get();
 
         return response()->json($data);
     }
