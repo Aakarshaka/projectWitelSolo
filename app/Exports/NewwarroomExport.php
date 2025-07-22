@@ -10,6 +10,8 @@ use Carbon\Carbon;
 
 class NewwarroomExport implements FromCollection, WithHeadings, WithMapping
 {
+    private $rowNumber = 0;
+
     public function collection()
     {
         return Newwarroom::select([
@@ -31,6 +33,7 @@ class NewwarroomExport implements FromCollection, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
+            'No',
             'Tanggal',
             'Agenda',
             'UIC',
@@ -47,7 +50,10 @@ class NewwarroomExport implements FromCollection, WithHeadings, WithMapping
 
     public function map($newwarroom): array
     {
+        $this->rowNumber++;
+        
         return [
+            $this->rowNumber, // Nomor urut
             // Format tanggal menjadi "3 Juli 2025"
             $newwarroom->tgl ? Carbon::parse($newwarroom->tgl)
                 ->setTimezone('Asia/Jakarta')

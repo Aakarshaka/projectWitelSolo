@@ -10,6 +10,8 @@ use Carbon\Carbon;
 
 class SupportneededExport implements FromCollection, WithHeadings, WithMapping
 {
+    private $rowNumber = 0;
+
     public function collection()
     {
         // Urutkan berdasarkan tanggal terkecil (ASC)
@@ -21,15 +23,20 @@ class SupportneededExport implements FromCollection, WithHeadings, WithMapping
     {
         // Ambil semua kolom kecuali id, created_at, dan updated_at
         $columns = \Schema::getColumnListing((new Supportneeded)->getTable());
-        return array_filter($columns, function($column) {
+        $filteredColumns = array_filter($columns, function($column) {
             return !in_array($column, ['id', 'created_at', 'updated_at']);
         });
+        
+        // Tambahkan kolom "No" di awal
+        return array_merge(['No'], $filteredColumns);
     }
 
     public function map($supportneeded): array
     {
+        $this->rowNumber++;
+        
         $columns = \Schema::getColumnListing((new Supportneeded)->getTable());
-        $mappedData = [];
+        $mappedData = [$this->rowNumber]; // Mulai dengan nomor urut
 
         foreach ($columns as $column) {
             // Skip kolom id, created_at, dan updated_at
