@@ -92,6 +92,8 @@ Route::middleware(['auth'])->group(function () {
     // Warroom routes
     Route::resource('newwarroom', NewwarroomController::class);
     Route::post('/warroom/sync', [NewwarroomController::class, 'syncFromSupportneeded'])->name('warroom.sync');
+    Route::get('/newwarroom/{newwarroom}/action-plans', [NewwarroomController::class, 'getActionPlans'])
+        ->name('newwarroom.action-plans');
 
     // Activity log routes
     Route::get('/activitylog', [ActivityLogController::class, 'index'])->name('activity-log.index');

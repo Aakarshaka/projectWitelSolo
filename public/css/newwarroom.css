@@ -559,10 +559,10 @@ body {
 
 .table-wr th.col-sap-wr,
 .table-wr td.col-sap-wr {
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
-    text-align: center;
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+    text-align: left;
 }
 
 .table-wr th.col-action-wr,
@@ -724,6 +724,30 @@ body {
     font-style: italic;
     text-align: center;
     padding: 40px 20px;
+}
+
+/* CSS untuk garis pemisah di kolom Action Plan */
+.col-ac-wr, .col-uap-wr, .col-sap-wr {
+    line-height: 1.6;
+}
+
+.col-ac-wr br:not(:last-child),
+.col-uap-wr br:not(:last-child),
+.col-sap-wr br:not(:last-child) {
+    display: block;
+    content: "";
+    margin: 8px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Alternative approach using pseudo-elements */
+.action-plan-item {
+    padding: 6px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.action-plan-item:last-child {
+    border-bottom: none;
 }
 
 /* Responsive Design */

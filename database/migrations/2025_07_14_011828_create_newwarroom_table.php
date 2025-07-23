@@ -6,33 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-       Schema::create('newwarrooms', function (Blueprint $table) {
-        $table->id();
-        $table->date('tgl')->nullable();
-        $table->string('agenda')->nullable();
-        $table->string('uic')->nullable();   
-        $table->text('peserta')->nullable();
-        $table->text('pembahasan')->nullable();
-        $table->text('action_plan')->nullable();
-        $table->text('support_needed')->nullable();
-        $table->text('info_kompetitor')->nullable();
-        $table->integer('jumlah_action_plan')->nullable();
-        $table->text('update_action_plan')->nullable();
-        $table->string('status_action_plan')->nullable();
-        $table->timestamps();
+        Schema::create('newwarroom', function (Blueprint $table) {
+            $table->id();
+            $table->date('tgl')->nullable();
+            $table->string('agenda')->nullable();
+            $table->string('uic')->nullable();   
+            $table->text('peserta')->nullable();
+            $table->text('pembahasan')->nullable();
+            $table->text('support_needed')->nullable();
+            $table->text('info_kompetitor')->nullable();
+            $table->integer('jumlah_action_plan')->default(0); // sesuai alter
+            $table->unsignedBigInteger('supportneeded_id')->nullable(); // sesuai alter (nanti bisa relasi FK)
+            $table->timestamps();
+
+            // Langsung tambahkan index (sesuai alter)
+            $table->index('tgl');
+            $table->index('agenda');
+            $table->index('uic');
+            $table->index('supportneeded_id');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('newwarroom_controllers');
+        Schema::dropIfExists('newwarrooms');
     }
 };
