@@ -310,6 +310,13 @@ body {
     max-width: 100px;
 }
 
+.table th.col-approval,
+.table td.col-approval {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
 .table th.col-progress,
 .table td.col-progress {
     width: 120px;

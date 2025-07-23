@@ -84,10 +84,13 @@ Route::middleware(['auth'])->group(function () {
     // Support needed routes
     Route::get('/supportneeded/detail', [SupportneededController::class, 'getDetail'])->name('supportneeded.detail');
     Route::resource('supportneeded', SupportneededController::class)->except(['show']);
-
+    // Untuk update approval status
+    Route::post('supportneeded/{id}/approval', [SupportNeededController::class, 'updateApproval'])->name('supportneeded.update-approval');
+    Route::post('supportneeded/{id}/progress', [SupportNeededController::class, 'updateProgress'])->name('supportneeded.update-progress');
 
     // Summary routes
-    Route::resource('newsummary', SumController::class);
+    Route::get('/newsummary', [SumController::class, 'index'])->name('summary.index');
+    Route::get('/summary/detail', [SumController::class, 'getDetail'])->name('summary.detail');
 
     // Warroom routes
     Route::resource('newwarroom', NewwarroomController::class);

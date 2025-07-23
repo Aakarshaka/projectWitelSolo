@@ -141,7 +141,6 @@
     .table-container1 {
         overflow: auto;
         max-height: 60vh;
-        /* atau tinggi sesuai kebutuhan */
         background: white;
         position: relative;
     }
@@ -167,6 +166,7 @@
         border-bottom: 1px solid #e0e0e0;
         vertical-align: top;
         word-wrap: break-word;
+        color: #333;
     }
 
     .detail-table tr:nth-child(even) {
@@ -189,10 +189,41 @@
         font-size: 12px;
         font-weight: 500;
         text-transform: uppercase;
+        display: inline-block;
     }
 
     .status-action {
         background-color: #ff9800;
+        color: white;
+    }
+
+    .status-eskalasi {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .status-support {
+        background-color: #2196f3;
+        color: white;
+    }
+
+    .progress-open {
+        background-color: #ff5722;
+        color: white;
+    }
+
+    .progress-discuss {
+        background-color: #ff9800;
+        color: white;
+    }
+
+    .progress-progress {
+        background-color: #2196f3;
+        color: white;
+    }
+
+    .progress-done {
+        background-color: #4caf50;
         color: white;
     }
 
@@ -284,35 +315,54 @@
 
 <script>
     function openDetailModal(type, value, progress) {
-        const modal = document.getElementById('detailModal');
-        const content = document.getElementById('detailContent');
-        content.innerHTML = '<p>Loading...</p>';
-        modal.style.display = 'block';
+    const modal = document.getElementById('detailModal');
+    const content = document.getElementById('detailContent');
+    const modalTitle = document.querySelector('.modal-title');
+    
+    // Update modal title
+    modalTitle.textContent = `Detail ${type.toUpperCase()} - ${value} (${progress})`;
+    
+    content.innerHTML = '<div class="loading">Loading data...</div>';
+    modal.style.display = 'block';
 
-        let url = '/supportneeded/detail?';
-        if (type === 'uic') {
-            url += `uic=${encodeURIComponent(value)}&progress=${encodeURIComponent(progress)}`;
-        } else if (type === 'agenda') {
-            url += `agenda=${encodeURIComponent(value)}&progress=${encodeURIComponent(progress)}`;
-        } else if (type === 'unit') {
-            url += `unit=${encodeURIComponent(value)}&progress=${encodeURIComponent(progress)}`;
-        } else {
-            content.innerHTML = '<p>Invalid request type.</p>';
-            return;
-        }
+    // Build URL dengan parameter yang benar
+    let url = '/summary/detail?';
+    url += `type=${encodeURIComponent(type)}`;
+    url += `&value=${encodeURIComponent(value)}`;
+    url += `&progress=${encodeURIComponent(progress)}`;
 
-        fetch(url)
-            .then(response => {
-                if (!response.ok) throw new Error("Failed to fetch");
-                return response.json();
-            })
-            .then(data => {
-                if (!Array.isArray(data) || data.length === 0) {
-                    content.innerHTML = '<p>No data found.</p>';
+    console.log('Fetching URL:', url); // Debug log
+
+    fetch(url)
+        .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error(`Route not found. Please check if the route '/summary/detail' is registered in routes/web.php`);
+                } else if (response.status === 500) {
+                    throw new Error(`Server error. Please check the server logs for more details.`);
                 } else {
-                    let html = '<div class="table-container1">';
-                    html += '<table class="detail-table">';
-                    html += `<thead><tr>
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Data received:', data); // Debug log
+            
+            // Check if response contains error
+            if (data.error) {
+                throw new Error(data.message || 'Server returned an error');
+            }
+            
+            if (!Array.isArray(data) || data.length === 0) {
+                content.innerHTML = '<div class="no-data">No data found for this filter.</div>';
+            } else {
+                let html = '<div class="table-container1">';
+                html += '<table class="detail-table">';
+                html += `<thead><tr>
                     <th>No</th>
                     <th>Agenda</th>
                     <th>Unit/Telda</th>
@@ -327,49 +377,156 @@
                     <th>Response UIC</th>
                 </tr></thead><tbody>`;
 
-                    data.forEach((item, index) => {
-                        const statusClass = item.status?.toLowerCase() === 'action' ? 'status-action' :
-                            item.status?.toLowerCase() === 'done' ? 'status-done' : 'status-pending-summary';
-                        html += `<tr>
+                data.forEach((item, index) => {
+                    // Status badge class
+                    let statusClass = 'status-badge-summary ';
+                    if (item.status === 'Action') statusClass += 'status-action';
+                    else if (item.status === 'Eskalasi') statusClass += 'status-eskalasi';
+                    else if (item.status === 'Support Needed') statusClass += 'status-support';
+                    else statusClass += 'status-action';
+
+                    // Progress badge class
+                    let progressClass = 'status-badge-summary ';
+                    if (item.progress === 'Open') progressClass += 'progress-open';
+                    else if (item.progress === 'Need Discuss') progressClass += 'progress-discuss';
+                    else if (item.progress === 'On Progress') progressClass += 'progress-progress';
+                    else if (item.progress === 'Done') progressClass += 'progress-done';
+
+                    // Format UIC to show multiple UICs clearly
+                    let uicDisplay = item.uic || '-';
+                    if (uicDisplay !== '-' && uicDisplay.includes(',')) {
+                        // Split by comma and trim spaces, then rejoin with proper formatting
+                        uicDisplay = uicDisplay.split(',').map(u => u.trim()).join(', ');
+                    }
+
+                    // Gunakan tanggal yang sudah diformat dari backend
+                    // Prioritas: formatted -> display -> original -> fallback
+                    const startDate = item.start_date_formatted || item.start_date_display || item.start_date || '-';
+                    const endDate = item.end_date_formatted || item.end_date_display || item.end_date || '-';
+
+                    // Gunakan completion_percentage dari backend, fallback ke complete
+                    const completionPercentage = item.completion_percentage || item.complete || 0;
+
+                    html += `<tr>
                         <td>${index + 1}</td>
                         <td>${item.agenda || '-'}</td>
                         <td>${item.unit_or_telda || '-'}</td>
-                        <td>${item.start_date || '-'}</td>
-                        <td>${item.end_date || '-'}</td>
+                        <td class="date-cell" title="${startDate}">${startDate}</td>
+                        <td class="date-cell" title="${endDate}">${endDate}</td>
                         <td>${item.off_day || 0}</td>
-                        <td>${item.notes_to_follow_up ? item.notes_to_follow_up.replace(/\n/g, '<br>') : '-'}</td>
-                        <td>${item.uic || '-'}</td>
-                        <td>${item.progress || '-'}</td>
+                        <td style="max-width: 200px; word-wrap: break-word;">${item.notes_to_follow_up ? item.notes_to_follow_up.replace(/\n/g, '<br>') : '-'}</td>
+                        <td><span title="${uicDisplay}">${uicDisplay}</span></td>
+                        <td><span class="${progressClass}">${item.progress || '-'}</span></td>
                         <td>
                             <div style="display: flex; align-items: center;">
-                                <span style="margin-right: 8px;">${item.complete || 0}%</span>
+                                <span style="margin-right: 8px;">${completionPercentage}%</span>
                                 <div class="progress-bar" style="width: 60px;">
-                                    <div class="progress-fill" style="width: ${item.complete || 0}%;"></div>
+                                    <div class="progress-fill" style="width: ${completionPercentage}%;"></div>
                                 </div>
                             </div>
                         </td>
-                        <td><span class="status-badge-summary ${statusClass}">${item.status || '-'}</span></td>
-                        <td>${item.response_uic ? item.response_uic.replace(/\n/g, '<br>') : '-'}</td>
+                        <td><span class="${statusClass}">${item.status || '-'}</span></td>
+                        <td style="max-width: 200px; word-wrap: break-word;">${item.response_uic ? item.response_uic.replace(/\n/g, '<br>') : '-'}</td>
                     </tr>`;
-                    });
+                });
 
-                    html += '</tbody></table>';
-                    content.innerHTML = html;
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-                content.innerHTML = '<p>Failed to load data.</p>';
-            });
-    }
+                html += '</tbody></table></div>';
+                content.innerHTML = html;
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+            
+            let errorMessage = 'Failed to load data. Please try again.';
+            
+            if (error.message.includes('Route not found')) {
+                errorMessage = `
+                    <div style="text-align: left; padding: 20px;">
+                        <h4 style="color: #f44336; margin-bottom: 10px;">Route Not Found Error</h4>
+                        <p>The route '/summary/detail' is not registered.</p>
+                        <p><strong>Solution:</strong> Add this route to your routes/web.php file:</p>
+                        <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; font-size: 12px; overflow-x: auto;">
+Route::get('/summary/detail', [SumController::class, 'getDetail'])->name('summary.detail');
+                        </pre>
+                        <p>Or check if the route is properly registered and accessible.</p>
+                    </div>
+                `;
+            } else if (error.message.includes('Server error')) {
+                errorMessage = `
+                    <div style="text-align: left; padding: 20px;">
+                        <h4 style="color: #f44336; margin-bottom: 10px;">Server Error</h4>
+                        <p>There was an error processing your request.</p>
+                        <p><strong>Solution:</strong> Check the Laravel logs for more details:</p>
+                        <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; font-size: 12px;">
+tail -f storage/logs/laravel.log
+                        </pre>
+                    </div>
+                `;
+            }
+            
+            content.innerHTML = `<div class="no-data">${errorMessage}</div>`;
+        });
+}
 
-    function closeDetailModal() {
-        document.getElementById('detailModal').style.display = 'none';
+function closeDetailModal() {
+    document.getElementById('detailModal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function (event) {
+    const modal = document.getElementById('detailModal');
+    if (event.target === modal) {
+        closeDetailModal();
     }
-    window.onclick = function (event) {
-        const modal = document.getElementById('detailModal');
-        if (event.target === modal) {
-            closeDetailModal();
+}
+
+// Close modal with ESC key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeDetailModal();
+    }
+});
+
+// Helper function to debug UIC matching
+function debugUicMatching(uic, searchValue) {
+    console.log('UIC Debug:', {
+        originalUic: uic,
+        searchValue: searchValue,
+        includesCheck: uic.includes(searchValue),
+        exactMatch: uic === searchValue,
+        splitUics: uic.split(',').map(u => u.trim()),
+        foundInSplit: uic.split(',').map(u => u.trim()).includes(searchValue)
+    });
+}
+
+// Helper function untuk format tanggal di JavaScript (jika diperlukan)
+function formatDateForDisplay(dateString) {
+    if (!dateString || dateString === '-') return '-';
+    
+    try {
+        // Jika sudah dalam format yang bagus, langsung return
+        if (dateString.includes(' ')) {
+            return dateString;
         }
+        
+        // Jika masih format lama, coba parse dan format ulang
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return dateString; // Jika tidak valid, return original
+        
+        // Format manual ke bahasa Indonesia
+        const months = [
+            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
+        
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        
+        return `${day} ${month} ${year}`;
+    } catch (error) {
+        console.warn('Error formatting date:', error);
+        return dateString; // Return original jika ada error
     }
+}
 </script>
