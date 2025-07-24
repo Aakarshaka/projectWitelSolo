@@ -33,7 +33,7 @@ class Newwarroom extends Model
     ];
 
     protected $casts = [
-        'tgl',
+        'tgl' => 'date',
         'start_date' => 'date',
         'end_date' => 'date',
         'off_day' => 'integer',
@@ -113,19 +113,31 @@ class Newwarroom extends Model
     }
 
     /**
-     * Scope untuk filter berdasarkan bulan
+     * Scope untuk filter berdasarkan bulan - gunakan tgl sebagai primary date field
      */
     public function scopeByMonth($query, $month)
     {
-        return $query->whereMonth('start_date', $month);
+        return $query->where(function ($q) use ($month) {
+            $q->whereMonth('tgl', $month)
+              ->orWhere(function ($subQ) use ($month) {
+                  $subQ->whereNull('tgl')
+                       ->whereMonth('start_date', $month);
+              });
+        });
     }
 
     /**
-     * Scope untuk filter berdasarkan tahun
+     * Scope untuk filter berdasarkan tahun - gunakan tgl sebagai primary date field
      */
     public function scopeByYear($query, $year)
     {
-        return $query->whereYear('start_date', $year);
+        return $query->where(function ($q) use ($year) {
+            $q->whereYear('tgl', $year)
+              ->orWhere(function ($subQ) use ($year) {
+                  $subQ->whereNull('tgl')
+                       ->whereYear('start_date', $year);
+              });
+        });
     }
 
     /**
@@ -197,5 +209,22 @@ class Newwarroom extends Model
             default:
                 return 'status-empty';
         }
+    }
+
+    /**
+     * Accessor untuk mendapatkan tanggal utama (tgl atau start_date)
+     */
+    public function getMainDateAttribute()
+    {
+        return $this->tgl ?? $this->start_date;
+    }
+
+    /**
+     * Accessor untuk format tanggal yang user-friendly
+     */
+    public function getFormattedMainDateAttribute()
+    {
+        $date = $this->main_date;
+        return $date ? $date->format('d/m/Y') : '-';
     }
 }
