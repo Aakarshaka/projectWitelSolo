@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Supportneeded;
 use App\Models\Newwarroom;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 
 class SupportneededController extends Controller
 {
@@ -13,289 +12,222 @@ class SupportneededController extends Controller
     {
         $query = Supportneeded::query();
 
-        if ($request->type_agenda) {
-            $query->where('agenda', $request->type_agenda);
-        }
-
-        if ($request->progress) {
-            $query->where('progress', $request->progress);
-        }
-
-        if ($request->status) {
-            $query->where('status', $request->status);
-        }
-
-        if ($request->unit_or_telda) {
-            $query->where('unit_or_telda', $request->unit_or_telda);
-        }
-
-        if ($request->uic) {
-            $query->where('uic', $request->uic);
-        }
-
-        if ($request->search) {
-            $query->where(function ($q) use ($request) {
-                $q->where('agenda', 'like', '%' . $request->search . '%')
-                    ->orWhere('unit_or_telda', 'like', '%' . $request->search . '%')
-                    ->orWhere('notes_to_follow_up', 'like', '%' . $request->search . '%')
-                    ->orWhere('uic', 'like', '%' . $request->search . '%')
-                    ->orWhere('progress', 'like', '%' . $request->search . '%')
-                    ->orWhere('status', 'like', '%' . $request->search . '%')
-                    ->orWhere('response_uic', 'like', '%' . $request->search . '%');
-            });
-        }
+        // Apply filters
+        $this->applyFilters($query, $request);
 
         $items = $query->get();
 
+        // Calculate statistics
+        $statistics = $this->calculateStatistics();
+
+        return view('supportneeded.supportneeded', array_merge(
+            compact('items'),
+            $statistics
+        ));
+    }
+
+    /**
+     * Apply filters to query
+     */
+    private function applyFilters($query, Request $request)
+    {
+        // ✅ Tambahkan 'status' ke dalam array filters
+        $filters = ['progress', 'status', 'unit_or_telda', 'uic'];
+
+        foreach ($filters as $filter) {
+            if ($request->filled($filter)) {
+                $query->where($filter, $request->$filter);
+            }
+        }
+
+        if ($request->filled('search')) {
+            $query->search($request->search);
+        }
+    }
+
+    /**
+     * Calculate dashboard statistics
+     */
+    private function calculateStatistics()
+    {
         $allItems = Supportneeded::all();
         $total = $allItems->count();
         $close = $allItems->where('progress', 'Done')->count();
         $closePercentage = $total > 0 ? round(($close / $total) * 100, 1) : 0;
 
-        $progressMap = [
-            'Open' => 0,
-            'Need Discuss' => 25,
-            'On Progress' => 75,
-            'Done' => 100,
-        ];
-
         $totalProgress = 0;
         $count = 0;
 
         foreach ($allItems as $item) {
-            if (isset($progressMap[$item->progress])) {
-                $totalProgress += $progressMap[$item->progress];
+            if (isset(Supportneeded::PROGRESS_MAP[$item->progress])) {
+                $totalProgress += Supportneeded::PROGRESS_MAP[$item->progress];
                 $count++;
             }
         }
 
         $avgProgress = $count > 0 ? round($totalProgress / $count, 1) : 0;
 
-        return view('supportneeded.supportneeded', compact(
-            'items',
-            'total',
-            'close',
-            'closePercentage',
-            'avgProgress'
-        ));
+        return compact('total', 'close', 'closePercentage', 'avgProgress');
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'agenda' => 'required|string',
-            'unit_or_telda' => 'nullable|string',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date',
-            'off_day' => 'nullable|integer',
-            'notes_to_follow_up' => 'nullable|string',
-            'uic' => 'nullable|string',
-            'progress' => 'nullable|string',
-            'complete' => 'nullable|integer|min:0|max:100',
-            'status' => 'nullable|string',
-            'response_uic' => 'nullable|string',
-        ]);
-
-        $escalationUics = ['RLEGS', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'RSMES', 'BPPLP', 'SSS'];
-        $supportNeededUics = ['BS', 'GS', 'RSO WITEL', 'SSGS', 'PRQ'];
-
-        if (empty($validated['unit_or_telda']) || empty($validated['uic'])) {
-            $status = '';
-        } elseif ($validated['unit_or_telda'] === $validated['uic']) {
-            $status = 'Action';
-        } elseif (in_array($validated['uic'], $escalationUics)) {
-            $status = 'Eskalasi';
-        } elseif (in_array($validated['uic'], $supportNeededUics)) {
-            $status = 'Support Needed';
-        } else {
-            $status = '';
-        }
-
-        $validated['status'] = $status;
-
-        // Logic untuk end_date dan off_day
-        $start = $validated['start_date'] ?? null;
-
-        // Jika progress = Done, set end_date ke hari ini
-        if ($validated['progress'] === 'Done') {
-            $validated['end_date'] = Carbon::now()->format('Y-m-d');
-        }
-
-        // Hitung off_day dinamis
-        if ($start) {
-            if ($validated['progress'] === 'Done' && $validated['end_date']) {
-                $validated['off_day'] = Carbon::parse($start)->diffInDays(Carbon::parse($validated['end_date'])) + 1;
-            } else {
-                $validated['off_day'] = Carbon::parse($start)->diffInDays(Carbon::now()) + 1;
-            }
-        } else {
-            $validated['off_day'] = 0;
-        }
-
-        // Hitung complete (berdasarkan progress jika kosong)
-        if (!isset($validated['complete'])) {
-            switch ($validated['progress']) {
-                case 'Open':
-                    $validated['complete'] = 0;
-                    break;
-                case 'Need Discuss':
-                    $validated['complete'] = 25;
-                    break;
-                case 'On Progress':
-                    $validated['complete'] = 75;
-                    break;
-                case 'Done':
-                    $validated['complete'] = 100;
-                    break;
-                default:
-                    $validated['complete'] = 0;
-            }
-        }
+        $validated = $this->validateRequest($request);
 
         $support = Supportneeded::create($validated);
+
         log_activity('create', $support, 'Menambahkan data Support Needed');
 
-        // Sinkronkan dengan warroom setelah berhasil create
+        // Sync with warroom
         $this->syncToWarroom($support);
 
-        return redirect()->route('supportneeded.index')->with('success', 'Data berhasil disimpan.');
+        // ✅ PERBAIKAN: Gunakan getOriginalFilterParams() yang sama dengan update
+        // untuk memastikan filter yang dipertahankan adalah filter dari URL, bukan dari form
+        $filterParams = $this->getOriginalFilterParams($request);
+
+        return redirect()->route('supportneeded.index', $filterParams)
+            ->with('success', 'Data berhasil disimpan.');
     }
 
     public function update(Request $request, Supportneeded $supportneeded)
     {
         $oldData = $supportneeded->toArray();
-
-        $validated = $request->validate([
-            'agenda' => 'required|string',
-            'unit_or_telda' => 'nullable|string',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date',
-            'off_day' => 'nullable|integer',
-            'notes_to_follow_up' => 'nullable|string',
-            'uic' => 'nullable|string',
-            'progress' => 'nullable|string',
-            'complete' => 'nullable|integer|min:0|max:100',
-            'status' => 'nullable|string',
-            'response_uic' => 'nullable|string',
-        ]);
-
-        $escalationUics = ['RLEGS', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'RSMES', 'BPPLP', 'SSS'];
-        $supportNeededUics = ['BS', 'GS', 'RSO WITEL', 'SSGS', 'PRQ'];
-
-        if (empty($validated['unit_or_telda']) || empty($validated['uic'])) {
-            $status = '';
-        } elseif ($validated['unit_or_telda'] === $validated['uic']) {
-            $status = 'Action';
-        } elseif (in_array($validated['uic'], $escalationUics)) {
-            $status = 'Eskalasi';
-        } elseif (in_array($validated['uic'], $supportNeededUics)) {
-            $status = 'Support Needed';
-        } else {
-            $status = '';
-        }
-
-        $validated['status'] = $status;
-
-        // Logic untuk end_date dan off_day
-        $start = $validated['start_date'] ?? null;
-
-        // Jika progress berubah menjadi Done, set end_date ke hari ini
-        if ($validated['progress'] === 'Done' && $supportneeded->progress !== 'Done') {
-            $validated['end_date'] = Carbon::now()->format('Y-m-d');
-        }
-        // Jika progress berubah dari Done ke status lain, hapus end_date
-        elseif ($validated['progress'] !== 'Done' && $supportneeded->progress === 'Done') {
-            $validated['end_date'] = null;
-        }
-
-        // Hitung off_day dinamis
-        if ($start) {
-            if ($validated['progress'] === 'Done' && $validated['end_date']) {
-                $diffInHours = Carbon::parse($start)->diffInHours(Carbon::parse($validated['end_date']));
-            } else {
-                $diffInHours = Carbon::parse($start)->diffInHours(Carbon::now());
-            }
-            $validated['off_day'] = ceil($diffInHours / 24);
-        } else {
-            $validated['off_day'] = 0;
-        }
-
-        // Hitung complete (berdasarkan progress jika kosong)
-        if (!isset($validated['complete'])) {
-            switch ($validated['progress']) {
-                case 'Open':
-                    $validated['complete'] = 0;
-                    break;
-                case 'Need Discuss':
-                    $validated['complete'] = 25;
-                    break;
-                case 'On Progress':
-                    $validated['complete'] = 75;
-                    break;
-                case 'Done':
-                    $validated['complete'] = 100;
-                    break;
-                default:
-                    $validated['complete'] = 0;
-            }
-        }
+        $validated = $this->validateRequest($request);
 
         $supportneeded->update($validated);
+
         log_activity('update', $supportneeded, 'Memperbarui data Support Needed', [
             'before' => $oldData,
             'after' => $supportneeded->toArray(),
         ]);
 
-        // Sinkronkan dengan warroom setelah update
+        // Sync with warroom
         $this->syncToWarroom($supportneeded);
 
-        return redirect()->route('supportneeded.index')->with('success', 'Data berhasil diperbarui.');
+        // ✅ Preserve filters from original request, bukan dari form data
+        $filterParams = $this->getOriginalFilterParams($request);
+
+        return redirect()->route('supportneeded.index', $filterParams)
+            ->with('success', 'Data berhasil diperbarui.');
+    }
+
+    public function destroy(Supportneeded $supportneeded, Request $request)
+    {
+        log_activity('delete', $supportneeded, 'Menghapus data Support Needed: ' . $supportneeded->agenda);
+
+        // Delete related warroom data
+        Newwarroom::where('supportneeded_id', $supportneeded->id)->delete();
+
+        $supportneeded->delete();
+
+        // ✅ PERBAIKAN: Gunakan getOriginalFilterParams() yang sama dengan store dan update
+        // untuk memastikan filter yang dipertahankan adalah filter dari URL
+        $filterParams = $this->getOriginalFilterParams($request);
+
+        return redirect()->route('supportneeded.index', $filterParams)
+            ->with('success', 'Agenda deleted');
     }
 
     /**
-     * Sinkronkan data supportneeded ke warroom
-     * Method ini diperbaiki untuk mengatasi masalah duplikasi dan null supportneeded_id
+     * Get filter parameters to preserve them during redirect
+     */
+    private function getFilterParams(Request $request)
+    {
+        $filterParams = [];
+        // ✅ Tambahkan 'status' ke dalam array filters
+        $filters = ['progress', 'status', 'unit_or_telda', 'uic', 'search'];
+
+        foreach ($filters as $filter) {
+            if ($request->filled($filter)) {
+                $filterParams[$filter] = $request->$filter;
+            }
+        }
+
+        return $filterParams;
+    }
+
+    /**
+     * ✅ Method baru untuk mendapatkan filter params dari URL/query parameters
+     * bukan dari form data yang dikirim via POST
+     */
+    /**
+     * ✅ Method untuk mendapatkan filter params dari URL/query parameters
+     * Digunakan untuk mempertahankan filter state setelah operasi CRUD
+     */
+    private function getOriginalFilterParams(Request $request)
+    {
+        $filterParams = [];
+        $filters = ['progress', 'status', 'unit_or_telda', 'uic', 'search'];
+
+        // ✅ PRIORITAS 1: Ambil dari query parameters (URL) - ini yang paling penting
+        foreach ($filters as $filter) {
+            $value = $request->query($filter);
+            if (!empty($value)) {
+                $filterParams[$filter] = $value;
+            }
+        }
+
+        // ✅ PRIORITAS 2: Ambil dari hidden inputs (dari form POST) untuk setiap filter
+        // yang belum ada di query parameters
+        foreach ($filters as $filter) {
+            // Jika filter ini belum ada di filterParams (dari query), cek di hidden inputs
+            if (!isset($filterParams[$filter])) {
+                $hiddenValue = $request->input("filter_{$filter}");
+                if (!empty($hiddenValue)) {
+                    $filterParams[$filter] = $hiddenValue;
+                }
+            }
+        }
+
+        return $filterParams;
+    }
+
+    /**
+     * Validate request data
+     */
+    private function validateRequest(Request $request)
+    {
+        return $request->validate([
+            'agenda' => 'required|string',
+            'unit_or_telda' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'notes_to_follow_up' => 'nullable|string',
+            'uic' => 'nullable|string',
+            'progress' => 'nullable|string',
+            'response_uic' => 'nullable|string',
+        ]);
+    }
+
+    /**
+     * Sync data with warroom table
      */
     private function syncToWarroom(Supportneeded $supportneeded)
     {
         if ($supportneeded->status === 'Action') {
-            // Jika status = Action, buat atau update data di warroom
             Newwarroom::updateOrCreate(
-                ['supportneeded_id' => $supportneeded->id], // Cari berdasarkan supportneeded_id
+                ['supportneeded_id' => $supportneeded->id],
                 [
                     'tgl' => $supportneeded->start_date,
                     'agenda' => $supportneeded->agenda,
                     'uic' => $supportneeded->uic,
                     'support_needed' => $supportneeded->notes_to_follow_up,
-                    'peserta' => null, // Set default jika diperlukan
+                    'peserta' => null,
                     'pembahasan' => null,
                     'action_plan' => null,
                     'info_kompetitor' => null,
                     'jumlah_action_plan' => 0,
                     'update_action_plan' => null,
                     'status_action_plan' => $supportneeded->status,
-                    'supportneeded_id' => $supportneeded->id, // Pastikan supportneeded_id diset
+                    'supportneeded_id' => $supportneeded->id,
                 ]
             );
         } else {
-            // Jika status bukan Action, hapus dari warroom jika ada
             Newwarroom::where('supportneeded_id', $supportneeded->id)->delete();
         }
     }
 
-    public function destroy(Supportneeded $supportneeded)
-    {
-        log_activity('delete', $supportneeded, 'Menghapus data Support Needed: ' . $supportneeded->agenda);
-
-        // Hapus data warroom yang terkait secara manual (karena tidak ada foreign key constraint)
-        Newwarroom::where('supportneeded_id', $supportneeded->id)->delete();
-
-        $supportneeded->delete();
-        return back()->with('success', 'Agenda deleted');
-    }
-
     /**
-     * Method to get detail data for popup by UIC and Progress
+     * Get detail data for popup (API endpoint)
      */
     public function getDetail(Request $request)
     {
@@ -308,22 +240,19 @@ class SupportneededController extends Controller
             return response()->json(['message' => 'Missing progress parameter'], 400);
         }
 
+        $query = Supportneeded::where('progress', $progress);
+
         if ($uic) {
-            $data = Supportneeded::where('uic', $uic)
-                ->where('progress', $progress)
-                ->get();
+            $query->where('uic', $uic);
         } elseif ($agenda) {
-            $data = Supportneeded::where('agenda', $agenda)
-                ->where('progress', $progress)
-                ->get();
+            $query->where('agenda', $agenda);
         } elseif ($unit) {
-            $data = Supportneeded::where('unit_or_telda', $unit)
-                ->where('progress', $progress)
-                ->get();
+            $query->where('unit_or_telda', $unit);
         } else {
             return response()->json(['message' => 'Missing query parameter'], 400);
         }
 
+        $data = $query->get();
         return response()->json($data);
     }
 }

@@ -89,6 +89,28 @@
                         <label class="filter-label">UIC</label>
                         <select class="filter-select" name="uic">
                             <option value="">All UIC</option>
+                            <option value="TELDA BLORA" {{ request('uic') == 'TELDA BLORA' ? 'selected' : '' }}>TELDA
+                                BLORA</option>
+                            <option value="TELDA BOYOLALI" {{ request('uic') == 'TELDA BOYOLALI' ? 'selected' : '' }}>
+                                TELDA BOYOLALI</option>
+                            <option value="TELDA JEPARA" {{ request('uic') == 'TELDA JEPARA' ? 'selected' : '' }}>TELDA
+                                JEPARA</option>
+                            <option value="TELDA KLATEN" {{ request('uic') == 'TELDA KLATEN' ? 'selected' : '' }}>TELDA
+                                KLATEN</option>
+                            <option value="TELDA KUDUS" {{ request('uic') == 'TELDA KUDUS' ? 'selected' : '' }}>TELDA
+                                KUDUS</option>
+                            <option value="MEA SOLO" {{ request('uic') == 'MEA SOLO' ? 'selected' : '' }}>MEA SOLO
+                            </option>
+                            <option value="TELDA PATI" {{ request('uic') == 'TELDA PATI' ? 'selected' : '' }}>TELDA PATI
+                            </option>
+                            <option value="TELDA PURWODADI" {{ request('uic') == 'TELDA PURWODADI' ? 'selected' : '' }}>
+                                TELDA PURWODADI</option>
+                            <option value="TELDA REMBANG" {{ request('uic') == 'TELDA REMBANG' ? 'selected' : '' }}>TELDA
+                                REMBANG</option>
+                            <option value="TELDA SRAGEN" {{ request('uic') == 'TELDA SRAGEN' ? 'selected' : '' }}>TELDA
+                                SRAGEN</option>
+                            <option value="TELDA WONOGIRI" {{ request('uic') == 'TELDA WONOGIRI' ? 'selected' : '' }}>
+                                TELDA WONOGIRI</option>
                             <option value="BS" {{ request('uic') == 'BS' ? 'selected' : '' }}>BS</option>
                             <option value="GS" {{ request('uic') == 'GS' ? 'selected' : '' }}>GS</option>
                             <option value="RLEGS" {{ request('uic') == 'RLEGS' ? 'selected' : '' }}>RLEGS</option>

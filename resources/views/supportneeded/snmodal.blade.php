@@ -271,6 +271,17 @@
                         <label class="sn-form-label">UIC</label>
                         <select class="sn-form-select" name="uic">
                             <option value="">Select UIC</option>
+                            <option value="TELDA BLORA">TELDA BLORA</option>
+                            <option value="TELDA BOYOLALI">TELDA BOYOLALI</option>
+                            <option value="TELDA JEPARA">TELDA JEPARA</option>
+                            <option value="TELDA KLATEN">TELDA KLATEN</option>
+                            <option value="TELDA KUDUS">TELDA KUDUS</option>
+                            <option value="MEA SOLO">MEA SOLO</option>
+                            <option value="TELDA PATI">TELDA PATI</option>
+                            <option value="TELDA PURWODADI">TELDA PURWODADI</option>
+                            <option value="TELDA REMBANG">TELDA REMBANG</option>
+                            <option value="TELDA SRAGEN">TELDA SRAGEN</option>
+                            <option value="TELDA WONOGIRI">TELDA WONOGIRI</option>
                             <option value="BS">BS</option>
                             <option value="GS">GS</option>
                             <option value="RLEGS">RLEGS</option>
@@ -440,14 +451,14 @@
     }
 
     // Close modal when clicking outside
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
         if (event.target.classList.contains('sn-modal')) {
             closeModal(event.target.id);
         }
     });
 
     // Close modal with Escape key
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') {
             const openModal = document.querySelector('.sn-modal.show');
             if (openModal) {
@@ -455,6 +466,47 @@
             }
         }
     });
+
+    /**
+     * ✅ Function untuk mendapatkan current filter parameters dari URL
+     */
+    function getCurrentFilters() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const filters = {};
+
+        // Daftar filter yang perlu dipreservasi
+        const filterKeys = ['progress', 'status', 'unit_or_telda', 'uic', 'search'];
+
+        filterKeys.forEach(key => {
+            const value = urlParams.get(key);
+            if (value) {
+                filters[key] = value;
+            }
+        });
+
+        return filters;
+    }
+
+    /**
+     * ✅ Function untuk menambahkan hidden inputs ke form
+     */
+    function addHiddenFiltersToForm(form) {
+        const currentFilters = getCurrentFilters();
+
+        // Remove existing hidden filter inputs
+        const existingHiddenInputs = form.querySelectorAll('input[data-filter-param="true"]');
+        existingHiddenInputs.forEach(input => input.remove());
+
+        // Add current filters as hidden inputs
+        Object.keys(currentFilters).forEach(key => {
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = `filter_${key}`; // Prefix to avoid conflicts
+            hiddenInput.value = currentFilters[key];
+            hiddenInput.setAttribute('data-filter-param', 'true');
+            form.appendChild(hiddenInput);
+        });
+    }
 
     // Function to populate edit form (call this when edit button is clicked)
     function populateEditForm(data) {
@@ -466,18 +518,61 @@
         document.getElementById('edit_notes_to_follow_up').value = data.notes_to_follow_up || '';
         document.getElementById('edit_response_uic').value = data.response_uic || '';
 
-        document.getElementById('editSupportForm').action = '/supportneeded/' + data.id;
+        // ✅ Update form action dengan current filters
+        const currentFilters = getCurrentFilters();
+        const filterQuery = new URLSearchParams(currentFilters).toString();
+        const baseAction = '/supportneeded/' + data.id;
+
+        document.getElementById('editSupportForm').action = baseAction + (filterQuery ? '?' + filterQuery : '');
+
+        // ✅ Tambahkan hidden inputs untuk filters
+        addHiddenFiltersToForm(document.getElementById('editSupportForm'));
     }
 
-    // Update the Add Support button to use the new modal
-    document.addEventListener('DOMContentLoaded', function() {
+    // ✅ Event listener untuk form submissions
+    document.addEventListener('DOMContentLoaded', function () {
         const startDateInput = document.getElementById('add_start_date');
+        const addForm = document.getElementById('addSupportForm');
+        const editForm = document.getElementById('editSupportForm');
 
         if (startDateInput) {
-            // Kalau di masa depan kamu mau kasih validasi start_date khusus, bisa pasang event listener di sini
-            startDateInput.addEventListener('change', function() {
+            startDateInput.addEventListener('change', function () {
                 // contoh: console.log("Start date selected: " + startDateInput.value);
             });
         }
+
+        // ✅ Add filters to add form before submission
+        if (addForm) {
+            addForm.addEventListener('submit', function (e) {
+                addHiddenFiltersToForm(this);
+            });
+        }
+
+        // ✅ Add filters to edit form before submission (backup)
+        if (editForm) {
+            editForm.addEventListener('submit', function (e) {
+                addHiddenFiltersToForm(this);
+            });
+        }
     });
+
+    /**
+     * ✅ Enhanced function untuk handle edit button click
+     * Panggil function ini dari edit button di tabel
+     */
+    function openEditModal(data) {
+        populateEditForm(data);
+        openModal('editSupportModal');
+    }
+
+    /**
+     * ✅ Enhanced function untuk handle add button click
+     */
+    function openAddModal() {
+        // Clear form
+        document.getElementById('addSupportForm').reset();
+        // Add current filters
+        addHiddenFiltersToForm(document.getElementById('addSupportForm'));
+        openModal('addSupportModal');
+    }
 </script>
