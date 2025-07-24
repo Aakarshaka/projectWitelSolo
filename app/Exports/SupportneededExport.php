@@ -100,7 +100,6 @@ class SupportneededExport implements
             $row->off_day ?? '-',
             $row->notes_to_follow_up ?? '-',
             $row->uic ?? '-',
-            $this->getUicApprovalStatus($row->uic_approvals ?? '', $row->uic ?? ''),
             $row->progress ?? '-',
             ($row->complete ?? 0) . '%',
             $this->getStatusBadge($row->status ?? ''),
@@ -111,11 +110,11 @@ class SupportneededExport implements
     public function styles(Worksheet $sheet)
     {
         $lastRow = $this->totalRows; // Total rows sesuai data yang ada
-        $lastColumn = 'M'; // Kolom terakhir (13 kolom = M)
+        $lastColumn = 'L'; // Kolom terakhir (13 kolom = M)
         
         return [
             // Style untuk header kolom (ROW 8)
-            'A8:M8' => [
+            'A8:L8' => [
                 'font' => [
                     'bold' => true,
                     'size' => 11,
@@ -138,7 +137,7 @@ class SupportneededExport implements
             ],
             
             // Style untuk semua data (mulai ROW 9)
-            "A9:M$lastRow" => [
+            "A9:L$lastRow" => [
                 'font' => [
                     'size' => 10,
                 ],
@@ -162,14 +161,13 @@ class SupportneededExport implements
             "E9:E$lastRow" => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]], // End Date
             "F9:F$lastRow" => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]], // Off Day
             "H9:H$lastRow" => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]], // UIC
-            "I9:I$lastRow" => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]], // UIC Approval Status
-            "J9:J$lastRow" => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]], // Progress
-            "K9:K$lastRow" => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]], // % Complete
-            "L9:L$lastRow" => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]], // Status
+            "J9:I$lastRow" => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]], // Progress
+            "K9:J$lastRow" => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]], // % Complete
+            "L9:K$lastRow" => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]], // Status
             
             // Left alignment untuk notes dan response (tetap middle vertical)
             "G9:G$lastRow" => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT]], // Notes to Follow Up
-            "M9:M$lastRow" => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT]], // Response UIC
+            "M9:L$lastRow" => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT]], // Response UIC
         ];
     }
 
@@ -184,11 +182,10 @@ class SupportneededExport implements
             'F' => 10,  // Off Day
             'G' => 35,  // Notes to Follow Up
             'H' => 8,   // UIC
-            'I' => 15,  // UIC Approval Status
-            'J' => 12,  // Progress
-            'K' => 12,  // % Complete
-            'L' => 15,  // Status
-            'M' => 35,  // Response UIC
+            'I' => 12,  // Progress
+            'J' => 12,  // % Complete
+            'K' => 15,  // Status
+            'L' => 35,  // Response UIC
         ];
     }
 
@@ -199,10 +196,10 @@ class SupportneededExport implements
                 $sheet = $event->sheet->getDelegate();
                 
                 // ROW 1: JUDUL UTAMA
-                $sheet->mergeCells('A1:M1');
+                $sheet->mergeCells('A1:L1');
                 $sheet->setCellValue('A1', 'SUPPORT NEEDED MANAGEMENT');
                 $sheet->getRowDimension(1)->setRowHeight(40);
-                $sheet->getStyle('A1:M1')->applyFromArray([
+                $sheet->getStyle('A1:L1')->applyFromArray([
                     'font' => [
                         'bold' => true,
                         'size' => 18,
@@ -229,10 +226,10 @@ class SupportneededExport implements
                 
                 // ROW 3: INFORMASI PERIODE
                 $currentMonth = Carbon::now()->locale('id')->isoFormat('MMMM YYYY');
-                $sheet->mergeCells('A3:M3');
+                $sheet->mergeCells('A3:L3');
                 $sheet->setCellValue('A3', "Periode: {$currentMonth} | Total Support: {$this->statistics['total']} Items");
                 $sheet->getRowDimension(3)->setRowHeight(25);
-                $sheet->getStyle('A3:M3')->applyFromArray([
+                $sheet->getStyle('A3:L3')->applyFromArray([
                     'font' => [
                         'bold' => true,
                         'size' => 12,
@@ -276,7 +273,6 @@ class SupportneededExport implements
                     '# OFF DAY', 
                     'NOTES TO FOLLOW UP', 
                     'UIC', 
-                    'UIC APPROVAL STATUS', 
                     'PROGRESS', 
                     '% COMPLETE', 
                     'STATUS', 
@@ -347,9 +343,9 @@ class SupportneededExport implements
         ]);
         
         // Card 3: Actual Progress
-        $sheet->mergeCells('J5:M5');
+        $sheet->mergeCells('J5:L5');
         $sheet->setCellValue('J5', 'Actual Progress');
-        $sheet->getStyle('J5:M5')->applyFromArray([
+        $sheet->getStyle('J5:L5')->applyFromArray([
             'fill' => [
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => ['argb' => '20C997'], // Hijau
@@ -424,9 +420,9 @@ class SupportneededExport implements
         ]);
         
         // Value 3: Actual Progress
-        $sheet->mergeCells('J6:M6');
+        $sheet->mergeCells('J6:L6');
         $sheet->setCellValue('J6', $this->statistics['actual_progress'] . '%');
-        $sheet->getStyle('J6:M6')->applyFromArray([
+        $sheet->getStyle('J6:L6')->applyFromArray([
             'fill' => [
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => ['argb' => 'FFFFFF'],
@@ -484,41 +480,6 @@ class SupportneededExport implements
             'close_percentage' => $closePercentage,
             'actual_progress' => $actualProgress,
         ];
-    }
-
-    private function getUicApprovalStatus($uicApprovals, $uic)
-    {
-        if (empty($uic)) {
-            return '-';
-        }
-
-        if (empty($uicApprovals)) {
-            return '⏳ Pending';
-        }
-
-        $approvals = json_decode($uicApprovals, true);
-        if (!is_array($approvals)) {
-            return '⏳ Pending';
-        }
-
-        $uics = explode(',', $uic);
-        $approvedCount = 0;
-        $totalCount = count($uics);
-
-        foreach ($uics as $singleUic) {
-            $trimmedUic = trim($singleUic);
-            if (isset($approvals[$trimmedUic]) && $approvals[$trimmedUic] === true) {
-                $approvedCount++;
-            }
-        }
-
-        if ($approvedCount === $totalCount) {
-            return '✅ Approved';
-        } elseif ($approvedCount > 0) {
-            return "🔄 Partial ({$approvedCount}/{$totalCount})";
-        } else {
-            return '⏳ Pending';
-        }
     }
 
     private function getStatusBadge($status)
