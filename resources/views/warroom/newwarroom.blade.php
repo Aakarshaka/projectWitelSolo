@@ -20,11 +20,11 @@
                     <div class="stat-label-wr">Jumlah Agenda</div>
                     <div class="stat-value-wr">{{ $jumlah_agenda }}</div>
                 </div>
-                <a href="{{ url('/newwarroom/export') }}" class="add-btn" type="button">
-                    Export to Excel
+                <a href="{{ url('/newwarroom/export') }}" style="underline:none" class="add-btn" type="button">
+                    EXCEL
                 </a>
 
-                <button class="add-btn-wr" type="button" onclick="openModal('addModal')">ADD+</button>
+                <button class="add-btn" type="button" onclick="openModal('addModal')">ADD+</button>
             </div>
         </div>
 
@@ -98,6 +98,8 @@
                         <h3 class="filter-title-wr">Filter Data</h3>
                         <form method="GET" class="filter-form-wr">
                             <div class="filter-inputs-wr">
+
+                                {{-- ✅ Filter Bulan --}}
                                 <div class="filter-group-wr">
                                     <label for="bulan" class="filter-label-wr">Bulan</label>
                                     <select name="bulan" class="filter-select-wr">
@@ -116,16 +118,31 @@
                                     </select>
                                 </div>
 
+                                {{-- ✅ Filter Tahun (Dinamis) --}}
                                 <div class="filter-group-wr">
                                     <label for="tahun" class="filter-label-wr">Tahun</label>
                                     <select name="tahun" class="filter-select-wr">
                                         <option value="" {{ empty($tahun) ? 'selected' : '' }}>All</option>
-                                        @for ($y = 2023; $y <= 2030; $y++)
-                                            <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
-                                            @endfor
+                                        @foreach ($tahunList as $t)
+                                        <option value="{{ $t }}" {{ $tahun == $t ? 'selected' : '' }}>{{ $t }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
 
+                                {{-- ✅ Filter UIC (Statis dari Controller) --}}
+                                <div class="filter-group-wr">
+                                    <label for="uic" class="filter-label-wr">UIC</label>
+                                    <select name="uic" class="filter-select-wr">
+                                        <option value="" {{ empty($uic) ? 'selected' : '' }}>All</option>
+                                        @foreach ($uicList as $option)
+                                        <option value="{{ $option }}" {{ $uic == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                {{-- ✅ Tombol Filter --}}
                                 <div class="filter-group-wr">
                                     <button type="submit" class="filter-btn-wr">
                                         <i class="fas fa-filter"></i> Filter
@@ -234,8 +251,7 @@
                                         Edit
                                     </button>
                                     <form action="{{ route('newwarroom.destroy', $item->id) }}" method="POST"
-                                        style="display:inline-block;"
-                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                        style="display:inline-block;" class="delete-form">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn-wr btn-sm btn-danger">
@@ -262,5 +278,6 @@
 @include('warroom.wrmodal')
 @push('scripts')
 <script src="{{ asset('js/tablescript.js') }}"></script>
+<script src="{{ asset('js/wrscript.js') }}"></script>
 @endpush
 @endsection

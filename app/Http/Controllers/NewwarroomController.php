@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\DB;
 
 class NewwarroomController extends Controller
 {
+    private function getFilterParams(Request $request)
+    {
+        return $request->only(['bulan', 'tahun', 'uic', 'search']);
+    }
+
     /**
      * ✅ Tampilkan daftar data warroom dengan filter & search
      */
@@ -18,6 +23,7 @@ class NewwarroomController extends Controller
     {
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun');
+        $uic = $request->input('uic');
         $search = $request->input('search');
 
         $query = Newwarroom::with(['actionPlans', 'supportneeded']);
@@ -30,6 +36,10 @@ class NewwarroomController extends Controller
             $query->byYear($tahun);
         }
 
+        if (!empty($uic)) {
+            $query->where('uic', 'like', '%' . $uic . '%');
+        }
+
         if (!empty($search)) {
             $query->search($search);
         }
@@ -38,7 +48,7 @@ class NewwarroomController extends Controller
             ->orderBy('tgl', 'asc')
             ->get();
 
-        // ✅ Statistik
+        // Statistik
         $jumlah_agenda = $warroomData->count();
         $nama_agenda = $warroomData->pluck('agenda')->unique()->values();
         $jumlah_action_plan = $warroomData->sum('jumlah_action_plan');
@@ -54,6 +64,42 @@ class NewwarroomController extends Controller
             'open' => ActionPlan::whereIn('newwarroom_id', $warroomData->pluck('id'))->where('status_action_plan', 'Open')->count(),
         ];
 
+        // ✅ Tahun Dinamis dari data tgl
+        $tahunList = Newwarroom::selectRaw('YEAR(tgl) as tahun')
+            ->whereNotNull('tgl')
+            ->distinct()
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun');
+
+        // ✅ UIC Statis
+        $uicList = [
+            "TELDA BLORA",
+            "TELDA BOYOLALI",
+            "TELDA JEPARA",
+            "TELDA KLATEN",
+            "TELDA KUDUS",
+            "TELDA MEA SOLO",
+            "TELDA PATI",
+            "TELDA PURWODADI",
+            "TELDA REMBANG",
+            "TELDA SRAGEN",
+            "TELDA WONOGIRI",
+            "BS",
+            "GS",
+            "RLEGS",
+            "RSO REGIONAL",
+            "RSO WITEL",
+            "ED",
+            "TIF",
+            "TSEL",
+            "GSD",
+            "SSGS",
+            "PRQ",
+            "RSMES",
+            "BPPLP",
+            "SSS"
+        ];
+
         return view('warroom.newwarroom', compact(
             'warroomData',
             'jumlah_agenda',
@@ -63,6 +109,9 @@ class NewwarroomController extends Controller
             'action_plan_stats',
             'bulan',
             'tahun',
+            'uic',
+            'uicList',
+            'tahunList',
             'search'
         ));
     }
@@ -120,6 +169,33 @@ class NewwarroomController extends Controller
 
             DB::commit();
             return redirect()->route('newwarroom.index')->with('success', 'Data berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+        }
+        DB::beginTransaction();
+
+        try {
+            $warroom = Newwarroom::create($validated);
+
+            for ($i = 1; $i <= $jumlah; $i++) {
+                ActionPlan::create([
+                    'newwarroom_id' => $warroom->id,
+                    'plan_number' => $i,
+                    'action_plan' => $request->input("action_plan_{$i}"),
+                    'update_action_plan' => $request->input("update_action_plan_{$i}"),
+                    'status_action_plan' => $request->input("status_action_plan_{$i}"),
+                ]);
+            }
+
+            log_activity('create', $warroom, 'Menambahkan data Warroom dengan ' . $jumlah . ' action plans');
+
+            DB::commit();
+
+            // ✅ PERUBAHAN: Preserve filter parameters
+            $filterParams = $this->getFilterParams($request);
+            return redirect()->route('newwarroom.index', $filterParams)
+                ->with('success', 'Data berhasil ditambahkan.');
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
@@ -199,6 +275,40 @@ class NewwarroomController extends Controller
             DB::rollback();
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
         }
+
+        DB::beginTransaction();
+
+        try {
+            $old = $newwarroom->toArray();
+            $newwarroom->update($validated);
+
+            // Hapus & ganti action plans
+            $newwarroom->actionPlans()->delete();
+            for ($i = 1; $i <= $jumlah; $i++) {
+                ActionPlan::create([
+                    'newwarroom_id' => $newwarroom->id,
+                    'plan_number' => $i,
+                    'action_plan' => $request->input("action_plan_{$i}"),
+                    'update_action_plan' => $request->input("update_action_plan_{$i}"),
+                    'status_action_plan' => $request->input("status_action_plan_{$i}"),
+                ]);
+            }
+
+            log_activity('update', $newwarroom, 'Mengubah data Warroom dengan ' . $jumlah . ' action plans', [
+                'before' => $old,
+                'after' => $newwarroom->toArray(),
+            ]);
+
+            DB::commit();
+
+            // ✅ PERUBAHAN: Preserve filter parameters
+            $filterParams = $this->getFilterParams($request);
+            return redirect()->route('newwarroom.index', $filterParams)
+                ->with('success', 'Data berhasil diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+        }
     }
 
     /**
@@ -212,10 +322,18 @@ class NewwarroomController extends Controller
             log_activity('delete', $newwarroom, 'Menghapus Warroom: ' . $newwarroom->agenda);
             $newwarroom->delete();
             DB::commit();
-            return redirect()->route('newwarroom.index')->with('success', 'Data berhasil dihapus.');
+
+            // ✅ PERUBAHAN: Preserve filter parameters
+            $filterParams = $this->getFilterParams($request);
+            return redirect()->route('newwarroom.index', $filterParams)
+                ->with('success', 'Data berhasil dihapus.');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->route('newwarroom.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+
+            // ✅ PERUBAHAN: Preserve filter parameters untuk error juga
+            $filterParams = $this->getFilterParams($request);
+            return redirect()->route('newwarroom.index', $filterParams)
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 

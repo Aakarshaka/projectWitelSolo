@@ -242,17 +242,6 @@
         color: #dc3545;
     }
 
-    .demo-btn {
-        background: #4a0e4e;
-        color: white;
-        padding: 15px 30px;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
-        margin: 10px;
-    }
-
     .jumlah-action-highlight {
         display: flex;
         justify-content: space-between;
@@ -396,6 +385,17 @@
                         <label class="wr-form-label">UIC</label>
                         <select class="wr-form-select" name="uic">
                             <option value="">Select UIC</option>
+                            <option value="TELDA BLORA">TELDA BLORA</option>
+                            <option value="TELDA BOYOLALI">TELDA BOYOLALI</option>
+                            <option value="TELDA JEPARA">TELDA JEPARA</option>
+                            <option value="TELDA KLATEN">TELDA KLATEN</option>
+                            <option value="TELDA KUDUS">TELDA KUDUS</option>
+                            <option value="TELDA MEA SOLO">MEA SOLO</option>
+                            <option value="TELDA PATI">TELDA PATI</option>
+                            <option value="TELDA PURWODADI">TELDA PURWODADI</option>
+                            <option value="TELDA REMBANG">TELDA REMBANG</option>
+                            <option value="TELDA SRAGEN">TELDA SRAGEN</option>
+                            <option value="TELDA WONOGIRI">TELDA WONOGIRI</option>
                             <option value="BS">BS</option>
                             <option value="GS">GS</option>
                             <option value="RLEGS">RLEGS</option>
@@ -496,6 +496,17 @@
                         <label class="wr-form-label">UIC</label>
                         <select class="wr-form-select" name="uic">
                             <option value="">Select UIC</option>
+                            <option value="TELDA BLORA" {{ $item->uic == 'TELDA BLORA' ? 'selected' : '' }}>TELDA BLORA</option>
+                            <option value="TELDA BOYOLALI" {{ $item->uic == 'TELDA BOYOLALI' ? 'selected' : '' }}>TELDA BOYOLALI</option>
+                            <option value="TELDA JEPARA" {{ $item->uic == 'TELDA JEPARA' ? 'selected' : '' }}>TELDA JEPARA</option>
+                            <option value="TELDA KLATEN" {{ $item->uic == 'TELDA KLATEN' ? 'selected' : '' }}>TELDA KLATEN</option>
+                            <option value="TELDA KUDUS" {{ $item->uic == 'TELDA KUDUS' ? 'selected' : '' }}>TELDA KUDUS</option>
+                            <option value="TELDA MEA SOLO" {{ $item->uic == 'MEA SOLO' ? 'selected' : '' }}>MEA SOLO</option>
+                            <option value="TELDA PATI" {{ $item->uic == 'TELDA PATI' ? 'selected' : '' }}>TELDA PATI</option>
+                            <option value="TELDA PURWODADI" {{ $item->uic == 'TELDA PURWODADI' ? 'selected' : '' }}>TELDA PURWODADI</option>
+                            <option value="TELDA REMBANG" {{ $item->uic == 'TELDA REMBANG' ? 'selected' : '' }}>TELDA REMBANG</option>
+                            <option value="TELDA SRAGEN" {{ $item->uic == 'TELDA SRAGEN' ? 'selected' : '' }}>TELDA SRAGEN</option>
+                            <option value="TELDA WONOGIRI" {{ $item->uic == 'TELDA WONOGIRI' ? 'selected' : '' }}>TELDA WONOGIRI</option>
                             <option value="BS" {{ $item->uic == 'BS' ? 'selected' : '' }}>BS</option>
                             <option value="GS" {{ $item->uic == 'GS' ? 'selected' : '' }}>GS</option>
                             <option value="RLEGS" {{ $item->uic == 'RLEGS' ? 'selected' : '' }}>RLEGS</option>
@@ -566,116 +577,135 @@
 @endforeach
 
 <script>
-    // Global object untuk menyimpan data action plans
-    let actionPlansData = {};
+// Global object untuk menyimpan data action plans
+let actionPlansData = {};
 
-    function enableEditActionPlan(itemId) {
-        const input = document.getElementById(`jumlahActionEdit${itemId}`);
-        const changeBtn = event.target;
-        const generateBtn = document.getElementById(`generateBtn${itemId}`);
+// Helper function untuk mendapatkan info modal
+function getModalInfo(modalType) {
+    const isEdit = modalType.startsWith('edit');
+    const itemId = isEdit ? modalType.replace('edit', '') : null;
+    const containerSuffix = modalType.charAt(0).toUpperCase() + modalType.slice(1);
+    return { isEdit, itemId, containerSuffix };
+}
 
-        // PERBAIKAN: Hapus readonly dengan benar
-        input.removeAttribute('readonly');
-        input.readOnly = false; // Tambahan untuk memastikan
-        input.focus();
-        changeBtn.style.display = 'none';
-        generateBtn.style.display = 'block';
+// Modal functions
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+
+    // Generate action plans for edit modal if it has existing data
+    if (modalId.startsWith('editModal')) {
+        const itemId = modalId.replace('editModal', '');
+        loadActionPlansData(itemId).then(() => {
+            generateActionPlans('edit' + itemId);
+        });
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.remove('show');
+    document.body.style.overflow = 'auto';
+}
+
+// Function untuk load data action plans dari server
+async function loadActionPlansData(itemId) {
+    try {
+        const response = await fetch(`/newwarroom/${itemId}/action-plans`);
+        const data = await response.json();
+
+        actionPlansData[`edit${itemId}`] = {
+            actionPlans: [],
+            updateActionPlans: [],
+            statusActionPlans: []
+        };
+
+        data.forEach(actionPlan => {
+            const index = actionPlan.plan_number - 1;
+            actionPlansData[`edit${itemId}`].actionPlans[index] = actionPlan.action_plan || '';
+            actionPlansData[`edit${itemId}`].updateActionPlans[index] = actionPlan.update_action_plan || '';
+            actionPlansData[`edit${itemId}`].statusActionPlans[index] = actionPlan.status_action_plan || 'Open';
+        });
+
+    } catch (error) {
+        console.error('Error loading action plans:', error);
+        actionPlansData[`edit${itemId}`] = {
+            actionPlans: [],
+            updateActionPlans: [],
+            statusActionPlans: []
+        };
+    }
+}
+
+// Enable edit untuk action plan
+function enableEditActionPlan(itemId) {
+    const input = document.getElementById(`jumlahActionEdit${itemId}`);
+    const changeBtn = event.target;
+    const generateBtn = document.getElementById(`generateBtn${itemId}`);
+
+    input.removeAttribute('readonly');
+    input.readOnly = false;
+    input.focus();
+    changeBtn.style.display = 'none';
+    generateBtn.style.display = 'block';
+}
+
+// Auto resize textarea function
+function autoResizeTextarea(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+}
+
+// Setup textarea auto-resize untuk container tertentu
+function setupTextareaAutoResize(container = document) {
+    const textareas = container.querySelectorAll('.wr-form-textarea');
+    textareas.forEach(textarea => {
+        autoResizeTextarea(textarea);
+        textarea.addEventListener('input', function() {
+            autoResizeTextarea(this);
+        });
+    });
+}
+
+// Generate dynamic action plan fields
+function generateActionPlans(modalType) {
+    const { containerSuffix } = getModalInfo(modalType);
+    const inputId = `jumlahAction${containerSuffix}`;
+    const jumlahInput = document.getElementById(inputId);
+    const jumlah = parseInt(jumlahInput.value);
+    const container = document.getElementById(`actionPlansContainer${containerSuffix}`);
+
+    const isEditAutoLoad = modalType.startsWith('edit') && container.innerHTML.trim() === '';
+
+    // Validasi input
+    if (!jumlah || jumlah < 1) {
+        alert('Masukkan jumlah action plan yang valid (minimal 1)');
+        jumlahInput.focus();
+        return;
     }
 
-    // Modal functions
-    function openModal(modalId) {
-        const modal = document.getElementById(modalId);
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-
-        // Generate action plans for edit modal if it has existing data
-        if (modalId.startsWith('editModal')) {
-            const itemId = modalId.replace('editModal', '');
-
-            // Load data action plans dari server terlebih dahulu
-            loadActionPlansData(itemId).then(() => {
-                // Auto generate pada saat buka modal edit
-                generateActionPlans('edit' + itemId);
-            });
-        }
-    }
-
-    // Function untuk load data action plans dari server
-    async function loadActionPlansData(itemId) {
-        try {
-            const response = await fetch(`/newwarroom/${itemId}/action-plans`);
-            const data = await response.json();
-
-            // Simpan data ke global object
-            actionPlansData[`edit${itemId}`] = {
-                actionPlans: [],
-                updateActionPlans: [],
-                statusActionPlans: []
-            };
-
-            // Organize data berdasarkan plan_number
-            data.forEach(actionPlan => {
-                const index = actionPlan.plan_number - 1;
-                actionPlansData[`edit${itemId}`].actionPlans[index] = actionPlan.action_plan || '';
-                actionPlansData[`edit${itemId}`].updateActionPlans[index] = actionPlan.update_action_plan || '';
-                actionPlansData[`edit${itemId}`].statusActionPlans[index] = actionPlan.status_action_plan || 'Open';
-            });
-
-        } catch (error) {
-            console.error('Error loading action plans:', error);
-            // Fallback jika error
-            actionPlansData[`edit${itemId}`] = {
-                actionPlans: [],
-                updateActionPlans: [],
-                statusActionPlans: []
-            };
-        }
-    }
-
-    function closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        modal.classList.remove('show');
-        document.body.style.overflow = 'auto';
-    }
-
-    // Generate dynamic action plan fields
-    function generateActionPlans(modalType) {
-        const inputId = `jumlahAction${modalType.charAt(0).toUpperCase() + modalType.slice(1)}`;
-        const jumlahInput = document.getElementById(inputId);
-        const jumlah = parseInt(jumlahInput.value);
-        const container = document.getElementById(`actionPlansContainer${modalType.charAt(0).toUpperCase() + modalType.slice(1)}`);
-
-        // Untuk edit modal, jika dipanggil pertama kali (auto load), tidak perlu konfirmasi
-        const isEditAutoLoad = modalType.startsWith('edit') && container.innerHTML.trim() === '';
-
-        // Validasi input
-        if (!jumlah || jumlah < 1) {
-            alert('Masukkan jumlah action plan yang valid (minimal 1)');
-            jumlahInput.focus();
+    // Konfirmasi jika sudah ada action plans (kecuali auto load)
+    if (!isEditAutoLoad && container.innerHTML.trim() !== '') {
+        if (!confirm(`Akan mengganti dengan ${jumlah} action plans. Data yang ada akan hilang. Lanjutkan?`)) {
             return;
         }
+    }
 
-        // Konfirmasi jika sudah ada action plans (kecuali auto load)
-        if (!isEditAutoLoad && container.innerHTML.trim() !== '') {
-            if (!confirm(`Akan mengganti dengan ${jumlah} action plans. Data yang ada akan hilang. Lanjutkan?`)) {
-                return;
-            }
-        }
+    // Reset button untuk edit modal
+    if (modalType.startsWith('edit') && !isEditAutoLoad) {
+        const itemId = modalType.replace('edit', '');
+        const changeBtn = document.querySelector(`#editModal${itemId} .wr-btn-secondary`);
+        const generateBtn = document.getElementById(`generateBtn${itemId}`);
 
-        // Jika edit dan generate baru, reset button
-        if (modalType.startsWith('edit') && !isEditAutoLoad) {
-            const itemId = modalType.replace('edit', '');
-            const changeBtn = document.querySelector(`#editModal${itemId} .wr-btn-secondary`);
-            const generateBtn = document.getElementById(`generateBtn${itemId}`);
+        changeBtn.style.display = 'block';
+        generateBtn.style.display = 'none';
+        jumlahInput.setAttribute('readonly', 'readonly');
+        jumlahInput.readOnly = true;
+    }
 
-            changeBtn.style.display = 'block';
-            generateBtn.style.display = 'none';
-            jumlahInput.setAttribute('readonly', 'readonly');
-            jumlahInput.readOnly = true; // TAMBAHAN: Pastikan readonly
-        }
-
-        // Generate header dengan tombol add
-        let html = `
+    // Generate header dengan tombol add
+    let html = `
         <div class="jumlah-action-highlight">
             <div>
                 <i class="fas fa-tasks"></i> 
@@ -687,215 +717,28 @@
         </div>
     `;
 
-        // Generate action plans
-        for (let i = 1; i <= parseInt(jumlah); i++) {
-            // Get existing data for edit modal
-            let existingActionPlan = '';
-            let existingUpdatePlan = '';
-            let existingStatus = 'Open';
+    // Generate action plans
+    for (let i = 1; i <= parseInt(jumlah); i++) {
+        let existingActionPlan = '';
+        let existingUpdatePlan = '';
+        let existingStatus = 'Open';
 
-            // Ambil data dari actionPlansData yang sudah diload dari server
-            if (modalType.startsWith('edit') && actionPlansData[modalType]) {
-                existingActionPlan = actionPlansData[modalType].actionPlans[i - 1] || '';
-                existingUpdatePlan = actionPlansData[modalType].updateActionPlans[i - 1] || '';
-                existingStatus = actionPlansData[modalType].statusActionPlans[i - 1] || 'Open';
-            }
-
-            html += createActionPlanHtml(i, modalType, existingActionPlan, existingUpdatePlan, existingStatus);
+        if (modalType.startsWith('edit') && actionPlansData[modalType]) {
+            existingActionPlan = actionPlansData[modalType].actionPlans[i - 1] || '';
+            existingUpdatePlan = actionPlansData[modalType].updateActionPlans[i - 1] || '';
+            existingStatus = actionPlansData[modalType].statusActionPlans[i - 1] || 'Open';
         }
 
-        container.innerHTML = html;
-
-        // Auto-resize new textareas
-        const newTextareas = container.querySelectorAll('.wr-form-textarea');
-        newTextareas.forEach(textarea => {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener('input', function() {
-                autoResizeTextarea(this);
-            });
-        });
+        html += createActionPlanHtml(i, modalType, existingActionPlan, existingUpdatePlan, existingStatus);
     }
 
-    // Auto resize textarea function
-    function autoResizeTextarea(textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = textarea.scrollHeight + 'px';
-    }
+    container.innerHTML = html;
+    setupTextareaAutoResize(container);
+}
 
-    // Close modal when clicking outside
-    document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('wr-modal')) {
-            closeModal(event.target.id);
-        }
-    });
-
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            const openModal = document.querySelector('.wr-modal.show');
-            if (openModal) {
-                closeModal(openModal.id);
-            }
-        }
-    });
-
-    // Form handling
-    document.addEventListener('DOMContentLoaded', function() {
-        // Auto-resize existing textareas
-        const textareas = document.querySelectorAll('.wr-form-textarea');
-        textareas.forEach(textarea => {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener('input', function() {
-                autoResizeTextarea(this);
-            });
-        });
-
-        // Form validation and submission
-        const forms = document.querySelectorAll('form');
-        forms.forEach(form => {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const requiredFields = form.querySelectorAll('[required]');
-                let isValid = true;
-
-                requiredFields.forEach(field => {
-                    if (!field.value.trim()) {
-                        field.style.borderColor = '#dc3545';
-                        isValid = false;
-                    } else {
-                        field.style.borderColor = '#e6e1e8';
-                    }
-                });
-
-                if (!isValid) {
-                    alert('Mohon lengkapi semua field yang wajib diisi!');
-                    return;
-                }
-
-                // Submit form
-                this.submit();
-            });
-        });
-    });
-
-    const jumlahActionInputs = form.querySelectorAll('input[name="jumlah_action_plan"]');
-    jumlahActionInputs.forEach(input => {
-        const value = parseInt(input.value);
-        if (!value || value < 1) {
-            input.style.borderColor = '#dc3545';
-            isValid = false;
-            alert('Jumlah action plan minimal 1');
-        }
-    });
-
-    //======================================================================================================
-    // 2. TAMBAHAN: Fungsi untuk menambah action plan baru
-    function addActionPlan(modalType) {
-        const container = document.getElementById(`actionPlansContainer${modalType.charAt(0).toUpperCase() + modalType.slice(1)}`);
-        const existingPlans = container.querySelectorAll('.action-plan-section');
-        const newIndex = existingPlans.length + 1;
-
-        // Update jumlah di input
-        const inputId = `jumlahAction${modalType.charAt(0).toUpperCase() + modalType.slice(1)}`;
-        const jumlahInput = document.getElementById(inputId);
-        jumlahInput.value = newIndex;
-
-        // Buat action plan baru
-        const newActionPlanHtml = createActionPlanHtml(newIndex, modalType, '', '', 'Open');
-
-        // Tambahkan ke container
-        container.insertAdjacentHTML('beforeend', newActionPlanHtml);
-
-        // Update header total
-        updateTotalActionPlansHeader(container, newIndex);
-
-        // Setup textarea auto-resize untuk element baru
-        const newTextareas = container.querySelectorAll('.action-plan-section:last-child .wr-form-textarea');
-        newTextareas.forEach(textarea => {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener('input', function() {
-                autoResizeTextarea(this);
-            });
-        });
-    }
-
-    // 3. TAMBAHAN: Fungsi untuk menghapus action plan
-    function removeActionPlan(modalType, planIndex) {
-        if (!confirm('Apakah Anda yakin ingin menghapus action plan ini?')) {
-            return;
-        }
-
-        const container = document.getElementById(`actionPlansContainer${modalType.charAt(0).toUpperCase() + modalType.slice(1)}`);
-        const actionPlanSections = container.querySelectorAll('.action-plan-section');
-
-        if (actionPlanSections.length <= 1) {
-            alert('Minimal harus ada 1 action plan');
-            return;
-        }
-
-        // Hapus section
-        actionPlanSections[planIndex - 1].remove();
-
-        // Reindex semua action plans
-        reindexActionPlans(modalType);
-
-        // Update jumlah di input
-        const inputId = `jumlahAction${modalType.charAt(0).toUpperCase() + modalType.slice(1)}`;
-        const jumlahInput = document.getElementById(inputId);
-        jumlahInput.value = actionPlanSections.length - 1; // -1 karena sudah dihapus
-    }
-
-    // 4. TAMBAHAN: Fungsi untuk reindex action plans setelah penghapusan
-    function reindexActionPlans(modalType) {
-        const container = document.getElementById(`actionPlansContainer${modalType.charAt(0).toUpperCase() + modalType.slice(1)}`);
-        const actionPlanSections = container.querySelectorAll('.action-plan-section');
-
-        actionPlanSections.forEach((section, index) => {
-            const newIndex = index + 1;
-
-            // Update nomor dan judul
-            section.querySelector('.action-plan-number').textContent = newIndex;
-            section.querySelector('.action-plan-title').textContent = `Action Plan ${newIndex}`;
-
-            // Update semua name attributes
-            const textarea1 = section.querySelector('textarea[name^="action_plan_"]');
-            const textarea2 = section.querySelector('textarea[name^="update_action_plan_"]');
-            const select = section.querySelector('select[name^="status_action_plan_"]');
-            const removeBtn = section.querySelector('.remove-action-btn');
-
-            if (textarea1) {
-                textarea1.name = `action_plan_${newIndex}`;
-                textarea1.placeholder = `Masukkan detail action plan ${newIndex}...`;
-            }
-            if (textarea2) {
-                textarea2.name = `update_action_plan_${newIndex}`;
-                textarea2.placeholder = `Update progress untuk action plan ${newIndex}...`;
-            }
-            if (select) {
-                select.name = `status_action_plan_${newIndex}`;
-            }
-            if (removeBtn) {
-                removeBtn.setAttribute('onclick', `removeActionPlan('${modalType}', ${newIndex})`);
-            }
-
-            // Update labels
-            const labels = section.querySelectorAll('label');
-            labels.forEach(label => {
-                const text = label.textContent;
-                if (text.includes('Action Plan')) {
-                    label.innerHTML = text.replace(/Action Plan \d+/, `Action Plan ${newIndex}`);
-                }
-            });
-        });
-
-        // Update header total
-        updateTotalActionPlansHeader(container, actionPlanSections.length);
-    }
-
-    // 5. TAMBAHAN: Fungsi untuk membuat HTML action plan
-    function createActionPlanHtml(index, modalType, existingActionPlan = '', existingUpdatePlan = '', existingStatus = 'Open') {
-        return `
+// Fungsi untuk membuat HTML action plan
+function createActionPlanHtml(index, modalType, existingActionPlan = '', existingUpdatePlan = '', existingStatus = 'Open') {
+    return `
         <div class="action-plan-section">
             <div class="action-plan-header">
                 <div class="action-plan-number">${index}</div>
@@ -907,8 +750,8 @@
             
             <div class="action-plan-grid">
                 <div class="wr-form-group">
-                    <label class="wr-form-label">Action Plan ${index} <span class="required">*</span></label>
-                    <textarea class="wr-form-textarea" name="action_plan_${index}" rows="3" required 
+                    <label class="wr-form-label">Action Plan ${index}</label>
+                    <textarea class="wr-form-textarea" name="action_plan_${index}" rows="3"  
                         placeholder="Masukkan detail action plan ${index}...">${existingActionPlan}</textarea>
                 </div>
                 
@@ -933,91 +776,177 @@
             </div>
         </div>
     `;
+}
+
+// Fungsi untuk menambah action plan baru
+function addActionPlan(modalType) {
+    const { containerSuffix } = getModalInfo(modalType);
+    const container = document.getElementById(`actionPlansContainer${containerSuffix}`);
+    const existingPlans = container.querySelectorAll('.action-plan-section');
+    const newIndex = existingPlans.length + 1;
+
+    // Update jumlah di input
+    const inputId = `jumlahAction${containerSuffix}`;
+    const jumlahInput = document.getElementById(inputId);
+    jumlahInput.value = newIndex;
+
+    // Buat action plan baru
+    const newActionPlanHtml = createActionPlanHtml(newIndex, modalType, '', '', 'Open');
+    container.insertAdjacentHTML('beforeend', newActionPlanHtml);
+
+    // Update header total
+    updateTotalActionPlansHeader(container, newIndex);
+
+    // Setup textarea auto-resize untuk element baru
+    const newSection = container.querySelector('.action-plan-section:last-child');
+    setupTextareaAutoResize(newSection);
+}
+
+// Fungsi untuk menghapus action plan
+function removeActionPlan(modalType, planIndex) {
+    if (!confirm('Apakah Anda yakin ingin menghapus action plan ini?')) {
+        return;
     }
 
-    // 6. TAMBAHAN: Fungsi untuk update header total
-    function updateTotalActionPlansHeader(container, total) {
-        const header = container.querySelector('.jumlah-action-highlight strong');
-        if (header) {
-            header.textContent = `Total Action Plans: ${total}`;
-        }
+    const { containerSuffix } = getModalInfo(modalType);
+    const container = document.getElementById(`actionPlansContainer${containerSuffix}`);
+    const actionPlanSections = container.querySelectorAll('.action-plan-section');
+
+    if (actionPlanSections.length <= 1) {
+        alert('Minimal harus ada 1 action plan');
+        return;
     }
 
-    // 7. PERBAIKAN: Update fungsi generateActionPlans
-    function generateActionPlans(modalType) {
-        const inputId = `jumlahAction${modalType.charAt(0).toUpperCase() + modalType.slice(1)}`;
-        const jumlahInput = document.getElementById(inputId);
-        const jumlah = parseInt(jumlahInput.value);
-        const container = document.getElementById(`actionPlansContainer${modalType.charAt(0).toUpperCase() + modalType.slice(1)}`);
+    // Hapus section
+    actionPlanSections[planIndex - 1].remove();
 
-        // Untuk edit modal, jika dipanggil pertama kali (auto load), tidak perlu konfirmasi
-        const isEditAutoLoad = modalType.startsWith('edit') && container.innerHTML.trim() === '';
+    // Reindex semua action plans
+    reindexActionPlans(modalType);
 
-        // Validasi input
-        if (!jumlah || jumlah < 1) {
-            alert('Masukkan jumlah action plan yang valid (minimal 1)');
-            jumlahInput.focus();
-            return;
+    // Update jumlah di input
+    const inputId = `jumlahAction${containerSuffix}`;
+    const jumlahInput = document.getElementById(inputId);
+    jumlahInput.value = actionPlanSections.length - 1;
+}
+
+// Fungsi untuk reindex action plans setelah penghapusan
+function reindexActionPlans(modalType) {
+    const { containerSuffix } = getModalInfo(modalType);
+    const container = document.getElementById(`actionPlansContainer${containerSuffix}`);
+    const actionPlanSections = container.querySelectorAll('.action-plan-section');
+
+    actionPlanSections.forEach((section, index) => {
+        const newIndex = index + 1;
+
+        // Update nomor dan judul
+        section.querySelector('.action-plan-number').textContent = newIndex;
+        section.querySelector('.action-plan-title').textContent = `Action Plan ${newIndex}`;
+
+        // Update semua name attributes
+        const textarea1 = section.querySelector('textarea[name^="action_plan_"]');
+        const textarea2 = section.querySelector('textarea[name^="update_action_plan_"]');
+        const select = section.querySelector('select[name^="status_action_plan_"]');
+        const removeBtn = section.querySelector('.remove-action-btn');
+
+        if (textarea1) {
+            textarea1.name = `action_plan_${newIndex}`;
+            textarea1.placeholder = `Masukkan detail action plan ${newIndex}...`;
+        }
+        if (textarea2) {
+            textarea2.name = `update_action_plan_${newIndex}`;
+            textarea2.placeholder = `Update progress untuk action plan ${newIndex}...`;
+        }
+        if (select) {
+            select.name = `status_action_plan_${newIndex}`;
+        }
+        if (removeBtn) {
+            removeBtn.setAttribute('onclick', `removeActionPlan('${modalType}', ${newIndex})`);
         }
 
-        // Konfirmasi jika sudah ada action plans (kecuali auto load)
-        if (!isEditAutoLoad && container.innerHTML.trim() !== '') {
-            if (!confirm(`Akan mengganti dengan ${jumlah} action plans. Data yang ada akan hilang. Lanjutkan?`)) {
-                return;
+        // Update labels
+        const labels = section.querySelectorAll('label');
+        labels.forEach(label => {
+            const text = label.textContent;
+            if (text.includes('Action Plan')) {
+                label.innerHTML = text.replace(/Action Plan \d+/, `Action Plan ${newIndex}`);
             }
-        }
-
-        // Jika edit dan generate baru, reset button
-        if (modalType.startsWith('edit') && !isEditAutoLoad) {
-            const itemId = modalType.replace('edit', '');
-            const changeBtn = document.querySelector(`#editModal${itemId} .wr-btn-secondary`);
-            const generateBtn = document.getElementById(`generateBtn${itemId}`);
-
-            changeBtn.style.display = 'block';
-            generateBtn.style.display = 'none';
-            jumlahInput.setAttribute('readonly', 'readonly');
-            jumlahInput.readOnly = true; // TAMBAHAN: Pastikan readonly
-        }
-
-        // Generate header dengan tombol add
-        let html = `
-        <div class="jumlah-action-highlight">
-            <div>
-                <i class="fas fa-tasks"></i> 
-                <strong>Total Action Plans: ${jumlah}</strong>
-            </div>
-            <button type="button" class="add-action-btn" onclick="addActionPlan('${modalType}')" title="Tambah Action Plan">
-                <i class="fas fa-plus"></i> Add Action Plan
-            </button>
-        </div>
-    `;
-
-        // Generate action plans
-        for (let i = 1; i <= parseInt(jumlah); i++) {
-            // Get existing data for edit modal
-            let existingActionPlan = '';
-            let existingUpdatePlan = '';
-            let existingStatus = 'Open';
-
-            // Ambil data dari actionPlansData yang sudah diload dari server
-            if (modalType.startsWith('edit') && actionPlansData[modalType]) {
-                existingActionPlan = actionPlansData[modalType].actionPlans[i - 1] || '';
-                existingUpdatePlan = actionPlansData[modalType].updateActionPlans[i - 1] || '';
-                existingStatus = actionPlansData[modalType].statusActionPlans[i - 1] || 'Open';
-            }
-
-            html += createActionPlanHtml(i, modalType, existingActionPlan, existingUpdatePlan, existingStatus);
-        }
-
-        container.innerHTML = html;
-
-        // Auto-resize new textareas
-        const newTextareas = container.querySelectorAll('.wr-form-textarea');
-        newTextareas.forEach(textarea => {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener('input', function() {
-                autoResizeTextarea(this);
-            });
         });
+    });
+
+    // Update header total
+    updateTotalActionPlansHeader(container, actionPlanSections.length);
+}
+
+// Fungsi untuk update header total
+function updateTotalActionPlansHeader(container, total) {
+    const header = container.querySelector('.jumlah-action-highlight strong');
+    if (header) {
+        header.textContent = `Total Action Plans: ${total}`;
     }
+}
+
+// Form validation dan submission
+function handleFormSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+
+    // Set empty action plan textareas to '0'
+    const actionPlanTextareas = form.querySelectorAll('textarea[name^="action_plan_"]');
+    actionPlanTextareas.forEach(textarea => {
+        if (!textarea.value.trim()) {
+            textarea.value = '0';
+        }
+    });
+
+    // Validate required fields
+    const requiredFields = form.querySelectorAll('[required]');
+    let isValid = true;
+
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.style.borderColor = '#dc3545';
+            isValid = false;
+        } else {
+            field.style.borderColor = '#e6e1e8';
+        }
+    });
+
+    if (!isValid) {
+        alert('Mohon lengkapi semua field yang wajib diisi!');
+        return;
+    }
+
+    form.submit();
+}
+
+// Event listeners
+function initializeEventListeners() {
+    // Close modal when clicking outside
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('wr-modal')) {
+            closeModal(event.target.id);
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const openModal = document.querySelector('.wr-modal.show');
+            if (openModal) {
+                closeModal(openModal.id);
+            }
+        }
+    });
+
+    // Form handling
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', handleFormSubmit);
+    });
+
+    // Setup textarea auto-resize
+    setupTextareaAutoResize();
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', initializeEventListeners);
 </script>
