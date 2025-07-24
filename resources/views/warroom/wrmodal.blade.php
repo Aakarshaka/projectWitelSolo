@@ -327,7 +327,7 @@
     /* Responsive */
     @media (max-width: 768px) {
         .wr-modal-content {
-            width: 98%;
+            width: 90%;
             margin: 1% auto;
         }
 

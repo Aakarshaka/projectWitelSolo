@@ -11,6 +11,7 @@ class Newwarroom extends Model
     protected $table = 'newwarrooms';
 
     protected $fillable = [
+        'tgl',
         'supportneeded_id',
         'agenda',
         'unit_or_telda',
@@ -32,6 +33,7 @@ class Newwarroom extends Model
     ];
 
     protected $casts = [
+        'tgl',
         'start_date' => 'date',
         'end_date' => 'date',
         'off_day' => 'integer',
