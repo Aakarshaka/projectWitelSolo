@@ -588,6 +588,53 @@ function getModalInfo(modalType) {
     return { isEdit, itemId, containerSuffix };
 }
 
+// Function untuk mendapatkan current filter parameters dari URL
+function getCurrentFilterParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterParams = {};
+    const filters = ['bulan', 'tahun', 'uic', 'search', 'status'];
+    
+    filters.forEach(filter => {
+        const value = urlParams.get(filter);
+        if (value && value.trim() !== '') {
+            filterParams[filter] = value;
+        }
+    });
+    
+    return filterParams;
+}
+
+// Function untuk menambahkan filter parameters ke form sebagai hidden inputs
+function addFilterParamsToForm(form) {
+    const filterParams = getCurrentFilterParams();
+    
+    // Hapus existing filter inputs jika ada
+    const existingFilterInputs = form.querySelectorAll('input[data-filter-param]');
+    existingFilterInputs.forEach(input => input.remove());
+    
+    // Tambahkan filter params sebagai hidden inputs
+    Object.keys(filterParams).forEach(key => {
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = key;
+        hiddenInput.value = filterParams[key];
+        hiddenInput.setAttribute('data-filter-param', 'true');
+        form.appendChild(hiddenInput);
+    });
+}
+
+// Function untuk membuat query string dari filter parameters
+function createFilterQueryString() {
+    const filterParams = getCurrentFilterParams();
+    const params = new URLSearchParams();
+    
+    Object.keys(filterParams).forEach(key => {
+        params.append(key, filterParams[key]);
+    });
+    
+    return params.toString();
+}
+
 // Modal functions
 function openModal(modalId) {
     const modal = document.getElementById(modalId);
@@ -600,6 +647,12 @@ function openModal(modalId) {
         loadActionPlansData(itemId).then(() => {
             generateActionPlans('edit' + itemId);
         });
+    }
+    
+    // Add filter parameters to form when modal opens
+    const form = modal.querySelector('form');
+    if (form) {
+        addFilterParamsToForm(form);
     }
 }
 
@@ -890,6 +943,9 @@ function handleFormSubmit(e) {
     e.preventDefault();
     const form = e.target;
 
+    // Pastikan filter parameters ditambahkan sebelum submit
+    addFilterParamsToForm(form);
+
     // Set empty action plan textareas to '0'
     const actionPlanTextareas = form.querySelectorAll('textarea[name^="action_plan_"]');
     actionPlanTextareas.forEach(textarea => {
@@ -919,6 +975,63 @@ function handleFormSubmit(e) {
     form.submit();
 }
 
+// Function untuk handle delete dengan filter parameters
+function handleDelete(deleteUrl, itemId) {
+    if (!confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+        return;
+    }
+
+    // Buat form delete dengan filter parameters
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = deleteUrl;
+    form.style.display = 'none';
+
+    // Add CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]');
+    if (csrfToken) {
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_token';
+        csrfInput.value = csrfToken.getAttribute('content');
+        form.appendChild(csrfInput);
+    }
+
+    // Add method spoofing for DELETE
+    const methodInput = document.createElement('input');
+    methodInput.type = 'hidden';
+    methodInput.name = '_method';
+    methodInput.value = 'DELETE';
+    form.appendChild(methodInput);
+
+    // Add filter parameters
+    addFilterParamsToForm(form);
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
+// Function untuk setup delete buttons
+function setupDeleteButtons() {
+    const deleteButtons = document.querySelectorAll('[data-delete-url]');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const deleteUrl = this.getAttribute('data-delete-url');
+            const itemId = this.getAttribute('data-item-id');
+            handleDelete(deleteUrl, itemId);
+        });
+    });
+}
+
+// Function untuk handle navigation dengan filter parameters
+function navigateWithFilters(baseUrl) {
+    const queryString = createFilterQueryString();
+    const separator = baseUrl.includes('?') ? '&' : '?';
+    const finalUrl = queryString ? `${baseUrl}${separator}${queryString}` : baseUrl;
+    window.location.href = finalUrl;
+}
+
 // Event listeners
 function initializeEventListeners() {
     // Close modal when clicking outside
@@ -943,10 +1056,33 @@ function initializeEventListeners() {
         form.addEventListener('submit', handleFormSubmit);
     });
 
+    // Setup delete buttons
+    setupDeleteButtons();
+
     // Setup textarea auto-resize
     setupTextareaAutoResize();
+
+    // Setup navigation buttons with filters (jika ada)
+    const navButtons = document.querySelectorAll('[data-nav-url]');
+    navButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const navUrl = this.getAttribute('data-nav-url');
+            navigateWithFilters(navUrl);
+        });
+    });
 }
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeEventListeners);
+
+// Expose functions globally untuk digunakan inline
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.enableEditActionPlan = enableEditActionPlan;
+window.generateActionPlans = generateActionPlans;
+window.addActionPlan = addActionPlan;
+window.removeActionPlan = removeActionPlan;
+window.handleDelete = handleDelete;
+window.navigateWithFilters = navigateWithFilters;
 </script>
