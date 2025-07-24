@@ -250,8 +250,8 @@
                                         onclick="openModal('editModal{{ $item->id }}')">
                                         Edit
                                     </button>
-                                    <form action="{{ route('newwarroom.destroy', $item->id) }}" method="POST"
-                                        style="display:inline-block;" class="delete-form">
+                                    <form action="{{ route('newwarroom.destroy', array_merge(['newwarroom' => $item->id], request()->only(['bulan','tahun','uic','search']))) }}"
+                                        method="POST" style="display:inline-block;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn-wr btn-sm btn-danger">

@@ -137,7 +137,7 @@ class NewwarroomController extends Controller
             'pembahasan' => 'nullable|string',
             'support_needed' => 'nullable|string',
             'info_kompetitor' => 'nullable|string',
-            'jumlah_action_plan' => 'required|integer|min:1|max:10',
+            'jumlah_action_plan' => 'required|integer|min:1',
             'supportneeded_id' => 'nullable|integer|exists:supportneeded,id',
         ]);
 
@@ -233,7 +233,7 @@ class NewwarroomController extends Controller
             'pembahasan' => 'nullable|string',
             'support_needed' => 'nullable|string',
             'info_kompetitor' => 'nullable|string',
-            'jumlah_action_plan' => 'required|integer|min:1|max:10',
+            'jumlah_action_plan' => 'required|integer|min:1',
             'supportneeded_id' => 'nullable|integer|exists:supportneeded,id',
         ]);
 
@@ -314,7 +314,7 @@ class NewwarroomController extends Controller
     /**
      * ✅ Hapus data warroom & action plans
      */
-    public function destroy(Newwarroom $newwarroom)
+    public function destroy(Request $request, Newwarroom $newwarroom)
     {
         DB::beginTransaction();
 
@@ -323,14 +323,13 @@ class NewwarroomController extends Controller
             $newwarroom->delete();
             DB::commit();
 
-            // ✅ PERUBAHAN: Preserve filter parameters
+            // ✅ Preserve filter parameters
             $filterParams = $this->getFilterParams($request);
             return redirect()->route('newwarroom.index', $filterParams)
                 ->with('success', 'Data berhasil dihapus.');
         } catch (\Exception $e) {
             DB::rollback();
 
-            // ✅ PERUBAHAN: Preserve filter parameters untuk error juga
             $filterParams = $this->getFilterParams($request);
             return redirect()->route('newwarroom.index', $filterParams)
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
