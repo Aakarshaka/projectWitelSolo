@@ -15,9 +15,6 @@ class Newwarroom extends Model
         'supportneeded_id',
         'agenda',
         'unit_or_telda',
-        'start_date',
-        'end_date',
-        'off_day',
         'notes_to_follow_up',
         'uic',
         'uic_approvals',
@@ -34,197 +31,131 @@ class Newwarroom extends Model
 
     protected $casts = [
         'tgl' => 'date',
-        'start_date' => 'date',
-        'end_date' => 'date',
-        'off_day' => 'integer',
         'complete' => 'integer',
         'jumlah_action_plan' => 'integer',
         'uic_approvals' => 'json',
     ];
 
-    /**
-     * Relationship dengan ActionPlan
-     */
+    /* ======================
+       RELATIONSHIPS
+    ====================== */
+
     public function actionPlans(): HasMany
     {
         return $this->hasMany(ActionPlan::class, 'newwarroom_id');
     }
 
-    /**
-     * Relationship dengan Supportneeded
-     */
     public function supportneeded(): BelongsTo
     {
         return $this->belongsTo(Supportneeded::class, 'supportneeded_id');
     }
 
-    /**
-     * Accessor untuk mendapatkan jumlah action plan yang sudah done
-     */
+    /* ======================
+       ACCESSORS
+    ====================== */
+
     public function getDoneActionPlansCountAttribute()
     {
         return $this->actionPlans()->where('status_action_plan', 'Done')->count();
     }
 
-    /**
-     * Accessor untuk mendapatkan jumlah action plan yang sedang progress
-     */
     public function getProgressActionPlansCountAttribute()
     {
         return $this->actionPlans()->where('status_action_plan', 'Progress')->count();
     }
 
-    /**
-     * Accessor untuk mendapatkan jumlah action plan yang eskalasi
-     */
     public function getEskalasiActionPlansCountAttribute()
     {
         return $this->actionPlans()->where('status_action_plan', 'Eskalasi')->count();
     }
 
-    /**
-     * Accessor untuk mendapatkan persentase completion
-     */
     public function getCompletionPercentageAttribute()
     {
         if ($this->jumlah_action_plan == 0) return 0;
-        
         return round(($this->done_action_plans_count / $this->jumlah_action_plan) * 100, 1);
     }
 
-    /**
-     * Scope untuk pencarian global
-     */
-    public function scopeSearch($query, $search)
-    {
-        return $query->where(function ($q) use ($search) {
-            $q->where('agenda', 'like', "%$search%")
-                ->orWhere('uic', 'like', "%$search%")
-                ->orWhere('peserta', 'like', "%$search%")
-                ->orWhere('pembahasan', 'like', "%$search%")
-                ->orWhere('support_needed', 'like', "%$search%")
-                ->orWhere('info_kompetitor', 'like', "%$search%")
-                ->orWhereHas('actionPlans', function ($actionQuery) use ($search) {
-                    $actionQuery->where('action_plan', 'like', "%$search%")
-                              ->orWhere('update_action_plan', 'like', "%$search%")
-                              ->orWhere('status_action_plan', 'like', "%$search%");
-                });
-        });
-    }
-
-    /**
-     * Scope untuk filter berdasarkan bulan - gunakan tgl sebagai primary date field
-     */
-    public function scopeByMonth($query, $month)
-    {
-        return $query->where(function ($q) use ($month) {
-            $q->whereMonth('tgl', $month)
-              ->orWhere(function ($subQ) use ($month) {
-                  $subQ->whereNull('tgl')
-                       ->whereMonth('start_date', $month);
-              });
-        });
-    }
-
-    /**
-     * Scope untuk filter berdasarkan tahun - gunakan tgl sebagai primary date field
-     */
-    public function scopeByYear($query, $year)
-    {
-        return $query->where(function ($q) use ($year) {
-            $q->whereYear('tgl', $year)
-              ->orWhere(function ($subQ) use ($year) {
-                  $subQ->whereNull('tgl')
-                       ->whereYear('start_date', $year);
-              });
-        });
-    }
-
-    /**
-     * Accessor untuk UIC array (sesuai dengan Supportneeded model)
-     */
     public function getUicArrayAttribute()
     {
         return $this->uic ? explode(',', $this->uic) : [];
     }
 
-    /**
-     * Accessor untuk UIC approvals array (sesuai dengan Supportneeded model)
-     */
     public function getUicApprovalsArrayAttribute()
     {
         return $this->uic_approvals ? json_decode($this->uic_approvals, true) : [];
     }
 
-    /**
-     * Get progress percentage (sesuai dengan Supportneeded model)
-     */
     public function getProgressPercentageAttribute()
     {
         switch ($this->progress) {
-            case 'Open':
-                return 0;
-            case 'Need Discuss':
-                return 25;
-            case 'On Progress':
-                return 75;
-            case 'Done':
-                return 100;
-            default:
-                return 0;
+            case 'Open': return 0;
+            case 'Need Discuss': return 25;
+            case 'On Progress': return 75;
+            case 'Done': return 100;
+            default: return 0;
         }
     }
 
-    /**
-     * Get progress color class (sesuai dengan Supportneeded model)
-     */
     public function getProgressColorAttribute()
     {
         switch ($this->progress) {
-            case 'Open':
-                return 'bg-red';
-            case 'Need Discuss':
-                return 'bg-orange';
-            case 'On Progress':
-                return 'bg-yellow';
-            case 'Done':
-                return 'bg-green';
-            default:
-                return 'bg-gray';
+            case 'Open': return 'bg-red';
+            case 'Need Discuss': return 'bg-orange';
+            case 'On Progress': return 'bg-yellow';
+            case 'Done': return 'bg-green';
+            default: return 'bg-gray';
         }
     }
 
-    /**
-     * Get status badge class (sesuai dengan Supportneeded model)
-     */
     public function getStatusBadgeClassAttribute()
     {
         switch ($this->status) {
-            case 'Eskalasi':
-                return 'status-done';
-            case 'Action':
-                return 'status-action';
-            case 'Support Needed':
-                return 'status-in-progress';
-            default:
-                return 'status-empty';
+            case 'Eskalasi': return 'status-done';
+            case 'Action': return 'status-action';
+            case 'Support Needed': return 'status-in-progress';
+            default: return 'status-empty';
         }
     }
 
-    /**
-     * Accessor untuk mendapatkan tanggal utama (tgl atau start_date)
-     */
     public function getMainDateAttribute()
     {
-        return $this->tgl ?? $this->start_date;
+        return $this->tgl;
     }
 
-    /**
-     * Accessor untuk format tanggal yang user-friendly
-     */
     public function getFormattedMainDateAttribute()
     {
         $date = $this->main_date;
         return $date ? $date->format('d/m/Y') : '-';
+    }
+
+    /* ======================
+       SCOPES (SEARCH & FILTER)
+    ====================== */
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where(function ($q) use ($search) {
+            $q->where('agenda', 'like', "%$search%")
+              ->orWhere('uic', 'like', "%$search%")
+              ->orWhere('peserta', 'like', "%$search%")
+              ->orWhere('pembahasan', 'like', "%$search%")
+              ->orWhere('support_needed', 'like', "%$search%")
+              ->orWhere('info_kompetitor', 'like', "%$search%")
+              ->orWhereHas('actionPlans', function ($actionQuery) use ($search) {
+                  $actionQuery->where('action_plan', 'like', "%$search%")
+                              ->orWhere('update_action_plan', 'like', "%$search%")
+                              ->orWhere('status_action_plan', 'like', "%$search%");
+              });
+        });
+    }
+
+    public function scopeByMonth($query, $month)
+    {
+        return $query->whereMonth('tgl', $month);
+    }
+
+    public function scopeByYear($query, $year)
+    {
+        return $query->whereYear('tgl', $year);
     }
 }
