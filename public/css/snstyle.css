@@ -248,9 +248,12 @@ body {
 .table {
     border-collapse: collapse;
     font-size: 13px;
-    table-layout: fixed; /* KUNCI: Menggunakan fixed layout */
-    width: 1460px; /* Total width semua kolom */
-    min-width: 100%; /* Minimal selebar container */
+    table-layout: fixed;
+    /* KUNCI: Menggunakan fixed layout */
+    width: 1460px;
+    /* Total width semua kolom */
+    min-width: 100%;
+    /* Minimal selebar container */
 }
 
 /* PERBAIKAN: Definisi width kolom yang ketat */
@@ -429,7 +432,8 @@ body {
     overflow: hidden;
     position: relative;
     min-width: 80px;
-    max-width: 90px; /* Batasi maksimal width */
+    max-width: 90px;
+    /* Batasi maksimal width */
 }
 
 .progress-fill {
@@ -549,6 +553,123 @@ body {
     color: #6d5671;
     margin-top: 10px;
     padding: 10px 0;
+}
+
+/* CSS untuk tombol Copy */
+.copy-btn {
+    background-color: #10b981;
+    /* Green color */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.copy-btn:hover {
+    background-color: #059669;
+}
+
+.copy-btn:active {
+    background-color: #047857;
+}
+
+/* Notification styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    min-width: 300px;
+    max-width: 500px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.3s ease-out;
+}
+
+.notification-info {
+    background-color: #dbeafe;
+    border-left: 4px solid #3b82f6;
+    color: #1e40af;
+}
+
+.notification-content {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.notification-message {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    color: inherit;
+    margin-left: 10px;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-close:hover {
+    opacity: 0.7;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Adjust button group spacing */
+.btn-group-horizontal {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.btn-group-horizontal .action-btn {
+    margin: 0;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+    .btn-group-horizontal {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .action-btn {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+
+    .notification {
+        left: 10px;
+        right: 10px;
+        min-width: auto;
+        max-width: none;
+    }
 }
 
 /* Mobile responsive */
@@ -694,7 +815,7 @@ body {
         font-size: 12px;
     }
 
-    .scroll-hint{
+    .scroll-hint {
         display: block;
     }
 }

@@ -84,9 +84,10 @@ Route::middleware(['auth'])->group(function () {
     // Support needed routes
     Route::get('/supportneeded/detail', [SupportneededController::class, 'getDetail'])->name('supportneeded.detail');
     Route::resource('supportneeded', SupportneededController::class)->except(['show']);
+    Route::post('/supportneeded/{supportneeded}/copy', [SupportneededController::class, 'copy'])->name('supportneeded.copy');
     // Untuk update approval status
-    Route::post('supportneeded/{id}/approval', [SupportNeededController::class, 'updateApproval'])->name('supportneeded.update-approval');
-    Route::post('supportneeded/{id}/progress', [SupportNeededController::class, 'updateProgress'])->name('supportneeded.update-progress');
+    //Route::post('supportneeded/{id}/approval', [SupportNeededController::class, 'updateApproval'])->name('supportneeded.update-approval');
+    //Route::post('supportneeded/{id}/progress', [SupportNeededController::class, 'updateProgress'])->name('supportneeded.update-progress');
 
     // Summary routes
     Route::get('/newsummary', [SumController::class, 'index'])->name('summary.index');
