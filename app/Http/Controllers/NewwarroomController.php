@@ -10,16 +10,26 @@ use Illuminate\Support\Facades\DB;
 class NewwarroomController extends Controller
 {
     /**
+     * ✅ Helper filter UIC - supaya GS tidak ikut RLEGS, RSO WITEL tidak ikut RSO REGIONAL
+     */
+    private function filterByUic($query, $uic)
+    {
+        return $query->where(function ($q) use ($uic) {
+            $q->where('uic', $uic)
+              ->orWhereRaw("FIND_IN_SET(?, uic)", [$uic])
+              ->orWhereRaw("FIND_IN_SET(?, REPLACE(uic, ' ', ''))", [$uic]);
+        });
+    }
+
+    /**
      * Apply filters to query - PURE dari request saja
      */
     private function applyFilters($query, Request $request)
     {
-        // MURNI dari request, tidak ada campur tangan session
         $bulan = $request->get('bulan');
         $tahun = $request->get('tahun');
         $uic = $request->get('uic');
 
-        // Apply filter hanya jika ada nilai dan bukan kosong dan bukan 'all'
         if (!empty($bulan) && $bulan !== 'all') {
             $query->byMonth($bulan);
         }
@@ -29,7 +39,7 @@ class NewwarroomController extends Controller
         }
 
         if (!empty($uic) && $uic !== 'all') {
-            $query->Where('uic', 'like', '%' . $uic . '%');
+            $this->filterByUic($query, $uic); // ✅ FIXED
         }
     }
 
@@ -88,7 +98,6 @@ class NewwarroomController extends Controller
     {
         $query = Newwarroom::with(['actionPlans', 'supportneeded']);
 
-        // Apply filters MURNI dari request
         $this->applyFilters($query, $request);
 
         $warroomData = $query->orderByRaw('tgl IS NULL')
@@ -97,14 +106,12 @@ class NewwarroomController extends Controller
 
         $statistics = $this->calculateStatistics($warroomData);
 
-        // Tahun Dinamis dari data tgl
         $tahunList = Newwarroom::selectRaw('YEAR(tgl) as tahun')
             ->whereNotNull('tgl')
             ->distinct()
             ->orderBy('tahun', 'desc')
             ->pluck('tahun');
 
-        // UIC List
         $uicList = [
             "TELDA BLORA", "TELDA BOYOLALI", "TELDA JEPARA", "TELDA KLATEN", 
             "TELDA KUDUS", "TELDA MEA SOLO", "TELDA PATI", "TELDA PURWODADI", 
@@ -113,12 +120,10 @@ class NewwarroomController extends Controller
             "GSD", "SSGS", "PRQ", "RSMES", "BPPLP", "SSS"
         ];
 
-        // Ambil nilai filter MURNI dari request untuk ditampilkan di view
         $bulan = $request->get('bulan');
         $tahun = $request->get('tahun');
         $uic = $request->get('uic');
 
-        // HANYA simpan ke session jika ada filter aktif (untuk keperluan CRUD redirect)
         $activeFilters = [];
         if (!empty($bulan) && $bulan !== 'all') $activeFilters['bulan'] = $bulan;
         if (!empty($tahun) && $tahun !== 'all') $activeFilters['tahun'] = $tahun;
@@ -132,17 +137,11 @@ class NewwarroomController extends Controller
         ));
     }
 
-    /**
-     * Tampilkan form tambah data
-     */
     public function create()
     {
         return view('newwarroom.create');
     }
 
-    /**
-     * Simpan data baru dengan action plans
-     */
     public function store(Request $request)
     {
         $validated = $this->validateWarroomRequest($request);
@@ -170,7 +169,6 @@ class NewwarroomController extends Controller
 
             DB::commit();
 
-            // Redirect dengan filter yang tersimpan di session
             $sessionFilters = session('warroom_filters', []);
             
             return redirect()->route('newwarroom.index', $sessionFilters)
@@ -181,27 +179,18 @@ class NewwarroomController extends Controller
         }
     }
 
-    /**
-     * Tampilkan detail warroom
-     */
     public function show(Newwarroom $newwarroom)
     {
         $newwarroom->load('actionPlans', 'supportneeded');
         return view('newwarroom.show', compact('newwarroom'));
     }
 
-    /**
-     * Tampilkan form edit
-     */
     public function edit(Newwarroom $newwarroom)
     {
         $newwarroom->load('actionPlans');
         return view('newwarroom.edit', ['data' => $newwarroom]);
     }
 
-    /**
-     * Update data warroom & action plans
-     */
     public function update(Request $request, Newwarroom $newwarroom)
     {
         $validated = $this->validateWarroomRequest($request);
@@ -214,7 +203,6 @@ class NewwarroomController extends Controller
             $old = $newwarroom->toArray();
             $newwarroom->update($validated);
 
-            // Hapus & ganti action plans
             $newwarroom->actionPlans()->delete();
             for ($i = 1; $i <= $jumlah; $i++) {
                 ActionPlan::create([
@@ -235,7 +223,6 @@ class NewwarroomController extends Controller
 
             DB::commit();
 
-            // Redirect dengan filter yang tersimpan di session
             $sessionFilters = session('warroom_filters', []);
             
             return redirect()->route('newwarroom.index', $sessionFilters)
@@ -246,9 +233,6 @@ class NewwarroomController extends Controller
         }
     }
 
-    /**
-     * Hapus data warroom & action plans
-     */
     public function destroy(Request $request, Newwarroom $newwarroom)
     {
         DB::beginTransaction();
@@ -261,7 +245,6 @@ class NewwarroomController extends Controller
             $newwarroom->delete();
             DB::commit();
 
-            // Redirect dengan filter yang tersimpan di session
             $sessionFilters = session('warroom_filters', []);
             
             return redirect()->route('newwarroom.index', $sessionFilters)
@@ -269,7 +252,6 @@ class NewwarroomController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
 
-            // Redirect dengan filter yang tersimpan di session
             $sessionFilters = session('warroom_filters', []);
             
             return redirect()->route('newwarroom.index', $sessionFilters)
@@ -277,17 +259,11 @@ class NewwarroomController extends Controller
         }
     }
 
-    /**
-     * API untuk ambil action plans (untuk script edit)
-     */
     public function getActionPlans(Newwarroom $newwarroom)
     {
         return response()->json($newwarroom->actionPlans()->orderBy('plan_number')->get());
     }
 
-    /**
-     * Method untuk clear semua filter
-     */
     public function clearFilters()
     {
         session()->forget('warroom_filters');

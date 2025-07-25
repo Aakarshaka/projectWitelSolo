@@ -12,25 +12,19 @@ class SumController extends Controller
 {
     public function index()
     {
-        // Get summary data by UIC
         $byUic = $this->getSummaryByUic();
         $totalUic = $this->getTotalSummary($byUic);
 
-        // Get summary data by Agenda
         $byAgenda = $this->getSummaryByAgenda();
         $totalAgenda = $this->getTotalSummary($byAgenda);
 
-        // Get summary data by Unit
         $byUnit = $this->getSummaryByUnit();
         $totalUnit = $this->getTotalSummary($byUnit);
 
         return view('summary.newsummary', compact(
-            'byUic',
-            'totalUic',
-            'byAgenda',
-            'totalAgenda',
-            'byUnit',
-            'totalUnit'
+            'byUic', 'totalUic',
+            'byAgenda', 'totalAgenda',
+            'byUnit', 'totalUnit'
         ));
     }
 
@@ -41,81 +35,43 @@ class SumController extends Controller
             $value = $request->get('value');
             $progress = $request->get('progress');
 
-            Log::info('Detail request received', [
-                'type' => $type,
-                'value' => $value,
-                'progress' => $progress
-            ]);
-
             $query = Supportneeded::query();
 
-            // Filter berdasarkan type
+            // ✅ FILTER TYPE
             if ($type === 'uic') {
-                // Improved UIC filtering for multiple UICs
-                $query->where(function ($q) use ($value) {
-                    // Split UIC string by comma and search for each
-                    $q->where('uic', 'like', '%' . $value . '%')
-                        ->orWhere('uic', '=', $value)
-                        ->orWhereRaw("FIND_IN_SET(?, REPLACE(uic, ' ', ''))", [$value])
-                        ->orWhereRaw("FIND_IN_SET(?, uic)", [$value]);
-                });
+                $this->filterByUic($query, $value);
             } elseif ($type === 'agenda') {
                 $query->where('agenda', $value);
             } elseif ($type === 'unit') {
                 $query->where('unit_or_telda', $value);
             }
 
-            // Filter berdasarkan progress
+            // ✅ FILTER PROGRESS
             if ($progress && $progress !== 'all') {
                 $query->where('progress', $progress);
             }
 
             $data = $query->orderBy('start_date', 'desc')->get();
 
-            // Format tanggal dan perhitungan persentase untuk setiap item
+            // ✅ FORMAT TANGGAL & PROGRESS
             $data = $data->map(function ($item) {
-                // Format Start Date dengan timezone Jakarta dan locale Indonesia
-                $item->start_date_formatted = $item->start_date 
-                    ? Carbon::parse($item->start_date)
-                        ->setTimezone('Asia/Jakarta')
-                        ->locale('id')
-                        ->isoFormat('D MMMM YYYY') 
-                    : '';
-
-                // Format End Date dengan timezone Jakarta dan locale Indonesia
-                $item->end_date_formatted = $item->end_date 
-                    ? Carbon::parse($item->end_date)
-                        ->setTimezone('Asia/Jakarta')
-                        ->locale('id')
-                        ->isoFormat('D MMMM YYYY') 
-                    : '';
-
-                // Hitung persentase completion berdasarkan progress
+                $item->start_date_formatted = $this->formatDate($item->start_date);
+                $item->end_date_formatted = $this->formatDate($item->end_date);
                 $item->completion_percentage = $this->calculateCompletionPercentage($item->progress);
 
-                // Tambahkan field formatted untuk display
+                // Untuk display
                 $item->start_date_display = $item->start_date_formatted;
                 $item->end_date_display = $item->end_date_formatted;
-                
-                // Ganti field asli dengan yang sudah diformat untuk konsistensi
+
                 $item->start_date = $item->start_date_formatted;
                 $item->end_date = $item->end_date_formatted;
 
                 return $item;
             });
 
-            Log::info('Detail query result', [
-                'count' => $data->count(),
-                'sql' => $query->toSql()
-            ]);
-
             return response()->json($data);
-
         } catch (\Exception $e) {
-            Log::error('Error in getDetail: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString()
-            ]);
-
+            Log::error('Error in getDetail: ' . $e->getMessage());
             return response()->json([
                 'error' => 'Internal server error',
                 'message' => $e->getMessage()
@@ -123,35 +79,24 @@ class SumController extends Controller
         }
     }
 
-    /**
-     * Calculate completion percentage based on progress status
-     */
     private function calculateCompletionPercentage($progress)
     {
-        switch ($progress) {
-            case 'Open':
-                return 0;
-            case 'Need Discuss':
-                return 25;
-            case 'On Progress':
-                return 75;
-            case 'Done':
-                return 100;
-            default:
-                return 0;
-        }
+        return match ($progress) {
+            'Open' => 0,
+            'Need Discuss' => 25,
+            'On Progress' => 75,
+            'Done' => 100,
+            default => 0
+        };
     }
 
-    /**
-     * Helper method untuk format tanggal yang konsisten
-     */
     private function formatDate($date)
     {
-        return $date 
+        return $date
             ? Carbon::parse($date)
                 ->setTimezone('Asia/Jakarta')
                 ->locale('id')
-                ->isoFormat('D MMMM YYYY') 
+                ->isoFormat('D MMMM YYYY')
             : '';
     }
 
@@ -161,26 +106,10 @@ class SumController extends Controller
         $summary = [];
 
         foreach ($uicList as $uic) {
-            // Improved query for multiple UIC support - konsisten dengan SumController
-            $baseQuery = function ($query, $progress = null) use ($uic) {
-                $query->where(function ($q) use ($uic) {
-                    $q->where('uic', 'like', '%' . $uic . '%')
-                        ->orWhere('uic', '=', $uic)
-                        ->orWhereRaw("FIND_IN_SET(?, REPLACE(uic, ' ', ''))", [$uic])
-                        ->orWhereRaw("FIND_IN_SET(?, uic)", [$uic]);
-                });
-
-                if ($progress) {
-                    $query->where('progress', $progress);
-                }
-
-                return $query;
-            };
-
-            $open = $baseQuery(Supportneeded::query(), 'Open')->count();
-            $discuss = $baseQuery(Supportneeded::query(), 'Need Discuss')->count();
-            $progress = $baseQuery(Supportneeded::query(), 'On Progress')->count();
-            $done = $baseQuery(Supportneeded::query(), 'Done')->count();
+            $open = $this->filterByUic(Supportneeded::query(), $uic)->where('progress', 'Open')->count();
+            $discuss = $this->filterByUic(Supportneeded::query(), $uic)->where('progress', 'Need Discuss')->count();
+            $progress = $this->filterByUic(Supportneeded::query(), $uic)->where('progress', 'On Progress')->count();
+            $done = $this->filterByUic(Supportneeded::query(), $uic)->where('progress', 'Done')->count();
 
             $total = $open + $discuss + $progress + $done;
 
@@ -203,17 +132,7 @@ class SumController extends Controller
 
     private function getSummaryByAgenda()
     {
-        $agendaList = [
-            '1 ON 1 AM',
-            '1 ON 1 TELDA',
-            'WAR',
-            'FORUM TIF',
-            'FORUM TSEL',
-            'FORUM GSD',
-            'REVIEW KPI',
-            'OTHERS'
-        ];
-
+        $agendaList = ['1 ON 1 AM', '1 ON 1 TELDA', 'WAR', 'FORUM TIF', 'FORUM TSEL', 'FORUM GSD', 'REVIEW KPI', 'OTHERS'];
         $summary = [];
 
         foreach ($agendaList as $agenda) {
@@ -271,13 +190,7 @@ class SumController extends Controller
 
     private function getTotalSummary($data)
     {
-        $totals = [
-            'open' => 0,
-            'discuss' => 0,
-            'progress' => 0,
-            'done' => 0,
-            'total' => 0
-        ];
+        $totals = ['open' => 0, 'discuss' => 0, 'progress' => 0, 'done' => 0, 'total' => 0];
 
         foreach ($data as $item) {
             $totals['open'] += $item['open'];
@@ -287,12 +200,22 @@ class SumController extends Controller
             $totals['total'] += $item['total'];
         }
 
-        // Calculate percentages
         $totals['open_percent'] = $totals['total'] > 0 ? round(($totals['open'] / $totals['total']) * 100, 1) : 0;
         $totals['discuss_percent'] = $totals['total'] > 0 ? round(($totals['discuss'] / $totals['total']) * 100, 1) : 0;
         $totals['progress_percent'] = $totals['total'] > 0 ? round(($totals['progress'] / $totals['total']) * 100, 1) : 0;
         $totals['done_percent'] = $totals['total'] > 0 ? round(($totals['done'] / $totals['total']) * 100, 1) : 0;
 
         return $totals;
+    }
+
+    /**
+     * ✅ Helper: filter akurat untuk UIC
+     */
+    private function filterByUic($query, $uic)
+    {
+        return $query->where(function ($q) use ($uic) {
+            $q->where('uic', $uic)
+              ->orWhereRaw("FIND_IN_SET(?, uic)", [$uic]);
+        });
     }
 }
