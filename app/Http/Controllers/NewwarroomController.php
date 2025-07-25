@@ -10,49 +10,26 @@ use Illuminate\Support\Facades\DB;
 class NewwarroomController extends Controller
 {
     /**
-     * Method untuk mendapatkan filter params dari URL/query parameters
-     */
-    private function getOriginalFilterParams(Request $request)
-    {
-        $filterParams = [];
-        $filters = ['bulan', 'tahun', 'uic', 'search', 'status']; // Tambah status filter
-
-        foreach ($filters as $filter) {
-            $value = $request->query($filter);
-            if (!empty($value) && $value !== '') {
-                $filterParams[$filter] = $value;
-            }
-        }
-
-        return $filterParams;
-    }
-
-    /**
-     * Apply filters to query
+     * Apply filters to query - PURE dari request saja
      */
     private function applyFilters($query, Request $request)
     {
-        if ($request->filled('bulan') && $request->bulan !== '') {
-            $query->byMonth($request->bulan);
+        // MURNI dari request, tidak ada campur tangan session
+        $bulan = $request->get('bulan');
+        $tahun = $request->get('tahun');
+        $uic = $request->get('uic');
+
+        // Apply filter hanya jika ada nilai dan bukan kosong dan bukan 'all'
+        if (!empty($bulan) && $bulan !== 'all') {
+            $query->byMonth($bulan);
         }
 
-        if ($request->filled('tahun') && $request->tahun !== '') {
-            $query->byYear($request->tahun);
+        if (!empty($tahun) && $tahun !== 'all') {
+            $query->byYear($tahun);
         }
 
-        if ($request->filled('uic') && $request->uic !== '') {
-            $query->where('uic', 'like', '%' . $request->uic . '%');
-        }
-
-        if ($request->filled('search') && $request->search !== '') {
-            $query->search($request->search);
-        }
-
-        // Tambahkan filter status action plan
-        if ($request->filled('status') && $request->status !== '') {
-            $query->whereHas('actionPlans', function ($actionQuery) use ($request) {
-                $actionQuery->where('status_action_plan', $request->status);
-            });
+        if (!empty($uic) && $uic !== 'all') {
+            $query->Where('uic', 'like', '%' . $uic . '%');
         }
     }
 
@@ -105,43 +82,13 @@ class NewwarroomController extends Controller
     }
 
     /**
-     * Simpan filter parameters ke session untuk mempertahankan filter setelah CRUD operations
-     */
-    private function preserveFilterParams(Request $request)
-    {
-        $filterParams = $this->getOriginalFilterParams($request);
-        
-        // Simpan ke session jika ada filter aktif
-        if (!empty($filterParams)) {
-            session(['warroom_filters' => $filterParams]);
-        }
-        
-        return $filterParams;
-    }
-
-    /**
-     * Ambil filter parameters dari session jika tidak ada di request
-     */
-    private function getPreservedFilters(Request $request)
-    {
-        $currentFilters = $this->getOriginalFilterParams($request);
-        $sessionFilters = session('warroom_filters', []);
-        
-        // Jika tidak ada filter di request, gunakan dari session
-        if (empty($currentFilters) && !empty($sessionFilters)) {
-            return $sessionFilters;
-        }
-        
-        return $currentFilters;
-    }
-
-    /**
      * Tampilkan daftar data warroom dengan filter & search
      */
     public function index(Request $request)
     {
         $query = Newwarroom::with(['actionPlans', 'supportneeded']);
 
+        // Apply filters MURNI dari request
         $this->applyFilters($query, $request);
 
         $warroomData = $query->orderByRaw('tgl IS NULL')
@@ -166,23 +113,21 @@ class NewwarroomController extends Controller
             "GSD", "SSGS", "PRQ", "RSMES", "BPPLP", "SSS"
         ];
 
-        // Status List untuk filter
-        $statusList = ['Open', 'Progress', 'Need Discuss', 'Eskalasi', 'Done'];
+        // Ambil nilai filter MURNI dari request untuk ditampilkan di view
+        $bulan = $request->get('bulan');
+        $tahun = $request->get('tahun');
+        $uic = $request->get('uic');
 
-        // Get current filter values dengan preserved filters
-        $preservedFilters = $this->getPreservedFilters($request);
+        // HANYA simpan ke session jika ada filter aktif (untuk keperluan CRUD redirect)
+        $activeFilters = [];
+        if (!empty($bulan) && $bulan !== 'all') $activeFilters['bulan'] = $bulan;
+        if (!empty($tahun) && $tahun !== 'all') $activeFilters['tahun'] = $tahun;
+        if (!empty($uic) && $uic !== 'all') $activeFilters['uic'] = $uic;
         
-        $bulan = $request->filled('bulan') && $request->bulan !== '' ? $request->bulan : ($preservedFilters['bulan'] ?? null);
-        $tahun = $request->filled('tahun') && $request->tahun !== '' ? $request->tahun : ($preservedFilters['tahun'] ?? null);
-        $uic = $request->filled('uic') && $request->uic !== '' ? $request->uic : ($preservedFilters['uic'] ?? null);
-        $search = $request->filled('search') && $request->search !== '' ? $request->search : ($preservedFilters['search'] ?? null);
-        $status = $request->filled('status') && $request->status !== '' ? $request->status : ($preservedFilters['status'] ?? null);
-
-        // Simpan filter aktif ke session
-        $this->preserveFilterParams($request);
+        session(['warroom_filters' => $activeFilters]);
 
         return view('warroom.newwarroom', array_merge(
-            compact('warroomData', 'bulan', 'tahun', 'uic', 'uicList', 'tahunList', 'search', 'status', 'statusList'),
+            compact('warroomData', 'uicList', 'tahunList', 'bulan', 'tahun', 'uic'),
             $statistics
         ));
     }
@@ -203,9 +148,6 @@ class NewwarroomController extends Controller
         $validated = $this->validateWarroomRequest($request);
         $jumlah = (int) $validated['jumlah_action_plan'];
         $this->validateActionPlans($request, $jumlah);
-
-        // Preserve filter parameters sebelum operasi
-        $filterParams = $this->preserveFilterParams($request);
 
         DB::beginTransaction();
 
@@ -228,10 +170,10 @@ class NewwarroomController extends Controller
 
             DB::commit();
 
-            // Gunakan filter yang telah dipreserve
-            $redirectFilters = !empty($filterParams) ? $filterParams : session('warroom_filters', []);
+            // Redirect dengan filter yang tersimpan di session
+            $sessionFilters = session('warroom_filters', []);
             
-            return redirect()->route('newwarroom.index', $redirectFilters)
+            return redirect()->route('newwarroom.index', $sessionFilters)
                 ->with('success', 'Data berhasil ditambahkan.');
         } catch (\Exception $e) {
             DB::rollback();
@@ -266,9 +208,6 @@ class NewwarroomController extends Controller
         $jumlah = (int) $validated['jumlah_action_plan'];
         $this->validateActionPlans($request, $jumlah);
 
-        // Preserve filter parameters SEBELUM update
-        $filterParams = $this->preserveFilterParams($request);
-
         DB::beginTransaction();
 
         try {
@@ -296,10 +235,10 @@ class NewwarroomController extends Controller
 
             DB::commit();
 
-            // PENTING: Gunakan filter yang telah dipreserve, bukan yang baru dari request
-            $redirectFilters = !empty($filterParams) ? $filterParams : session('warroom_filters', []);
+            // Redirect dengan filter yang tersimpan di session
+            $sessionFilters = session('warroom_filters', []);
             
-            return redirect()->route('newwarroom.index', $redirectFilters)
+            return redirect()->route('newwarroom.index', $sessionFilters)
                 ->with('success', 'Data berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollback();
@@ -312,9 +251,6 @@ class NewwarroomController extends Controller
      */
     public function destroy(Request $request, Newwarroom $newwarroom)
     {
-        // Preserve filter parameters sebelum operasi
-        $filterParams = $this->preserveFilterParams($request);
-
         DB::beginTransaction();
 
         try {
@@ -325,18 +261,18 @@ class NewwarroomController extends Controller
             $newwarroom->delete();
             DB::commit();
 
-            // Gunakan filter yang telah dipreserve
-            $redirectFilters = !empty($filterParams) ? $filterParams : session('warroom_filters', []);
+            // Redirect dengan filter yang tersimpan di session
+            $sessionFilters = session('warroom_filters', []);
             
-            return redirect()->route('newwarroom.index', $redirectFilters)
+            return redirect()->route('newwarroom.index', $sessionFilters)
                 ->with('success', 'Data berhasil dihapus.');
         } catch (\Exception $e) {
             DB::rollback();
 
-            // Gunakan filter yang telah dipreserve
-            $redirectFilters = !empty($filterParams) ? $filterParams : session('warroom_filters', []);
+            // Redirect dengan filter yang tersimpan di session
+            $sessionFilters = session('warroom_filters', []);
             
-            return redirect()->route('newwarroom.index', $redirectFilters)
+            return redirect()->route('newwarroom.index', $sessionFilters)
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
@@ -350,7 +286,7 @@ class NewwarroomController extends Controller
     }
 
     /**
-     * Method untuk clear filter session (opsional)
+     * Method untuk clear semua filter
      */
     public function clearFilters()
     {
