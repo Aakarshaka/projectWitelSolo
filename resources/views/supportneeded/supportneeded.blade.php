@@ -22,7 +22,7 @@
                         <div class="stat-value">{{ round($avgProgress, 1) }}%</div>
                     </div>
                     <a href="{{ url('/supportneeded/export') }}" class="add-btn" type="button">
-                        Export to Excel
+                        EXCEL
                     </a>
                     <button class="add-btn" type="button" onclick="openModal('addSupportModal')">ADD+</button>
                 </div>

@@ -23,7 +23,7 @@
         visibility: visible;
     }
 
-    /* CP Modal Content */
+    /* CP Modal Content - FIXED for seamless footer */
     .cp-modal-content {
         background-color: #ffffff;
         margin: 3% auto;
@@ -37,13 +37,15 @@
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         transform: translateY(-50px) scale(0.95);
         transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        display: flex;
+        flex-direction: column;
     }
 
     .cp-modal.show .cp-modal-content {
         transform: translateY(0) scale(1);
     }
 
-    /* CP Modal Header - Light burgundy theme */
+    /* CP Modal Header - Light burgundy theme - STICKY */
     .cp-modal-header {
         background: linear-gradient(135deg, #8b1538 0%, #6b1f47 100%);
         color: white;
@@ -54,6 +56,8 @@
         align-items: center;
         position: relative;
         overflow: hidden;
+        flex-shrink: 0;
+        z-index: 10;
     }
 
     .cp-modal-header::before {
@@ -103,13 +107,15 @@
         outline: none;
     }
 
-    /* CP Modal Body - IMPROVED: Light background with better contrast */
+    /* CP Modal Body - FIXED for seamless connection */
     .cp-modal-body {
-        padding: 30px;
-        max-height: 65vh;
-        overflow-y: auto;
+        padding: 30px 30px 0 30px;
+        /* Removed bottom padding */
         background: linear-gradient(135deg, #fafbfc 0%, #f5f6f8 100%);
         color: #2c3e50;
+        flex: 1;
+        overflow-y: auto;
+        min-height: 0;
     }
 
     .cp-modal-body::-webkit-scrollbar {
@@ -274,15 +280,22 @@
         font-weight: 600;
     }
 
-    /* CP Modal Footer - IMPROVED */
+    /* CP Modal Footer - FIXED for seamless connection */
     .cp-modal-footer {
-        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        background: linear-gradient(135deg, #fafbfc 0%, #f5f6f8 100%);
+        /* Same as body background */
         padding: 20px 30px;
-        border-top: 1px solid #dee2e6;
+        border-top: 1px solid #e6e1e8;
+        /* Remove border */
         display: flex;
         justify-content: flex-end;
-        gap: 15px;
+        gap: 12px;
         border-radius: 0 0 12px 12px;
+        flex-shrink: 0;
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
+        /* Remove shadow for seamless look */
     }
 
     /* CP Button Styling - IMPROVED */
@@ -546,6 +559,11 @@
             padding: 20px;
         }
 
+        .cp-modal-body {
+            padding: 20px 20px 0 20px;
+            /* Maintain no bottom padding */
+        }
+
         .cp-form-row {
             flex-direction: column;
             gap: 15px;
@@ -583,6 +601,11 @@
         }
 
         .cp-modal-body {
+            padding: 15px 15px 0 15px;
+            /* Maintain no bottom padding */
+        }
+
+        .cp-modal-footer {
             padding: 15px;
         }
 
@@ -967,10 +990,10 @@
 
         // Add type-specific styling
         const colors = {
-            success: '#28a745',
-            error: '#dc3545',
-            warning: '#ffc107',
-            info: '#17a2b8'
+            success: '#4a0e4e',
+            error: '#4a0e4e',
+            warning: '#4a0e4e',
+            info: '#4a0e4e'
         };
 
         notification.querySelector('.notification-icon').style.color = colors[type] || colors.info;
