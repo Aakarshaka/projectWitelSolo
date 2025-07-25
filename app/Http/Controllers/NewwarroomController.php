@@ -16,8 +16,8 @@ class NewwarroomController extends Controller
     {
         return $query->where(function ($q) use ($uic) {
             $q->where('uic', $uic)
-              ->orWhereRaw("FIND_IN_SET(?, uic)", [$uic])
-              ->orWhereRaw("FIND_IN_SET(?, REPLACE(uic, ' ', ''))", [$uic]);
+                ->orWhereRaw("FIND_IN_SET(?, uic)", [$uic])
+                ->orWhereRaw("FIND_IN_SET(?, REPLACE(uic, ' ', ''))", [$uic]);
         });
     }
 
@@ -29,6 +29,8 @@ class NewwarroomController extends Controller
         $bulan = $request->get('bulan');
         $tahun = $request->get('tahun');
         $uic = $request->get('uic');
+        $search = $request->get('search'); // ✅ Tambahkan search
+
 
         if (!empty($bulan) && $bulan !== 'all') {
             $query->byMonth($bulan);
@@ -40,6 +42,21 @@ class NewwarroomController extends Controller
 
         if (!empty($uic) && $uic !== 'all') {
             $this->filterByUic($query, $uic); // ✅ FIXED
+        }
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('agenda', 'like', "%{$search}%")
+                    ->orWhere('uic', 'like', "%{$search}%") // ✅ Tambahkan pencarian UIC
+                    ->orWhere('peserta', 'like', "%{$search}%")
+                    ->orWhere('pembahasan', 'like', "%{$search}%")
+                    ->orWhere('support_needed', 'like', "%{$search}%");
+            })
+                ->orWhereHas('actionPlans', function ($q) use ($search) {
+                    $q->where('action_plan', 'like', "%{$search}%")
+                        ->orWhere('update_action_plan', 'like', "%{$search}%")
+                        ->orWhere('status_action_plan', 'like', "%{$search}%");
+                });
         }
     }
 
@@ -113,26 +130,48 @@ class NewwarroomController extends Controller
             ->pluck('tahun');
 
         $uicList = [
-            "TELDA BLORA", "TELDA BOYOLALI", "TELDA JEPARA", "TELDA KLATEN", 
-            "TELDA KUDUS", "TELDA MEA SOLO", "TELDA PATI", "TELDA PURWODADI", 
-            "TELDA REMBANG", "TELDA SRAGEN", "TELDA WONOGIRI", "BS", "GS", 
-            "RLEGS", "RSO REGIONAL", "RSO WITEL", "ED", "TIF", "TSEL", 
-            "GSD", "SSGS", "PRQ", "RSMES", "BPPLP", "SSS"
+            "TELDA BLORA",
+            "TELDA BOYOLALI",
+            "TELDA JEPARA",
+            "TELDA KLATEN",
+            "TELDA KUDUS",
+            "TELDA MEA SOLO",
+            "TELDA PATI",
+            "TELDA PURWODADI",
+            "TELDA REMBANG",
+            "TELDA SRAGEN",
+            "TELDA WONOGIRI",
+            "BS",
+            "GS",
+            "RLEGS",
+            "RSO REGIONAL",
+            "RSO WITEL",
+            "ED",
+            "TIF",
+            "TSEL",
+            "GSD",
+            "SSGS",
+            "PRQ",
+            "RSMES",
+            "BPPLP",
+            "SSS"
         ];
 
         $bulan = $request->get('bulan');
         $tahun = $request->get('tahun');
         $uic = $request->get('uic');
+        $search = $request->get('search'); // ✅ Tambah ini
+
 
         $activeFilters = [];
         if (!empty($bulan) && $bulan !== 'all') $activeFilters['bulan'] = $bulan;
         if (!empty($tahun) && $tahun !== 'all') $activeFilters['tahun'] = $tahun;
         if (!empty($uic) && $uic !== 'all') $activeFilters['uic'] = $uic;
-        
+
         session(['warroom_filters' => $activeFilters]);
 
         return view('warroom.newwarroom', array_merge(
-            compact('warroomData', 'uicList', 'tahunList', 'bulan', 'tahun', 'uic'),
+            compact('warroomData', 'uicList', 'tahunList', 'bulan', 'tahun', 'uic', 'search'),
             $statistics
         ));
     }
@@ -170,7 +209,7 @@ class NewwarroomController extends Controller
             DB::commit();
 
             $sessionFilters = session('warroom_filters', []);
-            
+
             return redirect()->route('newwarroom.index', $sessionFilters)
                 ->with('success', 'Data berhasil ditambahkan.');
         } catch (\Exception $e) {
@@ -224,7 +263,7 @@ class NewwarroomController extends Controller
             DB::commit();
 
             $sessionFilters = session('warroom_filters', []);
-            
+
             return redirect()->route('newwarroom.index', $sessionFilters)
                 ->with('success', 'Data berhasil diperbarui.');
         } catch (\Exception $e) {
@@ -241,19 +280,19 @@ class NewwarroomController extends Controller
             if (function_exists('log_activity')) {
                 log_activity('delete', $newwarroom, 'Menghapus Warroom: ' . $newwarroom->agenda);
             }
-            
+
             $newwarroom->delete();
             DB::commit();
 
             $sessionFilters = session('warroom_filters', []);
-            
+
             return redirect()->route('newwarroom.index', $sessionFilters)
                 ->with('success', 'Data berhasil dihapus.');
         } catch (\Exception $e) {
             DB::rollback();
 
             $sessionFilters = session('warroom_filters', []);
-            
+
             return redirect()->route('newwarroom.index', $sessionFilters)
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
