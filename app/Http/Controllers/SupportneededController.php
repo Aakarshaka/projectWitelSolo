@@ -31,13 +31,22 @@ class SupportneededController extends Controller
      */
     private function applyFilters($query, Request $request)
     {
-        // ✅ Tambahkan 'status' ke dalam array filters
+        // ✅ Tambahkan 'bulan' dan 'tahun' ke dalam array filters
         $filters = ['progress', 'status', 'unit_or_telda', 'uic'];
 
         foreach ($filters as $filter) {
             if ($request->filled($filter)) {
                 $query->where($filter, $request->$filter);
             }
+        }
+
+        // ✅ Filter berdasarkan bulan dan tahun
+        if ($request->filled('bulan')) {
+            $query->whereMonth('start_date', $request->bulan);
+        }
+
+        if ($request->filled('tahun')) {
+            $query->whereYear('start_date', $request->tahun);
         }
 
         if ($request->filled('search')) {
@@ -134,8 +143,8 @@ class SupportneededController extends Controller
     private function getFilterParams(Request $request)
     {
         $filterParams = [];
-        // ✅ Tambahkan 'status' ke dalam array filters
-        $filters = ['progress', 'status', 'unit_or_telda', 'uic', 'search'];
+        // ✅ Tambahkan 'bulan' dan 'tahun' ke dalam array filters
+        $filters = ['progress', 'status', 'unit_or_telda', 'uic', 'search', 'bulan', 'tahun'];
 
         foreach ($filters as $filter) {
             if ($request->filled($filter)) {
@@ -157,7 +166,8 @@ class SupportneededController extends Controller
     private function getOriginalFilterParams(Request $request)
     {
         $filterParams = [];
-        $filters = ['progress', 'status', 'unit_or_telda', 'uic', 'search'];
+        // ✅ Tambahkan 'bulan' dan 'tahun' ke dalam array filters
+        $filters = ['progress', 'status', 'unit_or_telda', 'uic', 'search', 'bulan', 'tahun'];
 
         // ✅ PRIORITAS 1: Ambil dari query parameters (URL) - ini yang paling penting
         foreach ($filters as $filter) {

@@ -13,7 +13,6 @@
         backdrop-filter: blur(3px);
         opacity: 0;
         transition: opacity 0.3s ease;
-
     }
 
     .sn-modal.show {
@@ -30,17 +29,12 @@
         width: 90%;
         max-width: 700px;
         max-height: 90vh;
-        /* overflow-y: auto; ❌ hapus ini */
         overflow: hidden;
-        /* ✅ tambahkan */
         transform: scale(0.7);
         transition: transform 0.3s ease;
         display: flex;
-        /* ✅ */
         flex-direction: column;
-        /* ✅ */
     }
-
 
     .sn-modal.show .sn-modal-content {
         transform: scale(1);
@@ -85,13 +79,9 @@
     .sn-modal-body {
         padding: 30px;
         overflow-y: auto;
-        /* ✅ scroll di sini */
         flex-grow: 1;
-        /* ✅ biar body ambil sisa tinggi */
         max-height: calc(90vh - 160px);
-        /* ✅ sesuaikan tinggi header + footer */
     }
-
 
     .sn-form-grid {
         display: grid;
@@ -300,8 +290,8 @@
                     </div>
 
                     <div class="sn-form-group">
-                        <label class="sn-form-label">Progress</label required>
-                        <select class="sn-form-select" name="progress">
+                        <label class="sn-form-label">Progress</label>
+                        <select class="sn-form-select" name="progress" required>
                             <option value="Open">Open</option>
                             <option value="Need Discuss">Need Discuss</option>
                             <option value="On Progress">On Progress</option>
@@ -365,7 +355,7 @@
                             <option value="TELDA JEPARA">TELDA JEPARA</option>
                             <option value="TELDA KLATEN">TELDA KLATEN</option>
                             <option value="TELDA KUDUS">TELDA KUDUS</option>
-                            <option value="TELDA MEA SOLO">MEA SOLO</option>
+                            <option value="MEA SOLO">MEA SOLO</option>
                             <option value="TELDA PATI">TELDA PATI</option>
                             <option value="TELDA PURWODADI">TELDA PURWODADI</option>
                             <option value="TELDA REMBANG">TELDA REMBANG</option>
@@ -408,7 +398,7 @@
                     <div class="sn-form-group">
                         <label class="sn-form-label">Progress</label>
                         <select class="sn-form-select" name="progress" id="edit_progress" required>
-                            <option value disabled="">Select Progress</option>
+                            <option value="" disabled>Select Progress</option>
                             <option value="Open">Open</option>
                             <option value="Need Discuss">Need Discuss</option>
                             <option value="On Progress">On Progress</option>
@@ -468,6 +458,54 @@
     });
 
     /**
+     * ✅ Function untuk format tanggal ke format yang diperlukan HTML input date (YYYY-MM-DD)
+     */
+    function formatDateForInput(dateString) {
+        if (!dateString) return '';
+        
+        // Jika sudah dalam format YYYY-MM-DD, return langsung
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+            return dateString;
+        }
+        
+        // Coba parse berbagai format tanggal
+        let date;
+        
+        // Format DD/MM/YYYY atau DD-MM-YYYY
+        if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}$/.test(dateString)) {
+            const parts = dateString.split(/[\/\-]/);
+            date = new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+        // Format MM/DD/YYYY atau MM-DD-YYYY
+        else if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}$/.test(dateString)) {
+            const parts = dateString.split(/[\/\-]/);
+            date = new Date(parts[2], parts[0] - 1, parts[1]);
+        }
+        // Format YYYY/MM/DD atau YYYY-MM-DD
+        else if (/^\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2}$/.test(dateString)) {
+            const parts = dateString.split(/[\/\-]/);
+            date = new Date(parts[0], parts[1] - 1, parts[2]);
+        }
+        // Coba parse dengan Date constructor
+        else {
+            date = new Date(dateString);
+        }
+        
+        // Validasi apakah date valid
+        if (isNaN(date.getTime())) {
+            console.warn('Invalid date format:', dateString);
+            return '';
+        }
+        
+        // Format ke YYYY-MM-DD
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        
+        return `${year}-${month}-${day}`;
+    }
+
+    /**
      * ✅ Function untuk mendapatkan current filter parameters dari URL
      */
     function getCurrentFilters() {
@@ -475,7 +513,7 @@
         const filters = {};
 
         // Daftar filter yang perlu dipreservasi
-        const filterKeys = ['progress', 'status', 'unit_or_telda', 'uic', 'search'];
+        const filterKeys = ['bulan','tahun','progress', 'status', 'unit_or_telda', 'uic', 'search'];
 
         filterKeys.forEach(key => {
             const value = urlParams.get(key);
@@ -508,15 +546,46 @@
         });
     }
 
-    // Function to populate edit form (call this when edit button is clicked)
+    /**
+     * ✅ Function to populate edit form dengan handling tanggal yang lebih baik
+     */
     function populateEditForm(data) {
-        document.getElementById('edit_agenda').value = data.agenda || '';
-        document.getElementById('edit_unit_or_telda').value = data.unit_or_telda || '';
-        document.getElementById('edit_start_date').value = data.start_date || '';
-        document.getElementById('edit_uic').value = data.uic || '';
-        document.getElementById('edit_progress').value = data.progress || '';
-        document.getElementById('edit_notes_to_follow_up').value = data.notes_to_follow_up || '';
-        document.getElementById('edit_response_uic').value = data.response_uic || '';
+        // Debug: log data yang diterima
+        console.log('Data received for edit:', data);
+        
+        // Set form values dengan validasi
+        const setSelectValue = (elementId, value) => {
+            const element = document.getElementById(elementId);
+            if (element && value) {
+                element.value = value;
+                // Validasi apakah option ada
+                if (element.value !== value) {
+                    console.warn(`Option "${value}" not found for ${elementId}`);
+                }
+            }
+        };
+
+        const setInputValue = (elementId, value) => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.value = value || '';
+            }
+        };
+
+        // Set semua field
+        setSelectValue('edit_agenda', data.agenda);
+        setSelectValue('edit_unit_or_telda', data.unit_or_telda);
+        setSelectValue('edit_uic', data.uic);
+        setSelectValue('edit_progress', data.progress);
+        
+        // Handle tanggal dengan format yang benar
+        const formattedDate = formatDateForInput(data.start_date);
+        console.log('Original date:', data.start_date, 'Formatted date:', formattedDate);
+        setInputValue('edit_start_date', formattedDate);
+        
+        // Set textarea values
+        setInputValue('edit_notes_to_follow_up', data.notes_to_follow_up);
+        setInputValue('edit_response_uic', data.response_uic);
 
         // ✅ Update form action dengan current filters
         const currentFilters = getCurrentFilters();
@@ -537,7 +606,7 @@
 
         if (startDateInput) {
             startDateInput.addEventListener('change', function () {
-                // contoh: console.log("Start date selected: " + startDateInput.value);
+                console.log("Start date selected: " + startDateInput.value);
             });
         }
 

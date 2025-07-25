@@ -32,6 +32,41 @@
                 <div class="filters">
                     <form method="GET" action="{{ route('supportneeded.index') }}" class="filters">
                         <div class="filter-group">
+                            <label class="filter-label">Bulan</label>
+                            <select class="filter-select" name="bulan">
+                                <option value="">All Bulan</option>
+                                <option value="01" {{ request('bulan') == '01' ? 'selected' : '' }}>January</option>
+                                <option value="02" {{ request('bulan') == '02' ? 'selected' : '' }}>February</option>
+                                <option value="03" {{ request('bulan') == '03' ? 'selected' : '' }}>March</option>
+                                <option value="04" {{ request('bulan') == '04' ? 'selected' : '' }}>April</option>
+                                <option value="05" {{ request('bulan') == '05' ? 'selected' : '' }}>May</option>
+                                <option value="06" {{ request('bulan') == '06' ? 'selected' : '' }}>June</option>
+                                <option value="07" {{ request('bulan') == '07' ? 'selected' : '' }}>July</option>
+                                <option value="08" {{ request('bulan') == '08' ? 'selected' : '' }}>August</option>
+                                <option value="09" {{ request('bulan') == '09' ? 'selected' : '' }}>September</option>
+                                <option value="10" {{ request('bulan') == '10' ? 'selected' : '' }}>October</option>
+                                <option value="11" {{ request('bulan') == '11' ? 'selected' : '' }}>November</option>
+                                <option value="12" {{ request('bulan') == '12' ? 'selected' : '' }}>December</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="filter-label">Tahun</label>
+                            <select class="filter-select" name="tahun">
+                                <option value="">All Tahun</option>
+                                <option value="2021" {{ request('tahun') == '2021' ? 'selected' : '' }}>2021</option>
+                                <option value="2022" {{ request('tahun') == '2022' ? 'selected' : '' }}>2022</option>
+                                <option value="2023" {{ request('tahun') == '2023' ? 'selected' : '' }}>2023</option>
+                                <option value="2024" {{ request('tahun') == '2024' ? 'selected' : '' }}>2024</option>
+                                <option value="2025" {{ request('tahun') == '2025' ? 'selected' : '' }}>2025</option>
+                                <option value="2026" {{ request('tahun') == '2026' ? 'selected' : '' }}>2026</option>
+                                <option value="2027" {{ request('tahun') == '2027' ? 'selected' : '' }}>2027</option>
+                                <option value="2028" {{ request('tahun') == '2028' ? 'selected' : '' }}>2028</option>
+                                <option value="2029" {{ request('tahun') == '2029' ? 'selected' : '' }}>2029</option>
+                                <option value="2030" {{ request('tahun') == '2030' ? 'selected' : '' }}>2030</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
                             <label class="filter-label">Status</label>
                             <select class="filter-select" name="status">
                                 <option value="">All Status</option>
@@ -233,7 +268,7 @@
                                                     </td>
                                                     <td class="col-status">
                                                         <span class="status-badge 
-                                                                                {{ $item->status == 'Eskalasi' ? 'status-done' :
+                                                                                                        {{ $item->status == 'Eskalasi' ? 'status-done' :
                                 ($item->status == 'Action' ? 'status-action' :
                                     ($item->status == 'Support Needed' ? 'status-in-progress' : 'status-empty')) }}">
                                                             {{ $item->status ?: '-' }}
@@ -244,15 +279,15 @@
                                                         <div class="btn-group-horizontal">
                                                             <button type="button" class="action-btn edit-btn save-scroll"
                                                                 onclick="populateEditForm({
-                                                                                                                            id: '{{ $item->id }}',
-                                                                                                                            agenda: '{{ $item->agenda }}',
-                                                                                                                            unit_or_telda: '{{ $item->unit_or_telda }}',
-                                                                                                                            start_date: '{{ $item->start_date }}',
-                                                                                                                            uic: '{{ $item->uic }}',
-                                                                                                                            progress: '{{ $item->progress }}',
-                                                                                                                            notes_to_follow_up: `{{ $item->notes_to_follow_up }}`,
-                                                                                                                            response_uic: `{{ $item->response_uic }}`
-                                                                                                                            }); openModal('editSupportModal');">Edit</button>
+                                                                                                                                                    id: '{{ $item->id }}',
+                                                                                                                                                    agenda: '{{ $item->agenda }}',
+                                                                                                                                                    unit_or_telda: '{{ $item->unit_or_telda }}',
+                                                                                                                                                    start_date: '{{ $item->start_date }}',
+                                                                                                                                                    uic: '{{ $item->uic }}',
+                                                                                                                                                    progress: '{{ $item->progress }}',
+                                                                                                                                                    notes_to_follow_up: `{{ $item->notes_to_follow_up }}`,
+                                                                                                                                                    response_uic: `{{ $item->response_uic }}`
+                                                                                                                                                    }); openModal('editSupportModal');">Edit</button>
                                                             <form action="{{ route('supportneeded.destroy', $item->id) }}" method="POST"
                                                                 style="display:inline;">
                                                                 @csrf
@@ -262,17 +297,17 @@
                                                             </form>
                                                             <!-- Tombol Copy -->
                                                             <button type="button" class="action-btn copy-btn save-scroll" onclick="copyRowData({
-                                                                    id: '{{ $item->id }}',
-                                                                    agenda: '{{ $item->agenda }}',
-                                                                    unit_or_telda: '{{ $item->unit_or_telda }}',
-                                                                    start_date: '{{ $item->start_date }}',
-                                                                    end_date: '{{ $item->end_date }}',
-                                                                    uic: '{{ $item->uic }}',
-                                                                    progress: '{{ $item->progress }}',
-                                                                    status: '{{ $item->status }}',
-                                                                    notes_to_follow_up: `{{ $item->notes_to_follow_up }}`,
-                                                                    response_uic: `{{ $item->response_uic }}`
-                                                                }); openModal('copySupportModal');">Duplicate</button>
+                                                                                            id: '{{ $item->id }}',
+                                                                                            agenda: '{{ $item->agenda }}',
+                                                                                            unit_or_telda: '{{ $item->unit_or_telda }}',
+                                                                                            start_date: '{{ $item->start_date }}',
+                                                                                            end_date: '{{ $item->end_date }}',
+                                                                                            uic: '{{ $item->uic }}',
+                                                                                            progress: '{{ $item->progress }}',
+                                                                                            status: '{{ $item->status }}',
+                                                                                            notes_to_follow_up: `{{ $item->notes_to_follow_up }}`,
+                                                                                            response_uic: `{{ $item->response_uic }}`
+                                                                                        }); openModal('copySupportModal');">Duplicate</button>
                                                         </div>
                                                     </td>
                                                 </tr>
