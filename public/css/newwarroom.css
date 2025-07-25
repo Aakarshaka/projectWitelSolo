@@ -170,7 +170,7 @@ body {
 }
 
 .forum-item-wr {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .forum-item-header-wr {
@@ -191,7 +191,7 @@ body {
     border-radius: 6px;
     padding: 15px;
     border: 1px solid #e6e1e8;
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
 }
 
@@ -282,7 +282,7 @@ body {
 .filter-group-wr {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 0px;
 }
 
 .filter-label-wr {
