@@ -63,9 +63,6 @@ class SumController extends Controller
                 $item->start_date_display = $item->start_date_formatted;
                 $item->end_date_display = $item->end_date_formatted;
 
-                $item->start_date = $item->start_date_formatted;
-                $item->end_date = $item->end_date_formatted;
-
                 return $item;
             });
 
