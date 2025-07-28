@@ -171,6 +171,7 @@
                                 <option value="RSMES" {{ request('uic') == 'RSMES' ? 'selected' : '' }}>RSMES</option>
                                 <option value="BPPLP" {{ request('uic') == 'BPPLP' ? 'selected' : '' }}>BPPLP</option>
                                 <option value="SSS" {{ request('uic') == 'SSS' ? 'selected' : '' }}>SSS</option>
+                                <option value="LESA V" {{ request('uic') == 'LESA V' ? 'selected' : '' }}>LESA V</option>
                                 <!-- Tambahkan lainnya sesuai kebutuhan -->
                             </select>
                         </div>

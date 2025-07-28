@@ -154,7 +154,8 @@ class NewwarroomController extends Controller
             "PRQ",
             "RSMES",
             "BPPLP",
-            "SSS"
+            "SSS",
+            "LESA V"
         ];
 
         $bulan = $request->get('bulan');

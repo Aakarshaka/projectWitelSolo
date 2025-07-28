@@ -410,6 +410,7 @@
                             <option value="RSMES">RSMES</option>
                             <option value="BPPLP">BPPLP</option>
                             <option value="SSS">SSS</option>
+                            <option value="LESA V">LESA V</option>
                         </select>
                     </div>
 
@@ -521,6 +522,7 @@
                             <option value="RSMES" {{ $item->uic == 'RSMES' ? 'selected' : '' }}>RSMES</option>
                             <option value="BPPLP" {{ $item->uic == 'BPPLP' ? 'selected' : '' }}>BPPLP</option>
                             <option value="SSS" {{ $item->uic == 'SSS' ? 'selected' : '' }}>SSS</option>
+                            <option value="LESA V" {{ $item->uic == 'LESA V' ? 'selected' : '' }}>LESA V</option>
                         </select>
                     </div>
 

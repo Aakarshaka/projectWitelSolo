@@ -102,7 +102,7 @@ class SumController extends Controller
 
     private function getSummaryByUic()
     {
-        $uicList = ['BS', 'GS', 'RLEGS', 'RSO WITEL', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ', 'RSMES', 'BPPLP', 'SSS'];
+        $uicList = ['BS', 'GS', 'RLEGS', 'RSO WITEL', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ', 'RSMES', 'BPPLP', 'SSS', 'LESA V'];
         $summary = [];
 
         foreach ($uicList as $uic) {

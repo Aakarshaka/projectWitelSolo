@@ -15,6 +15,10 @@ class SupportneededController extends Controller
         // Apply filters
         $this->applyFilters($query, $request);
 
+        $supportneeded = $query->orderByRaw('start_date IS NULL')
+            ->orderBy('start_date', 'asc')
+            ->get();
+
         $items = $query->get();
 
         // Calculate statistics
