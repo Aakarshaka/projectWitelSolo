@@ -380,6 +380,17 @@
                         <label class="sn-form-label">UIC</label>
                         <select class="sn-form-select" name="uic" id="edit_uic">
                             <option value="">Select UIC</option>
+                            <option value="TELDA BLORA">TELDA BLORA</option>
+                            <option value="TELDA BOYOLALI">TELDA BOYOLALI</option>
+                            <option value="TELDA JEPARA">TELDA JEPARA</option>
+                            <option value="TELDA KLATEN">TELDA KLATEN</option>
+                            <option value="TELDA KUDUS">TELDA KUDUS</option>
+                            <option value="MEA SOLO">MEA SOLO</option>
+                            <option value="TELDA PATI">TELDA PATI</option>
+                            <option value="TELDA PURWODADI">TELDA PURWODADI</option>
+                            <option value="TELDA REMBANG">TELDA REMBANG</option>
+                            <option value="TELDA SRAGEN">TELDA SRAGEN</option>
+                            <option value="TELDA WONOGIRI">TELDA WONOGIRI</option>
                             <option value="BS">BS</option>
                             <option value="GS">GS</option>
                             <option value="RLEGS">RLEGS</option>

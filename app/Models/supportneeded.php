@@ -40,8 +40,8 @@ class Supportneeded extends Model
     ];
 
     // UIC categories untuk status determination<option value
-    const ESCALATION_UICS = ['TELDA BLORA','TELDA BOYOLALI','TELDA JEPARA','TELDA KLATEN','TELDA KUDUS','MEA SOLO','TELDA PATI','TELDA PURWODADI','TELDA REMBANG','TELDA SRAGEN','TELDA WONOGIRI','RLEGS', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'RSMES', 'BPPLP', 'SSS','RWS'];
-    const SUPPORT_NEEDED_UICS = ['BS', 'GS', 'RSO WITEL', 'SSGS', 'PRQ', 'LESA V'];
+    const ESCALATION_UICS = ['RLEGS', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'RSMES', 'BPPLP', 'SSS','RWS'];
+    const SUPPORT_NEEDED_UICS = ['TELDA BLORA','TELDA BOYOLALI','TELDA JEPARA','TELDA KLATEN','TELDA KUDUS','MEA SOLO','TELDA PATI','TELDA PURWODADI','TELDA REMBANG','TELDA SRAGEN','TELDA WONOGIRI','BS', 'GS', 'RSO WITEL', 'SSGS', 'PRQ', 'LESA V'];
 
     /**
      * Boot method untuk auto-calculate fields
