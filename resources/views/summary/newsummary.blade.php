@@ -46,7 +46,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $uicList = ['BS', 'GS', 'RLEGS', 'RSO WITEL', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ', 'RSMES', 'BPPLP', 'SSS', 'LESA V'];
+                                            $uicList = ['BS', 'GS', 'RLEGS', 'RSO WITEL', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'SSGS', 'PRQ', 'RSMES', 'BPPLP', 'SSS', 'LESA V','RWS'];
                                         @endphp
                                         @foreach ($uicList as $index => $uic)
                                             @php

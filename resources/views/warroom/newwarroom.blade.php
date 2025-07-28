@@ -165,6 +165,7 @@
                                         <option value="BPPLP" {{ request('uic') == 'BPPLP' ? 'selected' : '' }}>BPPLP</option>
                                         <option value="SSS" {{ request('uic') == 'SSS' ? 'selected' : '' }}>SSS</option>
                                         <option value="LESA V" {{ request('uic') == 'LESA V' ? 'selected' : '' }}>LESA V</option>
+                                        <option value="RWS" {{ request('uic') == 'RWS' ? 'selected' : '' }}>RWS</option>
                                     </select>
                                 </div>
 

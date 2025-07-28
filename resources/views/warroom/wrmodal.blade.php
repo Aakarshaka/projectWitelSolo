@@ -411,6 +411,7 @@
                             <option value="BPPLP">BPPLP</option>
                             <option value="SSS">SSS</option>
                             <option value="LESA V">LESA V</option>
+                            <option value="RWS">RWS</option>
                         </select>
                     </div>
 
@@ -523,6 +524,7 @@
                             <option value="BPPLP" {{ $item->uic == 'BPPLP' ? 'selected' : '' }}>BPPLP</option>
                             <option value="SSS" {{ $item->uic == 'SSS' ? 'selected' : '' }}>SSS</option>
                             <option value="LESA V" {{ $item->uic == 'LESA V' ? 'selected' : '' }}>LESA V</option>
+                            <option value="RWS" {{ $item->uic == 'RWS' ? 'selected' : '' }}>RWS</option>
                         </select>
                     </div>
 
