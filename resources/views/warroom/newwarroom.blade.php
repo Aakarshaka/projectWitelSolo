@@ -9,9 +9,27 @@
             <h1>WARROOM ACTIVITY</h1>
             <div class="stats-container-wr">
                 <div class="stat-card-wr">
-                    <div class="stat-label-wr">Masuk Eskalasi</div>
-                    <div class="stat-value-wr">{{ $jumlah_eskalasi }}</div>
+                    <div class="stat-label-wr">Open</div>
+                    <div class="stat-value-wr">{{ $status_summary['Open'] }}</div>
                 </div>
+                <div class="stat-card-wr">
+                    <div class="stat-label-wr">Progress</div>
+                    <div class="stat-value-wr">{{ $status_summary['Progress'] }}</div>
+                </div>
+                <div class="stat-card-wr">
+                    <div class="stat-label-wr">Discuss</div>
+                    <div class="stat-value-wr">{{ $status_summary['Need Discuss'] }}</div>
+                </div>
+                <div class="stat-card-wr">
+                    <div class="stat-label-wr">Eskalasi</div>
+                    <div class="stat-value-wr">{{ $status_summary['Eskalasi'] }}</div>
+                </div>
+                <div class="stat-card-wr">
+                    <div class="stat-label-wr">Done</div>
+                    <div class="stat-value-wr">{{ $status_summary['Done'] }}</div>
+                </div>
+
+                {{-- Statistik tambahan --}}
                 <div class="stat-card-wr">
                     <div class="stat-label-wr">Jumlah Action Plan</div>
                     <div class="stat-value-wr">{{ $jumlah_action_plan }}</div>
@@ -20,11 +38,10 @@
                     <div class="stat-label-wr">Jumlah Agenda</div>
                     <div class="stat-value-wr">{{ $jumlah_agenda }}</div>
                 </div>
-                <a href="{{ url('/newwarroom/export') }}" style="underline:none" class="add-btn" type="button">
-                    EXCEL
-                </a>
 
-                <button class="add-btn" type="button" onclick="openModal('addModal')">ADD+</button>
+                {{-- Tombol Export & Add --}}
+                <a href="{{ url('/newwarroom/export') }}" class="add-btn-wr">EXCEL</a>
+                <button class="add-btn-wr" type="button" onclick="openModal('addModal')">ADD+</button>
             </div>
         </div>
 
@@ -46,21 +63,11 @@
                             <i class="fas fa-calendar-alt"></i>
                             @php
                             $nama_bulan = [
-                            '01' => 'January',
-                            '02' => 'February',
-                            '03' => 'March',
-                            '04' => 'April',
-                            '05' => 'May',
-                            '06' => 'June',
-                            '07' => 'July',
-                            '08' => 'August',
-                            '09' => 'September',
-                            '10' => 'October',
-                            '11' => 'November',
-                            '12' => 'December',
+                                '01' => 'January', '02' => 'February', '03' => 'March', '04' => 'April',
+                                '05' => 'May', '06' => 'June', '07' => 'July', '08' => 'August',
+                                '09' => 'September', '10' => 'October', '11' => 'November', '12' => 'December',
                             ];
                             @endphp
-
                             <span>
                                 {{ !empty($bulan) && isset($nama_bulan[$bulan]) ? $nama_bulan[$bulan] : 'Semua Bulan' }}
                                 {{ !empty($tahun) ? $tahun : 'Semua Tahun' }}
@@ -98,7 +105,6 @@
                         <h3 class="filter-title-wr">Filter Data</h3>
                         <form method="GET" action="{{ route('newwarroom.index') }}" class="filter-form-wr">
                             <div class="filter-inputs-wr">
-
                                 <div class="filter-group-wr">
                                     <label class="filter-label-wr">Bulan</label>
                                     <select class="filter-select-wr" name="bulan">
@@ -139,37 +145,21 @@
                                     <label class="filter-label-wr">UIC</label>
                                     <select class="filter-select-wr" name="uic">
                                         <option value="">All UIC</option>
-                                        <option value="TELDA BLORA" {{ request('uic') == 'TELDA BLORA' ? 'selected' : '' }}>TELDA BLORA</option>
-                                        <option value="TELDA BOYOLALI" {{ request('uic') == 'TELDA BOYOLALI' ? 'selected' : '' }}>TELDA BOYOLALI</option>
-                                        <option value="TELDA JEPARA" {{ request('uic') == 'TELDA JEPARA' ? 'selected' : '' }}>TELDA JEPARA</option>
-                                        <option value="TELDA KLATEN" {{ request('uic') == 'TELDA KLATEN' ? 'selected' : '' }}>TELDA KLATEN</option>
-                                        <option value="TELDA KUDUS" {{ request('uic') == 'TELDA KUDUS' ? 'selected' : '' }}>TELDA KUDUS</option>
-                                        <option value="TELDA MEA SOLO" {{ request('uic') == 'TELDA MEA SOLO' ? 'selected' : '' }}>TELDA MEA SOLO</option>
-                                        <option value="TELDA PATI" {{ request('uic') == 'TELDA PATI' ? 'selected' : '' }}>TELDA PATI</option>
-                                        <option value="TELDA PURWODADI" {{ request('uic') == 'TELDA PURWODADI' ? 'selected' : '' }}>TELDA PURWODADI</option>
-                                        <option value="TELDA REMBANG" {{ request('uic') == 'TELDA REMBANG' ? 'selected' : '' }}>TELDA REMBANG</option>
-                                        <option value="TELDA SRAGEN" {{ request('uic') == 'TELDA SRAGEN' ? 'selected' : '' }}>TELDA SRAGEN</option>
-                                        <option value="TELDA WONOGIRI" {{ request('uic') == 'TELDA WONOGIRI' ? 'selected' : '' }}>TELDA WONOGIRI</option>
-                                        <option value="BS" {{ request('uic') == 'BS' ? 'selected' : '' }}>BS</option>
-                                        <option value="GS" {{ request('uic') == 'GS' ? 'selected' : '' }}>GS</option>
-                                        <option value="RLEGS" {{ request('uic') == 'RLEGS' ? 'selected' : '' }}>RLEGS</option>
-                                        <option value="RSO REGIONAL" {{ request('uic') == 'RSO REGIONAL' ? 'selected' : '' }}>RSO REGIONAL</option>
-                                        <option value="RSO WITEL" {{ request('uic') == 'RSO WITEL' ? 'selected' : '' }}>RSO WITEL</option>
-                                        <option value="ED" {{ request('uic') == 'ED' ? 'selected' : '' }}>ED</option>
-                                        <option value="TIF" {{ request('uic') == 'TIF' ? 'selected' : '' }}>TIF</option>
-                                        <option value="TSEL" {{ request('uic') == 'TSEL' ? 'selected' : '' }}>TSEL</option>
-                                        <option value="GSD" {{ request('uic') == 'GSD' ? 'selected' : '' }}>GSD</option>
-                                        <option value="SSGS" {{ request('uic') == 'SSGS' ? 'selected' : '' }}>SSGS</option>
-                                        <option value="PRQ" {{ request('uic') == 'PRQ' ? 'selected' : '' }}>PRQ</option>
-                                        <option value="RSMES" {{ request('uic') == 'RSMES' ? 'selected' : '' }}>RSMES</option>
-                                        <option value="BPPLP" {{ request('uic') == 'BPPLP' ? 'selected' : '' }}>BPPLP</option>
-                                        <option value="SSS" {{ request('uic') == 'SSS' ? 'selected' : '' }}>SSS</option>
-                                        <option value="LESA V" {{ request('uic') == 'LESA V' ? 'selected' : '' }}>LESA V</option>
-                                        <option value="RWS" {{ request('uic') == 'RWS' ? 'selected' : '' }}>RWS</option>
+                                        @php
+                                        $uic_options = [
+                                            'TELDA BLORA', 'TELDA BOYOLALI', 'TELDA JEPARA', 'TELDA KLATEN', 
+                                            'TELDA KUDUS', 'TELDA MEA SOLO', 'TELDA PATI', 'TELDA PURWODADI',
+                                            'TELDA REMBANG', 'TELDA SRAGEN', 'TELDA WONOGIRI', 'BS', 'GS',
+                                            'RLEGS', 'RSO REGIONAL', 'RSO WITEL', 'ED', 'TIF', 'TSEL',
+                                            'GSD', 'SSGS', 'PRQ', 'RSMES', 'BPPLP', 'SSS', 'LESA V', 'RWS'
+                                        ];
+                                        @endphp
+                                        @foreach($uic_options as $uic)
+                                        <option value="{{ $uic }}" {{ request('uic') == $uic ? 'selected' : '' }}>{{ $uic }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
 
-                                {{-- ✅ Tombol Filter --}}
                                 <div class="filter-group-wr">
                                     <button type="submit" class="filter-btn-wr">
                                         <i class="fas fa-filter"></i> Filter
@@ -191,9 +181,7 @@
                                         <input type="text" name="search" class="search-input-wr"
                                             placeholder="Cari agenda, UIC, peserta, atau pembahasan..."
                                             value="{{ request('search') }}">
-                                        <button type="submit" class="search-btn-wr">
-                                            Search
-                                        </button>
+                                        <button type="submit" class="search-btn-wr">Search</button>
                                     </div>
                                 </div>
                             </div>
@@ -290,8 +278,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="13" style="color: #6b7280; font-style: italic; text-align: center; ">No data
-                                available.</td>
+                            <td colspan="13" style="color: #6b7280; font-style: italic; text-align: center;">No data available.</td>
                         </tr>
                         @endforelse
                     </tbody>

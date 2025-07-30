@@ -68,12 +68,31 @@ class NewwarroomController extends Controller
         $jumlah_agenda = $warroomData->count();
         $nama_agenda = $warroomData->pluck('agenda')->unique()->values();
         $jumlah_action_plan = $warroomData->sum('jumlah_action_plan');
+        $warroomIds = $warroomData->pluck('id');
 
-        $jumlah_eskalasi = ActionPlan::whereIn('newwarroom_id', $warroomData->pluck('id'))
-            ->where('status_action_plan', 'Eskalasi')
-            ->count();
+        // Ringkasan hitung semua status yang relevan
+        $status_summary = ActionPlan::whereIn('newwarroom_id', $warroomIds)
+            ->selectRaw('status_action_plan, COUNT(*) as total')
+            ->whereIn('status_action_plan', ['Open', 'Progress', 'Need Discuss', 'Eskalasi', 'Done'])
+            ->groupBy('status_action_plan')
+            ->pluck('total', 'status_action_plan')
+            ->toArray();
 
-        return compact('jumlah_agenda', 'nama_agenda', 'jumlah_action_plan', 'jumlah_eskalasi');
+        // Pastikan setiap status muncul (jika nol tetap ada)
+        $status_summary = array_merge([
+            'Open' => 0,
+            'Progress' => 0,
+            'Need Discuss' => 0,
+            'Eskalasi' => 0,
+            'Done' => 0,
+        ], $status_summary);
+
+        return compact(
+            'jumlah_agenda',
+            'nama_agenda',
+            'jumlah_action_plan',
+            'status_summary'
+        );
     }
 
     /**
