@@ -21,8 +21,13 @@ class SupportneededController extends Controller
 
         $items = $query->get();
 
-        // Calculate statistics
-        $statistics = $this->calculateStatistics();
+        // ✅ PERBAIKAN: Kirim query yang sudah difilter ke calculateStatistics
+        // Buat query baru dengan filter yang sama untuk statistik
+        $statsQuery = Supportneeded::query();
+        $this->applyFilters($statsQuery, $request);
+        
+        // Calculate statistics berdasarkan data yang sudah difilter
+        $statistics = $this->calculateStatistics($statsQuery);
 
         return view('supportneeded.supportneeded', array_merge(
             compact('items'),
@@ -60,10 +65,18 @@ class SupportneededController extends Controller
 
     /**
      * Calculate dashboard statistics
+     * ✅ PERBAIKAN: Terima query parameter untuk menghitung statistik berdasarkan data yang difilter
      */
-    private function calculateStatistics()
+    private function calculateStatistics($query = null)
     {
-        $allItems = Supportneeded::all();
+        // Jika tidak ada query yang dikirim, gunakan semua data (untuk backward compatibility)
+        if ($query === null) {
+            $allItems = Supportneeded::all();
+        } else {
+            // Gunakan query yang sudah difilter
+            $allItems = $query->get();
+        }
+
         $total = $allItems->count();
         $close = $allItems->where('progress', 'Done')->count();
         $closePercentage = $total > 0 ? round(($close / $total) * 100, 1) : 0;
