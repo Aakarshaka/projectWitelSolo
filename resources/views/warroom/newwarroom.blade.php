@@ -8,23 +8,23 @@
         <div class="header-wr">
             <h1>WARROOM ACTIVITY</h1>
             <div class="stats-container-wr">
-                <div class="stat-card-wr">
+                <div class="stat-card-wr" data-status="open">
                     <div class="stat-label-wr">Open</div>
                     <div class="stat-value-wr">{{ $status_summary['Open'] }}</div>
                 </div>
-                <div class="stat-card-wr">
+                <div class="stat-card-wr" data-status="progress">
                     <div class="stat-label-wr">Progress</div>
                     <div class="stat-value-wr">{{ $status_summary['Progress'] }}</div>
                 </div>
-                <div class="stat-card-wr">
+                <div class="stat-card-wr" data-status="discuss">
                     <div class="stat-label-wr">Discuss</div>
                     <div class="stat-value-wr">{{ $status_summary['Need Discuss'] }}</div>
                 </div>
-                <div class="stat-card-wr">
+                <div class="stat-card-wr" data-status="eskalasi">
                     <div class="stat-label-wr">Eskalasi</div>
                     <div class="stat-value-wr">{{ $status_summary['Eskalasi'] }}</div>
                 </div>
-                <div class="stat-card-wr">
+                <div class="stat-card-wr" data-status="done">
                     <div class="stat-label-wr">Done</div>
                     <div class="stat-value-wr">{{ $status_summary['Done'] }}</div>
                 </div>
@@ -63,9 +63,9 @@
                             <i class="fas fa-calendar-alt"></i>
                             @php
                             $nama_bulan = [
-                                '01' => 'January', '02' => 'February', '03' => 'March', '04' => 'April',
-                                '05' => 'May', '06' => 'June', '07' => 'July', '08' => 'August',
-                                '09' => 'September', '10' => 'October', '11' => 'November', '12' => 'December',
+                            '01' => 'January', '02' => 'February', '03' => 'March', '04' => 'April',
+                            '05' => 'May', '06' => 'June', '07' => 'July', '08' => 'August',
+                            '09' => 'September', '10' => 'October', '11' => 'November', '12' => 'December',
                             ];
                             @endphp
                             <span>
@@ -147,11 +147,11 @@
                                         <option value="">All UIC</option>
                                         @php
                                         $uic_options = [
-                                            'TELDA BLORA', 'TELDA BOYOLALI', 'TELDA JEPARA', 'TELDA KLATEN', 
-                                            'TELDA KUDUS', 'TELDA MEA SOLO', 'TELDA PATI', 'TELDA PURWODADI',
-                                            'TELDA REMBANG', 'TELDA SRAGEN', 'TELDA WONOGIRI', 'BS', 'GS',
-                                            'RLEGS', 'RSO REGIONAL', 'RSO WITEL', 'ED', 'TIF', 'TSEL',
-                                            'GSD', 'SSGS', 'PRQ', 'RSMES', 'BPPLP', 'SSS', 'LESA V', 'RWS'
+                                        'TELDA BLORA', 'TELDA BOYOLALI', 'TELDA JEPARA', 'TELDA KLATEN',
+                                        'TELDA KUDUS', 'TELDA MEA SOLO', 'TELDA PATI', 'TELDA PURWODADI',
+                                        'TELDA REMBANG', 'TELDA SRAGEN', 'TELDA WONOGIRI', 'BS', 'GS',
+                                        'RLEGS', 'RSO REGIONAL', 'RSO WITEL', 'ED', 'TIF', 'TSEL',
+                                        'GSD', 'SSGS', 'PRQ', 'RSMES', 'BPPLP', 'SSS', 'LESA V', 'RWS'
                                         ];
                                         @endphp
                                         @foreach($uic_options as $uic)

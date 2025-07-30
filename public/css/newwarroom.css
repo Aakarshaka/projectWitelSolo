@@ -83,6 +83,58 @@ body {
     line-height: 1;
 }
 
+/* Stat Card Colors - sesuai dengan status action plan */
+.stat-card-wr[data-status="open"] {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-color: #93c5fd;
+}
+
+.stat-card-wr[data-status="progress"] {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-color: #fcd34d;
+}
+
+.stat-card-wr[data-status="discuss"] {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    border-color: #d1d5db;
+}
+
+.stat-card-wr[data-status="eskalasi"] {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border-color: #fca5a5;
+}
+
+.stat-card-wr[data-status="done"] {
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border-color: #86efac;
+}
+
+/* Warna text untuk stat card */
+.stat-card-wr[data-status="open"] .stat-label-wr,
+.stat-card-wr[data-status="open"] .stat-value-wr {
+    color: #1e40af;
+}
+
+.stat-card-wr[data-status="progress"] .stat-label-wr,
+.stat-card-wr[data-status="progress"] .stat-value-wr {
+    color: #d97706;
+}
+
+.stat-card-wr[data-status="discuss"] .stat-label-wr,
+.stat-card-wr[data-status="discuss"] .stat-value-wr {
+    color: #6b7280;
+}
+
+.stat-card-wr[data-status="eskalasi"] .stat-label-wr,
+.stat-card-wr[data-status="eskalasi"] .stat-value-wr {
+    color: #dc2626;
+}
+
+.stat-card-wr[data-status="done"] .stat-label-wr,
+.stat-card-wr[data-status="done"] .stat-value-wr {
+    color: #16a34a;
+}
+
 .add-btn-wr {
     background: #22c55e;
     color: white;
