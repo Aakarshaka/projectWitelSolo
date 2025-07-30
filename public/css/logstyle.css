@@ -41,9 +41,10 @@ body {
     min-width: 200px;
 }
 
+/* Stats Container - RAPIKAN */
 .log-stats-container {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     align-items: center;
     flex-wrap: wrap;
 }
@@ -53,22 +54,31 @@ body {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
-    padding: 8px 16px;
+    padding: 10px 14px;
     text-align: center;
-    min-width: 80px;
+    min-width: 85px;
     flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.log-stat-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
 }
 
 .log-stat-label {
-    font-size: 12px;
-    opacity: 0.9;
+    font-size: 11px;
+    opacity: 0.95;
     font-weight: 500;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
 .log-stat-value {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
-    margin-top: 2px;
+    line-height: 1;
 }
 
 .log-controls {
@@ -197,10 +207,6 @@ body {
     background: #3a0b3e;
 }
 
-.log-table-wrapper::-webkit-scrollbar-corner {
-    background: #f8f6f9;
-}
-
 .log-table {
     border-collapse: collapse;
     font-size: 13px;
@@ -209,54 +215,27 @@ body {
     min-width: 100%;
 }
 
+/* Table Column Widths */
 .log-table th.log-col-no,
-.log-table td.log-col-no {
-    width: 50px;
-    min-width: 50px;
-    max-width: 50px;
-}
+.log-table td.log-col-no { width: 50px; min-width: 50px; max-width: 50px; }
 
 .log-table th.log-col-time,
-.log-table td.log-col-time {
-    width: 120px;
-    min-width: 120px;
-    max-width: 120px;
-}
+.log-table td.log-col-time { width: 120px; min-width: 120px; max-width: 120px; }
 
 .log-table th.log-col-user,
-.log-table td.log-col-user {
-    width: 150px;
-    min-width: 150px;
-    max-width: 150px;
-}
+.log-table td.log-col-user { width: 150px; min-width: 150px; max-width: 150px; }
 
 .log-table th.log-col-action,
-.log-table td.log-col-action {
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
-}
+.log-table td.log-col-action { width: 100px; min-width: 100px; max-width: 100px; }
 
 .log-table th.log-col-data,
-.log-table td.log-col-data {
-    width: 120px;
-    min-width: 120px;
-    max-width: 120px;
-}
+.log-table td.log-col-data { width: 120px; min-width: 120px; max-width: 120px; }
 
 .log-table th.log-col-description,
-.log-table td.log-col-description {
-    width: 300px;
-    min-width: 300px;
-    max-width: 300px;
-}
+.log-table td.log-col-description { width: 300px; min-width: 300px; max-width: 300px; }
 
 .log-table th.log-col-changes,
-.log-table td.log-col-changes {
-    width: 150px;
-    min-width: 150px;
-    max-width: 150px;
-}
+.log-table td.log-col-changes { width: 150px; min-width: 150px; max-width: 150px; }
 
 .log-table th {
     position: sticky;
@@ -442,6 +421,7 @@ body {
     padding: 10px 0;
 }
 
+/* Modal Changes Table Styles */
 .log-changes-table {
     width: 100%;
     border-collapse: collapse;
@@ -646,23 +626,6 @@ body {
 
     .log-scroll-hint {
         display: block;
-    }
-
-    .log-modal-content {
-        width: 95%;
-        margin: 10% auto;
-    }
-
-    .log-modal-header {
-        padding: 15px 20px;
-    }
-
-    .log-modal-title {
-        font-size: 18px;
-    }
-
-    .log-modal-body {
-        padding: 20px;
     }
 
     .log-info-grid {
