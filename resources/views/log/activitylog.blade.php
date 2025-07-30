@@ -6,36 +6,35 @@
 <div class="log-main-content">
     <div class="log-container">
         <!-- Header Section -->
-        <div class="log-header">
-            <div class="d-flex align-items-center">
-                <div class="me-3">
-                    <i class="fas fa-history fa-2x"></i>
+            <div class="log-header">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-history fa-2x"></i>
+                    </div>
+                    <div>
+                        <h1>ACTIVITY LOG</h1>
+                        <p class="mb-0" style="opacity: 0.75; font-size: 14px;">Pantau semua aktivitas sistem secara real-time</p>
+                    </div>
                 </div>
-                <div>
-                    <h1>ACTIVITY LOG</h1>
-                    <p class="mb-0" style="opacity: 0.75; font-size: 14px;">Pantau semua aktivitas sistem secara
-                        real-time</p>
+                <div class="log-stats-container">
+                    <div class="log-stat-card" data-action="create">
+                        <div class="log-stat-label">Create</div>
+                        <div class="log-stat-value">{{ $logs->where('action', 'create')->count() }}</div>
+                    </div>
+                    <div class="log-stat-card" data-action="update">
+                        <div class="log-stat-label">Update</div>
+                        <div class="log-stat-value">{{ $logs->where('action', 'update')->count() }}</div>
+                    </div>
+                    <div class="log-stat-card" data-action="delete">
+                        <div class="log-stat-label">Delete</div>
+                        <div class="log-stat-value">{{ $logs->where('action', 'delete')->count() }}</div>
+                    </div>
+                    <div class="log-stat-card" data-action="total">
+                        <div class="log-stat-label">Total</div>
+                        <div class="log-stat-value">{{ $logs->count() }}</div>
+                    </div>
                 </div>
             </div>
-            <div class="log-stats-container">
-                <div class="log-stat-card">
-                    <div class="log-stat-label">Create</div>
-                    <div class="log-stat-value">{{ $logs->where('action', 'create')->count() }}</div>
-                </div>
-                <div class="log-stat-card">
-                    <div class="log-stat-label">Update</div>
-                    <div class="log-stat-value">{{ $logs->where('action', 'update')->count() }}</div>
-                </div>
-                <div class="log-stat-card">
-                    <div class="log-stat-label">Delete</div>
-                    <div class="log-stat-value">{{ $logs->where('action', 'delete')->count() }}</div>
-                </div>
-                <div class="log-stat-card">
-                    <div class="log-stat-label">Total</div>
-                    <div class="log-stat-value">{{ $logs->count() }}</div>
-                </div>
-            </div>
-        </div>
 
         <!-- Controls Section -->
         <div class="log-controls">

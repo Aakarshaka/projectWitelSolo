@@ -41,7 +41,7 @@ body {
     min-width: 200px;
 }
 
-/* Stats Container - RAPIKAN */
+/* Stats Container */
 .log-stats-container {
     display: flex;
     gap: 12px;
@@ -54,21 +54,50 @@ body {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
-    padding: 10px 14px;
+    padding: 8px 14px;
     text-align: center;
-    min-width: 85px;
+    min-width: 80px;
     flex-shrink: 0;
     transition: all 0.3s ease;
 }
 
 .log-stat-card:hover {
-    background: rgba(255, 255, 255, 0.2);
     transform: translateY(-1px);
+}
+
+/* Stat Card Colors - sesuai dengan action */
+.log-stat-card[data-action="create"] {
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border-color: #86efac;
+}
+
+.log-stat-card[data-action="create"] .log-stat-label,
+.log-stat-card[data-action="create"] .log-stat-value {
+    color: #16a34a;
+}
+
+.log-stat-card[data-action="update"] {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-color: #fcd34d;
+}
+
+.log-stat-card[data-action="update"] .log-stat-label,
+.log-stat-card[data-action="update"] .log-stat-value {
+    color: #d97706;
+}
+
+.log-stat-card[data-action="delete"] {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border-color: #fca5a5;
+}
+
+.log-stat-card[data-action="delete"] .log-stat-label,
+.log-stat-card[data-action="delete"] .log-stat-value {
+    color: #dc2626;
 }
 
 .log-stat-label {
     font-size: 11px;
-    opacity: 0.95;
     font-weight: 500;
     margin-bottom: 2px;
     text-transform: uppercase;
@@ -217,25 +246,53 @@ body {
 
 /* Table Column Widths */
 .log-table th.log-col-no,
-.log-table td.log-col-no { width: 50px; min-width: 50px; max-width: 50px; }
+.log-table td.log-col-no {
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+}
 
 .log-table th.log-col-time,
-.log-table td.log-col-time { width: 120px; min-width: 120px; max-width: 120px; }
+.log-table td.log-col-time {
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+}
 
 .log-table th.log-col-user,
-.log-table td.log-col-user { width: 150px; min-width: 150px; max-width: 150px; }
+.log-table td.log-col-user {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+}
 
 .log-table th.log-col-action,
-.log-table td.log-col-action { width: 100px; min-width: 100px; max-width: 100px; }
+.log-table td.log-col-action {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+}
 
 .log-table th.log-col-data,
-.log-table td.log-col-data { width: 120px; min-width: 120px; max-width: 120px; }
+.log-table td.log-col-data {
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+}
 
 .log-table th.log-col-description,
-.log-table td.log-col-description { width: 300px; min-width: 300px; max-width: 300px; }
+.log-table td.log-col-description {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+}
 
 .log-table th.log-col-changes,
-.log-table td.log-col-changes { width: 150px; min-width: 150px; max-width: 150px; }
+.log-table td.log-col-changes {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+}
 
 .log-table th {
     position: sticky;
@@ -338,7 +395,7 @@ body {
     font-size: 10px;
     font-weight: 500;
     padding: 4px 8px;
-    border-radius: 12px;
+    border-radius: 4px;
     letter-spacing: 0.5px;
     display: inline-flex;
     align-items: center;
@@ -347,26 +404,29 @@ body {
 }
 
 .log-badge-create {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white;
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border-color: #86efac;
+    color: #16a34a;
 }
 
 .log-badge-update {
-    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
-    color: white;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-color: #fcd34d;
+    color: #d97706;
 }
 
 .log-badge-delete {
-    background: linear-gradient(135deg, #dc3545 0%, #e91e63 100%);
-    color: white;
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border-color: #fca5a5;
+    color: #dc2626;
 }
 
 .log-btn-detail {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    border: none;
-    color: white;
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border: 1px solid #93c5fd;
+    color: #1e40af;
     padding: 6px 12px;
-    border-radius: 12px;
+    border-radius: 4px;
     font-size: 10px;
     font-weight: 500;
     cursor: pointer;
@@ -377,7 +437,6 @@ body {
 .log-btn-detail:hover {
     transform: translateY(-1px);
     box-shadow: 0 3px 10px rgba(0, 123, 255, 0.4);
-    color: white;
 }
 
 .log-no-changes {
@@ -419,114 +478,6 @@ body {
     font-size: 15px;
     color: #6d5671;
     padding: 10px 0;
-}
-
-/* Modal Changes Table Styles */
-.log-changes-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    margin-top: 20px;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.log-changes-table th {
-    background: #f8f9fa;
-    padding: 15px;
-    text-align: left;
-    font-weight: 600;
-    color: #495057;
-    border-bottom: 2px solid #e9ecef;
-}
-
-.log-changes-table td {
-    padding: 15px;
-    border-bottom: 1px solid #e9ecef;
-    vertical-align: top;
-}
-
-.log-changes-table tr:last-child td {
-    border-bottom: none;
-}
-
-.log-changes-table tr:hover {
-    background: #f8f9fa;
-}
-
-.log-field-name {
-    font-weight: 600;
-    color: #495057;
-    min-width: 120px;
-}
-
-.log-field-value {
-    font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
-    font-size: 12px;
-    background: #f8f9fa;
-    padding: 8px 12px;
-    border-radius: 4px;
-    border-left: 4px solid #dee2e6;
-    max-width: 300px;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.log-field-value.log-old-value {
-    border-left-color: #dc3545;
-    background: #f8d7da;
-}
-
-.log-field-value.log-new-value {
-    border-left-color: #28a745;
-    background: #d4edda;
-}
-
-.log-info-section {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.log-info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-}
-
-.log-info-item {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.log-info-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: #6c757d;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.log-info-value {
-    font-size: 14px;
-    font-weight: 600;
-    color: #495057;
-}
-
-.log-no-changes-modal {
-    text-align: center;
-    padding: 40px;
-    color: #6c757d;
-}
-
-.log-no-changes-modal i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    opacity: 0.3;
 }
 
 /* Mobile responsive */
@@ -626,23 +577,5 @@ body {
 
     .log-scroll-hint {
         display: block;
-    }
-
-    .log-info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .log-changes-table {
-        font-size: 12px;
-    }
-
-    .log-changes-table th,
-    .log-changes-table td {
-        padding: 10px;
-    }
-
-    .log-field-value {
-        font-size: 11px;
-        max-width: 100%;
     }
 }
