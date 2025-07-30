@@ -863,9 +863,6 @@
 
         // Buka modal copy
         openModal('copySupportModal');
-
-        // Tampilkan notifikasi
-        showNotification('Data berhasil dicopy! Centang "Enable Edit" untuk mengubah data sebelum menyimpan.', 'info');
     }
 
     // Function untuk toggle enable/disable fields di copy modal

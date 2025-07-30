@@ -41,9 +41,10 @@ body {
     min-width: 200px;
 }
 
+/* Stats Container - COMPACT STYLE LIKE WARROOM */
 .stats-container {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     align-items: center;
     flex-wrap: wrap;
 }
@@ -53,39 +54,52 @@ body {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
-    padding: 8px 16px;
+    padding: 8px 14px;
     text-align: center;
     min-width: 80px;
     flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
 }
 
 .stat-label {
-    font-size: 12px;
-    opacity: 0.9;
+    font-size: 11px;
+    opacity: 0.95;
     font-weight: 500;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
 .stat-value {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
-    margin-top: 2px;
+    line-height: 1;
 }
 
 .add-btn {
     background: #22c55e;
     color: white;
     border: none;
-    padding: 25px 20px;
+    padding: 19px 18px;
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 14px;
+    font-size: 13px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
     flex-shrink: 0;
 }
 
 .add-btn:hover {
     background: #16a34a;
+    transform: translateY(-1px);
 }
 
 .controls {
@@ -156,13 +170,6 @@ body {
     background: #3a0b3e;
 }
 
-.search-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
 .search-box {
     padding: 8px 12px;
     border: 1px solid #e6e1e8;
@@ -190,21 +197,6 @@ body {
     min-width: 200px;
 }
 
-.search-form .filter-btn {
-    background: #4a0e4e;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    align-self: flex-end;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-/* PERBAIKAN UTAMA: Table container */
 .table-container-sn {
     position: relative;
     width: 100%;
@@ -212,28 +204,33 @@ body {
     border-radius: 0px;
     border: 1px solid #e6e1e8;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .table-wrapper {
     width: 100%;
     overflow-x: auto;
-    overflow-y: auto;
+    overflow-y: visible;
     max-height: calc(100vh - 280px);
     position: relative;
+    flex: 1;
 }
 
 .table-wrapper::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 12px;
+    height: 12px;
 }
 
 .table-wrapper::-webkit-scrollbar-track {
     background: #f8f6f9;
+    border-radius: 6px;
 }
 
 .table-wrapper::-webkit-scrollbar-thumb {
     background: #4a0e4e;
-    border-radius: 4px;
+    border-radius: 6px;
+    border: 2px solid #f8f6f9;
 }
 
 .table-wrapper::-webkit-scrollbar-thumb:hover {
@@ -244,116 +241,28 @@ body {
     background: #f8f6f9;
 }
 
-/* PERBAIKAN: Table dengan table-layout fixed dan width yang tepat */
 .table {
     border-collapse: collapse;
     font-size: 13px;
     table-layout: fixed;
-    /* KUNCI: Menggunakan fixed layout */
     width: 1460px;
-    /* Total width semua kolom */
     min-width: 100%;
-    /* Minimal selebar container */
+    display: table;
 }
 
-/* PERBAIKAN: Definisi width kolom yang ketat */
-.table th.col-no,
-.table td.col-no {
-    width: 50px;
-    min-width: 50px;
-    max-width: 50px;
-}
-
-.table th.col-agenda,
-.table td.col-agenda {
-    width: 150px;
-    min-width: 150px;
-    max-width: 150px;
-}
-
-.table th.col-unit,
-.table td.col-unit {
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
-}
-
-.table th.col-start,
-.table td.col-start {
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
-}
-
-.table th.col-end,
-.table td.col-end {
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
-}
-
-.table th.col-off,
-.table td.col-off {
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
-}
-
-.table th.col-notes,
-.table td.col-notes {
-    width: 300px;
-    min-width: 300px;
-    max-width: 300px;
-}
-
-.table th.col-uic,
-.table td.col-uic {
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
-}
-
-.table th.col-approval,
-.table td.col-approval {
-    width: 200px;
-    min-width: 200px;
-    max-width: 200px;
-}
-
-.table th.col-progress,
-.table td.col-progress {
-    width: 120px;
-    min-width: 120px;
-    max-width: 120px;
-}
-
-.table th.col-complete,
-.table td.col-complete {
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
-}
-
-.table th.col-status,
-.table td.col-status {
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
-}
-
-.table th.col-respons,
-.table td.col-respons {
-    width: 300px;
-    min-width: 300px;
-    max-width: 300px;
-}
-
-.table th.col-action,
-.table td.col-action {
-    width: 150px;
-    min-width: 150px;
-    max-width: 150px;
-}
+.table th.col-no, .table td.col-no { width: 50px; min-width: 50px; max-width: 50px; }
+.table th.col-agenda, .table td.col-agenda { width: 150px; min-width: 150px; max-width: 150px; }
+.table th.col-unit, .table td.col-unit { width: 100px; min-width: 100px; max-width: 100px; }
+.table th.col-start, .table td.col-start { width: 100px; min-width: 100px; max-width: 100px; }
+.table th.col-end, .table td.col-end { width: 100px; min-width: 100px; max-width: 100px; }
+.table th.col-off, .table td.col-off { width: 100px; min-width: 100px; max-width: 100px; }
+.table th.col-notes, .table td.col-notes { width: 300px; min-width: 300px; max-width: 300px; }
+.table th.col-uic, .table td.col-uic { width: 100px; min-width: 100px; max-width: 100px; }
+.table th.col-progress, .table td.col-progress { width: 120px; min-width: 120px; max-width: 120px; }
+.table th.col-complete, .table td.col-complete { width: 100px; min-width: 100px; max-width: 100px; }
+.table th.col-status, .table td.col-status { width: 100px; min-width: 100px; max-width: 100px; }
+.table th.col-respons, .table td.col-respons { width: 300px; min-width: 300px; max-width: 300px; }
+.table th.col-action, .table td.col-action { width: 230px; min-width: 230px; max-width: 230px; }
 
 .table th {
     position: sticky;
@@ -370,7 +279,6 @@ body {
     white-space: nowrap;
     z-index: 10;
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
-    /* PENTING: Mencegah kolom berubah ukuran */
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -379,40 +287,25 @@ body {
     padding: 12px 8px;
     border-bottom: 1px solid #f2e8f3;
     vertical-align: middle;
-    /* PENTING: Mengatur text overflow untuk kolom yang ketat */
     white-space: normal;
     word-wrap: break-word;
     overflow-wrap: break-word;
     hyphens: auto;
 }
 
-/* PERBAIKAN: Kolom yang boleh wrap untuk notes dan respons */
-.table td.col-notes,
-.table td.col-respons {
+.table td.col-notes, .table td.col-respons {
     white-space: normal;
     word-wrap: break-word;
     overflow-wrap: break-word;
     hyphens: auto;
-}
-
-/* PERBAIKAN: Alignment untuk kolom tertentu */
-.table td.col-no,
-.table td.col-agenda,
-.table td.col-unit,
-.table td.col-start,
-.table td.col-end,
-.table td.col-uic,
-.table td.col-off,
-.table td.col-progress,
-.table td.col-complete,
-.table td.col-status,
-.table td.col-action {
-    text-align: center;
-}
-
-.table td.col-notes,
-.table td.col-respons {
     text-align: left;
+}
+
+.table td.col-no, .table td.col-agenda, .table td.col-unit,
+.table td.col-start, .table td.col-end, .table td.col-uic,
+.table td.col-off, .table td.col-progress, .table td.col-complete,
+.table td.col-status, .table td.col-action {
+    text-align: center;
 }
 
 .table tr:hover {
@@ -423,7 +316,6 @@ body {
     border-bottom: none;
 }
 
-/* Progress bar styles */
 .progress-bar {
     width: 100%;
     height: 20px;
@@ -433,12 +325,10 @@ body {
     position: relative;
     min-width: 80px;
     max-width: 90px;
-    /* Batasi maksimal width */
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
     transition: width 0.3s ease;
     border-radius: 10px;
 }
@@ -454,66 +344,36 @@ body {
     z-index: 1;
 }
 
-/* Status badges */
-.progress-bar {
-    position: relative;
-    background: #e5e7eb;
-    border-radius: 8px;
-    overflow: hidden;
-    height: 20px;
-}
+.bg-red { background: #dc2626; }
+.bg-orange { background: #f97316; }
+.bg-yellow { background: #facc15; }
+.bg-green { background: #16a34a; }
 
-.progress-fill {
-    height: 100%;
-    transition: width 0.4s ease;
-}
-
-.bg-red {
-    background: #dc2626;
-}
-
-.bg-orange {
-    background: #f97316;
-}
-
-.bg-yellow {
-    background: #facc15;
-}
-
-.bg-green {
-    background: #16a34a;
-}
-
-.progress-text {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 12px;
-    font-weight: 600;
-    color: #1f2937;
-    line-height: 20px;
-}
-
-/* Action buttons */
 .action-btn {
     border: none;
-    border-radius: 0px;
+    border-radius: 4px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 10px;
+    font-size: 11px;
     text-decoration: none;
     display: inline-block;
     text-align: center;
-    padding: 10px 10px;
-    min-width: 50px;
+    padding: 8px 12px;
+    min-width: 60px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn-group-horizontal {
     display: flex;
-    gap: 0px;
+    gap: 6px;
     justify-content: center;
+    align-items: center;
 }
 
 .edit-btn {
@@ -534,7 +394,19 @@ body {
     background: #dc2626;
 }
 
-/* Scroll hint */
+.copy-btn {
+    background-color: #10b981;
+    color: white;
+}
+
+.copy-btn:hover {
+    background-color: #059669;
+}
+
+.copy-btn:active {
+    background-color: #047857;
+}
+
 .scroll-hint {
     display: none;
     text-align: center;
@@ -555,122 +427,41 @@ body {
     padding: 10px 0;
 }
 
-/* CSS untuk tombol Copy */
-.copy-btn {
-    background-color: #10b981;
-    /* Green color */
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
+/* Status Badge Styles */
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    margin: 2px 0;
 }
 
-
-
-.copy-btn:hover {
-    background-color: #059669;
+.status-done {
+    background-color: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #86efac;
 }
 
-.copy-btn:active {
-    background-color: #047857;
+.status-action {
+    background-color: #fef3c7;
+    color: #d97706;
+    border: 1px solid #fcd34d;
 }
 
-/* Notification styles */
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
-    min-width: 300px;
-    max-width: 500px;
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    animation: slideIn 0.3s ease-out;
-}
-
-.notification-info {
+.status-in-progress {
     background-color: #dbeafe;
-    border-left: 4px solid #3b82f6;
     color: #1e40af;
+    border: 1px solid #93c5fd;
 }
 
-.notification-content {
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.notification-message {
-    flex: 1;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.notification-close {
-    background: none;
-    border: none;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    color: inherit;
-    margin-left: 10px;
-    padding: 0;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.notification-close:hover {
-    opacity: 0.7;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-/* Adjust button group spacing */
-.btn-group-horizontal {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-}
-
-.btn-group-horizontal .action-btn {
-    margin: 0;
-}
-
-/* Responsive adjustments for mobile */
-@media (max-width: 768px) {
-    .btn-group-horizontal {
-        flex-direction: column;
-        gap: 2px;
-    }
-
-    .action-btn {
-        font-size: 11px;
-        padding: 4px 8px;
-    }
-
-    .notification {
-        left: 10px;
-        right: 10px;
-        min-width: auto;
-        max-width: none;
-    }
+.status-empty {
+    background-color: #f3f4f6;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
 }
 
 /* Mobile responsive */
@@ -700,6 +491,7 @@ body {
     .stats-container {
         justify-content: center;
         width: 100%;
+        gap: 8px;
     }
 
     .stat-card {
@@ -716,7 +508,7 @@ body {
     }
 
     .add-btn {
-        padding: 20px 16px;
+        padding: 16px 14px;
         font-size: 12px;
     }
 
@@ -739,12 +531,6 @@ body {
         align-self: center;
         width: 100%;
         max-width: 200px;
-    }
-
-    .search-container {
-        flex-direction: column;
-        align-items: stretch;
-        width: 100%;
     }
 
     .search-form {
@@ -773,10 +559,6 @@ body {
         width: 100%;
     }
 
-    .table-container {
-        border-radius: 8px;
-    }
-
     .table {
         font-size: 11px;
     }
@@ -797,26 +579,31 @@ body {
     }
 
     .progress-text {
-        font-size: 10px;
-    }
-
-    .status-badge {
-        font-size: 10px;
-        padding: 3px 6px;
+        font-size: 9px;
     }
 
     .action-btn {
-        font-size: 10px;
-        padding: 10px 10px;
-        min-width: 30px;
-    }
-
-    .pagination button {
         padding: 6px 8px;
-        font-size: 12px;
+        font-size: 9px;
+        min-width: 40px;
     }
 
     .scroll-hint {
         display: block;
+        font-size: 11px;
+        margin-bottom: 8px;
+    }
+
+    .table-wrapper {
+        max-height: calc(100vh - 350px);
+    }
+
+    .btn-group-horizontal {
+        gap: 2px;
+    }
+
+    .sn-footer {
+        font-size: 12px;
+        margin-top: 20px;
     }
 }
