@@ -260,7 +260,7 @@ body {
 .table th.col-uic, .table td.col-uic { width: 100px; min-width: 100px; max-width: 100px; }
 .table th.col-progress, .table td.col-progress { width: 120px; min-width: 120px; max-width: 120px; }
 .table th.col-complete, .table td.col-complete { width: 100px; min-width: 100px; max-width: 100px; }
-.table th.col-status, .table td.col-status { width: 100px; min-width: 100px; max-width: 100px; }
+.table th.col-status, .table td.col-status { width: 150px; min-width: 150px; max-width: 150px; }
 .table th.col-respons, .table td.col-respons { width: 300px; min-width: 300px; max-width: 300px; }
 .table th.col-action, .table td.col-action { width: 230px; min-width: 230px; max-width: 230px; }
 
