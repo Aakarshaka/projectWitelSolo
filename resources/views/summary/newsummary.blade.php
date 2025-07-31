@@ -19,118 +19,6 @@
                 ← Geser ke kiri/kanan untuk melihat semua Colom →
             </div>
 
-            {{-- Table: By UIC --}}
-            <div class="row">
-                <div class="col-12">
-                    <div class="table-section">
-                        <div class="table-header">
-                            <h3>Report Follow Up Support Needed - By UIC</h3>
-                        </div>
-                        <div class="table-container">
-                            <div class="table-responsive">
-                                <table class="summary-table">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 60px;">No</th>
-                                            <th style="width: 120px;">UIC</th>
-                                            <th style="width: 80px;">OPEN</th>
-                                            <th style="width: 90px;">% OPEN</th>
-                                            <th style="width: 110px;">NEED DISCUSS</th>
-                                            <th style="width: 130px;">% NEED DISCUSS</th>
-                                            <th style="width: 110px;">ON PROGRESS</th>
-                                            <th style="width: 130px;">% ON PROGRESS</th>
-                                            <th style="width: 80px;">DONE</th>
-                                            <th style="width: 90px;">% DONE</th>
-                                            <th style="width: 80px;">TOTAL</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                            $uicList = ['RLEGS', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'RSMES', 'BPPLP', 'SSS','TELDA BLORA', 'TELDA BOYOLALI', 'TELDA JEPARA', 'TELDA KLATEN', 'TELDA KUDUS', 'MEA SOLO', 'TELDA PATI', 'TELDA PURWODADI', 'TELDA REMBANG', 'TELDA SRAGEN', 'TELDA WONOGIRI', 'BS', 'GS', 'PRQ','SSGS','LESA V','RSO WITEL'];
-                                            @endphp
-                                        @foreach ($uicList as $index => $uic)
-                                            @php
-                                                $rowData = null;
-                                                if (isset($byUic) && count($byUic) > 0) {
-                                                    foreach ($byUic as $data) {
-                                                        if ($data['uic'] == $uic) {
-                                                            $rowData = $data;
-                                                            break;
-                                                        }
-                                                    }
-                                                }
-                                            @endphp
-                                            <tr>
-                                                <td class="row-number">{{ $index + 1 }}</td>
-                                                <td class="entity-name">{{ $uic }}</td>
-                                                <td class="col-progress">
-                                                    <button class="status-badge-summary status-open-summary"
-                                                        onclick="openDetailModal('uic', '{{ $uic }}', 'Open')">
-                                                        {{ $rowData['open'] ?? 0 }}
-                                                    </button>
-                                                </td>
-                                                <td><span class="percentage-badge">{{ $rowData['open_percent'] ?? 0 }}%</span>
-                                                </td>
-
-                                                {{-- NEED DISCUSS --}}
-                                                <td class="col-progress">
-                                                    <button class="status-badge-summary status-discuss-summary"
-                                                        onclick="openDetailModal('uic', '{{ $uic }}', 'Need Discuss')">
-                                                        {{ $rowData['discuss'] ?? 0 }}
-                                                    </button>
-                                                </td>
-                                                <td><span
-                                                        class="percentage-badge">{{ $rowData['discuss_percent'] ?? 0 }}%</span>
-                                                </td>
-
-                                                {{-- PROGRESS --}}
-                                                <td class="col-progress">
-                                                    <button class="status-badge-summary status-progress-summary"
-                                                        onclick="openDetailModal('uic', '{{ $uic }}', 'On Progress')">
-                                                        {{ $rowData['progress'] ?? 0 }}
-                                                    </button>
-                                                </td>
-                                                <td><span
-                                                        class="percentage-badge">{{ $rowData['progress_percent'] ?? 0 }}%</span>
-                                                </td>
-
-                                                {{-- DONE --}}
-                                                <td class="col-progress">
-                                                    <button class="status-badge-summary status-done-summary"
-                                                        onclick="openDetailModal('uic', '{{ $uic }}', 'Done')">
-                                                        {{ $rowData['done'] ?? 0 }}
-                                                    </button>
-                                                </td>
-                                                <td><span class="percentage-badge">{{ $rowData['done_percent'] ?? 0 }}%</span>
-                                                </td>
-
-                                                {{-- TOTAL --}}
-                                                <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
-                                            </tr>
-                                        @endforeach
-
-                                        @if(isset($totalUic))
-                                            <tr class="total-row">
-                                                <td colspan="2"><strong>TOTAL</strong></td>
-                                                <td><strong>{{ $totalUic['open'] ?? 0 }}</strong></td>
-                                                <td><strong>{{ $totalUic['open_percent'] ?? 0 }}%</strong></td>
-                                                <td><strong>{{ $totalUic['discuss'] ?? 0 }}</strong></td>
-                                                <td><strong>{{ $totalUic['discuss_percent'] ?? 0 }}%</strong></td>
-                                                <td><strong>{{ $totalUic['progress'] ?? 0 }}</strong></td>
-                                                <td><strong>{{ $totalUic['progress_percent'] ?? 0 }}%</strong></td>
-                                                <td><strong>{{ $totalUic['done'] ?? 0 }}</strong></td>
-                                                <td><strong>{{ $totalUic['done_percent'] ?? 0 }}%</strong></td>
-                                                <td><strong>{{ $totalUic['total'] ?? 0 }}</strong></td>
-                                            </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             {{-- Table: By Agenda --}}
             <div class="row">
                 <div class="col-12">
@@ -354,6 +242,118 @@
                                                 <td><strong>{{ $totalUnit['done'] ?? 0 }}</strong></td>
                                                 <td><strong>{{ $totalUnit['done_percent'] ?? 0 }}%</strong></td>
                                                 <td><strong>{{ $totalUnit['total'] ?? 0 }}</strong></td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Table: By UIC --}}
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-section">
+                        <div class="table-header">
+                            <h3>Report Follow Up Support Needed - By UIC</h3>
+                        </div>
+                        <div class="table-container">
+                            <div class="table-responsive">
+                                <table class="summary-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 60px;">No</th>
+                                            <th style="width: 120px;">UIC</th>
+                                            <th style="width: 80px;">OPEN</th>
+                                            <th style="width: 90px;">% OPEN</th>
+                                            <th style="width: 110px;">NEED DISCUSS</th>
+                                            <th style="width: 130px;">% NEED DISCUSS</th>
+                                            <th style="width: 110px;">ON PROGRESS</th>
+                                            <th style="width: 130px;">% ON PROGRESS</th>
+                                            <th style="width: 80px;">DONE</th>
+                                            <th style="width: 90px;">% DONE</th>
+                                            <th style="width: 80px;">TOTAL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $uicList = ['RLEGS', 'RSO REGIONAL', 'ED', 'TIF', 'TSEL', 'GSD', 'RSMES', 'BPPLP', 'SSS','TELDA BLORA', 'TELDA BOYOLALI', 'TELDA JEPARA', 'TELDA KLATEN', 'TELDA KUDUS', 'MEA SOLO', 'TELDA PATI', 'TELDA PURWODADI', 'TELDA REMBANG', 'TELDA SRAGEN', 'TELDA WONOGIRI', 'BS', 'GS', 'PRQ','SSGS','LESA V','RSO WITEL'];
+                                            @endphp
+                                        @foreach ($uicList as $index => $uic)
+                                            @php
+                                                $rowData = null;
+                                                if (isset($byUic) && count($byUic) > 0) {
+                                                    foreach ($byUic as $data) {
+                                                        if ($data['uic'] == $uic) {
+                                                            $rowData = $data;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            @endphp
+                                            <tr>
+                                                <td class="row-number">{{ $index + 1 }}</td>
+                                                <td class="entity-name">{{ $uic }}</td>
+                                                <td class="col-progress">
+                                                    <button class="status-badge-summary status-open-summary"
+                                                        onclick="openDetailModal('uic', '{{ $uic }}', 'Open')">
+                                                        {{ $rowData['open'] ?? 0 }}
+                                                    </button>
+                                                </td>
+                                                <td><span class="percentage-badge">{{ $rowData['open_percent'] ?? 0 }}%</span>
+                                                </td>
+
+                                                {{-- NEED DISCUSS --}}
+                                                <td class="col-progress">
+                                                    <button class="status-badge-summary status-discuss-summary"
+                                                        onclick="openDetailModal('uic', '{{ $uic }}', 'Need Discuss')">
+                                                        {{ $rowData['discuss'] ?? 0 }}
+                                                    </button>
+                                                </td>
+                                                <td><span
+                                                        class="percentage-badge">{{ $rowData['discuss_percent'] ?? 0 }}%</span>
+                                                </td>
+
+                                                {{-- PROGRESS --}}
+                                                <td class="col-progress">
+                                                    <button class="status-badge-summary status-progress-summary"
+                                                        onclick="openDetailModal('uic', '{{ $uic }}', 'On Progress')">
+                                                        {{ $rowData['progress'] ?? 0 }}
+                                                    </button>
+                                                </td>
+                                                <td><span
+                                                        class="percentage-badge">{{ $rowData['progress_percent'] ?? 0 }}%</span>
+                                                </td>
+
+                                                {{-- DONE --}}
+                                                <td class="col-progress">
+                                                    <button class="status-badge-summary status-done-summary"
+                                                        onclick="openDetailModal('uic', '{{ $uic }}', 'Done')">
+                                                        {{ $rowData['done'] ?? 0 }}
+                                                    </button>
+                                                </td>
+                                                <td><span class="percentage-badge">{{ $rowData['done_percent'] ?? 0 }}%</span>
+                                                </td>
+
+                                                {{-- TOTAL --}}
+                                                <td class="total-count">{{ $rowData['total'] ?? 0 }}</td>
+                                            </tr>
+                                        @endforeach
+
+                                        @if(isset($totalUic))
+                                            <tr class="total-row">
+                                                <td colspan="2"><strong>TOTAL</strong></td>
+                                                <td><strong>{{ $totalUic['open'] ?? 0 }}</strong></td>
+                                                <td><strong>{{ $totalUic['open_percent'] ?? 0 }}%</strong></td>
+                                                <td><strong>{{ $totalUic['discuss'] ?? 0 }}</strong></td>
+                                                <td><strong>{{ $totalUic['discuss_percent'] ?? 0 }}%</strong></td>
+                                                <td><strong>{{ $totalUic['progress'] ?? 0 }}</strong></td>
+                                                <td><strong>{{ $totalUic['progress_percent'] ?? 0 }}%</strong></td>
+                                                <td><strong>{{ $totalUic['done'] ?? 0 }}</strong></td>
+                                                <td><strong>{{ $totalUic['done_percent'] ?? 0 }}%</strong></td>
+                                                <td><strong>{{ $totalUic['total'] ?? 0 }}</strong></td>
                                             </tr>
                                         @endif
                                     </tbody>
