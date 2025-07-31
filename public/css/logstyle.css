@@ -405,19 +405,19 @@ body {
 
 .log-badge-create {
     background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-    border-color: #86efac;
+    border: 1px solid #86efac;
     color: #16a34a;
 }
 
 .log-badge-update {
     background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border-color: #fcd34d;
+    border: 1px solid #fcd34d;
     color: #d97706;
 }
 
 .log-badge-delete {
     background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-    border-color: #fca5a5;
+    border: 1px solid #fca5a5;
     color: #dc2626;
 }
 
