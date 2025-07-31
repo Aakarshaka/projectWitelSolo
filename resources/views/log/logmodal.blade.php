@@ -14,15 +14,15 @@
 
     .log-modal-content {
         background-color: #fefefe;
-        margin: 5% auto;
+        margin: 3% auto;
         padding: 0;
         border: none;
-        border-radius: 12px;
-        width: 90%;
-        max-width: 800px;
-        max-height: 80vh;
+        border-radius: 16px;
+        width: 95%;
+        max-width: 900px;
+        max-height: 90vh;
         overflow: hidden;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
         animation: log-modalFadeIn 0.3s ease;
     }
 
@@ -31,7 +31,6 @@
             opacity: 0;
             transform: translateY(-50px);
         }
-
         to {
             opacity: 1;
             transform: translateY(0);
@@ -41,31 +40,32 @@
     .log-modal-header {
         background: linear-gradient(135deg, #8b1538 0%, #4a0e4e 100%);
         color: white;
-        padding: 20px 30px;
+        padding: 24px 32px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-radius: 12px 12px 0 0;
+        border-radius: 16px 16px 0 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
     .log-modal-title {
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 600;
         margin: 0;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
     }
 
     .log-modal-close {
         background: none;
         border: none;
         color: white;
-        font-size: 24px;
+        font-size: 28px;
         cursor: pointer;
         padding: 0;
-        width: 30px;
-        height: 30px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -79,9 +79,10 @@
     }
 
     .log-modal-body {
-        padding: 30px;
-        max-height: 60vh;
+        padding: 32px;
+        max-height: 75vh;
         overflow-y: auto;
+        background: #fafafa;
     }
 
     .log-modal-body::-webkit-scrollbar {
@@ -89,12 +90,306 @@
     }
 
     .log-modal-body::-webkit-scrollbar-track {
-        background: #f8f6f9;
+        background: #f1f1f1;
+        border-radius: 4px;
     }
 
     .log-modal-body::-webkit-scrollbar-thumb {
-        background: #4a0e4e;
+        background: #8b1538;
         border-radius: 4px;
+    }
+
+    .log-info-section {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #e9ecef;
+    }
+
+    .log-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .log-info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .log-info-label {
+        font-weight: 600;
+        color: #495057;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .log-info-value {
+        font-size: 16px;
+        color: #212529;
+        padding: 8px 12px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        border-left: 3px solid #8b1538;
+    }
+
+    .action-create {
+        background: #d4edda !important;
+        color: #155724 !important;
+        border-left-color: #28a745 !important;
+    }
+
+    .action-update {
+        background: #fff3cd !important;
+        color: #856404 !important;
+        border-left-color: #ffc107 !important;
+    }
+
+    .action-delete {
+        background: #f8d7da !important;
+        color: #721c24 !important;
+        border-left-color: #dc3545 !important;
+    }
+
+    .log-changes-section {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #e9ecef;
+    }
+
+    .log-changes-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0 0 20px 0;
+        color: #495057;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    .log-changes-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .log-change-item {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 16px;
+        border-left: 4px solid #8b1538;
+        transition: all 0.2s ease;
+    }
+
+    .log-change-item:hover {
+        background: #f1f3f4;
+        transform: translateX(2px);
+    }
+
+    .log-change-field {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .log-change-values {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .log-single-value {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .log-value-label {
+        font-size: 12px;
+        color: #6c757d;
+        font-weight: 500;
+        min-width: 120px;
+    }
+
+    .log-value-content {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        flex: 1;
+    }
+
+    .log-comparison-value {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .log-before-after {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .log-value-section {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .log-section-label {
+        font-size: 12px;
+        color: #6c757d;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .log-comparison-value .fas.fa-arrow-right {
+        display: none;
+    }
+
+    .old-value {
+        background: #fff5f5;
+        border: 1px solid #fed7d7;
+        color: #742a2a;
+        padding: 12px 16px;
+        border-radius: 8px;
+        word-break: break-word;
+        min-height: 40px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .new-value {
+        background: #f0fff4;
+        border: 1px solid #c6f6d5;
+        color: #276749;
+        padding: 12px 16px;
+        border-radius: 8px;
+        word-break: break-word;
+        min-height: 40px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .old-value pre,
+    .new-value pre {
+        margin: 0;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 12px;
+        line-height: 1.4;
+        white-space: pre-wrap;
+        background: none;
+        padding: 0;
+        border: none;
+        color: inherit;
+    }
+
+    .log-changes-table {
+        display: none;
+    }
+
+    .log-field-value .badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .badge-success {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .badge-secondary {
+        background: #e2e3e5;
+        color: #383d41;
+    }
+
+    .log-no-changes-modal {
+        text-align: center;
+        padding: 40px 20px;
+        color: #6c757d;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .log-no-changes-modal i {
+        font-size: 48px;
+        margin-bottom: 16px;
+        color: #ffc107;
+    }
+
+    .log-no-changes-modal p {
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .text-muted {
+        color: #6c757d !important;
+    }
+
+    .text-success {
+        color: #28a745 !important;
+    }
+
+    .text-warning {
+        color: #ffc107 !important;
+    }
+
+    .text-danger {
+        color: #dc3545 !important;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .log-modal-content {
+            width: 98%;
+            margin: 2% auto;
+            max-height: 95vh;
+        }
+
+        .log-modal-header {
+            padding: 20px 24px;
+        }
+
+        .log-modal-title {
+            font-size: 18px;
+        }
+
+        .log-modal-body {
+            padding: 20px;
+        }
+
+        .log-info-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .log-before-after {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .log-value-section {
+            width: 100%;
+        }
     }
 </style>
 
@@ -144,42 +439,60 @@
             @php
             $allFields = [];
             $changes = $log->changes;
+            
+            // Field yang tidak perlu ditampilkan
+            $excludedFields = ['id', 'created_at', 'updated_at', 'uic_approvals'];
 
             if ($changes && is_array($changes)) {
-            // Untuk action CREATE
-            if ($log->action === 'create') {
-            foreach ($changes as $field => $change) {
-            $allFields[$field] = [
-            'old' => null,
-            'new' => $change['new'] ?? $change ?? null
-            ];
-            }
-            }
-            // Untuk action UPDATE
-            elseif ($log->action === 'update') {
-            foreach ($changes as $field => $change) {
-            if (is_array($change) && isset($change['old']) && isset($change['new'])) {
-            $allFields[$field] = [
-            'old' => $change['old'],
-            'new' => $change['new']
-            ];
-            } else {
-            $allFields[$field] = [
-            'old' => $change['old'] ?? null,
-            'new' => $change['new'] ?? $change ?? null
-            ];
-            }
-            }
-            }
-            // Untuk action DELETE
-            elseif ($log->action === 'delete') {
-            foreach ($changes as $field => $change) {
-            $allFields[$field] = [
-            'old' => $change['old'] ?? $change ?? null,
-            'new' => null
-            ];
-            }
-            }
+                // Untuk action CREATE
+                if ($log->action === 'create') {
+                    foreach ($changes as $field => $change) {
+                        // Skip field yang dikecualikan
+                        if (in_array($field, $excludedFields)) {
+                            continue;
+                        }
+                        
+                        $allFields[$field] = [
+                            'old' => null,
+                            'new' => $change['new'] ?? $change ?? null
+                        ];
+                    }
+                }
+                // Untuk action UPDATE
+                elseif ($log->action === 'update') {
+                    foreach ($changes as $field => $change) {
+                        // Skip field yang dikecualikan
+                        if (in_array($field, $excludedFields)) {
+                            continue;
+                        }
+                        
+                        if (is_array($change) && isset($change['old']) && isset($change['new'])) {
+                            $allFields[$field] = [
+                                'old' => $change['old'],
+                                'new' => $change['new']
+                            ];
+                        } else {
+                            $allFields[$field] = [
+                                'old' => $change['old'] ?? null,
+                                'new' => $change['new'] ?? $change ?? null
+                            ];
+                        }
+                    }
+                }
+                // Untuk action DELETE
+                elseif ($log->action === 'delete') {
+                    foreach ($changes as $field => $change) {
+                        // Skip field yang dikecualikan
+                        if (in_array($field, $excludedFields)) {
+                            continue;
+                        }
+                        
+                        $allFields[$field] = [
+                            'old' => $change['old'] ?? $change ?? null,
+                            'new' => null
+                        ];
+                    }
+                }
             }
             @endphp
 
@@ -196,84 +509,86 @@
                 </h4>
 
                 <div class="log-changes-container">
-                    <table class="log-changes-table">
-                        <thead>
-                            <tr>
-                                <th width="25%">Field</th>
-                                <th width="37.5%">
-                                    @if($log->action === 'create')
-                                    Sebelum (Kosong)
-                                    @endif
-                                </th>
-                                <th width="37.5%">
-                                    @if($log->action === 'delete')
-                                    Setelah (Dihapus)
-                                    @endif
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($allFields as $field => $values)
-                            <tr>
-                                <td class="log-field-name">
-                                    <strong>{{ ucfirst(str_replace('_', ' ', $field)) }}</strong>
-                                </td>
-                                <td class="log-field-value-cell">
-                                    @if($log->action === 'create')
-                                    <div class="log-field-value log-empty-value">
-                                        <i class="fas fa-minus"></i>
-                                        <span class="text-muted">Kosong</span>
+                    @foreach($allFields as $field => $values)
+                    <div class="log-change-item">
+                        <div class="log-change-field">
+                            <strong>{{ ucfirst(str_replace('_', ' ', $field)) }}</strong>
+                        </div>
+                        <div class="log-change-values">
+                            @php
+                            $oldValue = $values['old'];
+                            $newValue = $values['new'];
+                            
+                            // Format old value
+                            if (is_null($oldValue)) {
+                                $oldFormatted = '<span class="text-muted">-</span>';
+                            } elseif (is_bool($oldValue)) {
+                                $oldFormatted = '<span class="badge badge-' . ($oldValue ? 'success' : 'secondary') . '">' . ($oldValue ? 'True' : 'False') . '</span>';
+                            } elseif (is_array($oldValue)) {
+                                $items = [];
+                                foreach ($oldValue as $key => $val) {
+                                    if (is_numeric($key)) {
+                                        $items[] = is_string($val) ? $val : json_encode($val);
+                                    } else {
+                                        $items[] = $key . ' = ' . (is_string($val) ? $val : json_encode($val));
+                                    }
+                                }
+                                $oldFormatted = '<pre>' . implode("\n", $items) . '</pre>';
+                            } elseif ($oldValue === '') {
+                                $oldFormatted = '<span class="text-muted">Kosong</span>';
+                            } else {
+                                $oldFormatted = $oldValue;
+                            }
+                            
+                            // Format new value
+                            if (is_null($newValue)) {
+                                $newFormatted = '<span class="text-muted">-</span>';
+                            } elseif (is_bool($newValue)) {
+                                $newFormatted = '<span class="badge badge-' . ($newValue ? 'success' : 'secondary') . '">' . ($newValue ? 'True' : 'False') . '</span>';
+                            } elseif (is_array($newValue)) {
+                                $items = [];
+                                foreach ($newValue as $key => $val) {
+                                    if (is_numeric($key)) {
+                                        $items[] = is_string($val) ? $val : json_encode($val);
+                                    } else {
+                                        $items[] = $key . ' = ' . (is_string($val) ? $val : json_encode($val));
+                                    }
+                                }
+                                $newFormatted = '<pre>' . implode("\n", $items) . '</pre>';
+                            } elseif ($newValue === '') {
+                                $newFormatted = '<span class="text-muted">Kosong</span>';
+                            } else {
+                                $newFormatted = $newValue;
+                            }
+                            @endphp
+                            
+                            @if($log->action === 'create')
+                            <div class="log-single-value">
+                                <span class="log-value-label">Nilai:</span>
+                                <span class="log-value-content new-value">{!! $newFormatted !!}</span>
+                            </div>
+                            @elseif($log->action === 'delete')
+                            <div class="log-single-value">
+                                <span class="log-value-label">Nilai yang dihapus:</span>
+                                <span class="log-value-content old-value">{!! $oldFormatted !!}</span>
+                            </div>
+                            @else
+                            <div class="log-comparison-value">
+                                <div class="log-before-after">
+                                    <div class="log-value-section">
+                                        <span class="log-section-label">Sebelum:</span>
+                                        <div class="old-value">{!! $oldFormatted !!}</div>
                                     </div>
-                                    @else
-                                    @if($values['old'] !== null)
-                                    <div class="log-field-value log-old-value">
-                                        @if(is_array($values['old']))
-                                        <pre>{{ json_encode($values['old'], JSON_PRETTY_PRINT) }}</pre>
-                                        @elseif(is_bool($values['old']))
-                                        <span class="badge badge-{{ $values['old'] ? 'success' : 'secondary' }}">
-                                            {{ $values['old'] ? 'True' : 'False' }}
-                                        </span>
-                                        @elseif($values['old'] === '')
-                                        <span class="text-muted">Kosong</span>
-                                        @else
-                                        <span>{{ $values['old'] }}</span>
-                                        @endif
+                                    <div class="log-value-section">
+                                        <span class="log-section-label">Sesudah:</span>
+                                        <div class="new-value">{!! $newFormatted !!}</div>
                                     </div>
-                                    @else
-                                    <span class="text-muted">-</span>
-                                    @endif
-                                    @endif
-                                </td>
-                                <td class="log-field-value-cell">
-                                    @if($log->action === 'delete')
-                                    <div class="log-field-value log-deleted-value">
-                                        <i class="fas fa-trash"></i>
-                                        <span class="text-muted">Dihapus</span>
-                                    </div>
-                                    @else
-                                    @if($values['new'] !== null)
-                                    <div class="log-field-value log-new-value">
-                                        @if(is_array($values['new']))
-                                        <pre>{{ json_encode($values['new'], JSON_PRETTY_PRINT) }}</pre>
-                                        @elseif(is_bool($values['new']))
-                                        <span class="badge badge-{{ $values['new'] ? 'success' : 'secondary' }}">
-                                            {{ $values['new'] ? 'True' : 'False' }}
-                                        </span>
-                                        @elseif($values['new'] === '')
-                                        <span class="text-muted">Kosong</span>
-                                        @else
-                                        <span>{{ $values['new'] }}</span>
-                                        @endif
-                                    </div>
-                                    @else
-                                    <span class="text-muted">-</span>
-                                    @endif
-                                    @endif
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
             </div>
             @else

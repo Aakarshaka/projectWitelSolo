@@ -7,6 +7,16 @@ use App\Models\ActivityLog;
 
 class ActivitylogController extends Controller
 {
+    /**
+     * Field yang tidak perlu ditampilkan di modal
+     */
+    private $excludedFields = [
+        'id',
+        'created_at',
+        'updated_at',
+        'uic_approvals'
+    ];
+
     public function index(Request $request)
     {
         $query = ActivityLog::with('user');
@@ -39,11 +49,17 @@ class ActivitylogController extends Controller
         // Ambil logs dengan pagination jika diperlukan
         $logs = $query->latest()->get();
 
-        // Decode JSON changes untuk setiap log
+        // Decode JSON changes untuk setiap log dan filter field yang tidak diinginkan
         $logs->transform(function ($log) {
             if ($log->changes && is_string($log->changes)) {
                 $log->changes = json_decode($log->changes, true);
             }
+            
+            // Filter field yang tidak diinginkan dari changes
+            if ($log->changes && is_array($log->changes)) {
+                $log->changes = $this->filterExcludedFields($log->changes);
+            }
+            
             return $log;
         });
 
@@ -97,6 +113,28 @@ class ActivitylogController extends Controller
     }
 
     /**
+     * Filter field yang tidak diinginkan dari array changes
+     */
+    private function filterExcludedFields($changes)
+    {
+        if (!is_array($changes)) {
+            return $changes;
+        }
+
+        $filtered = [];
+        foreach ($changes as $field => $change) {
+            // Skip field yang ada di daftar excluded
+            if (in_array($field, $this->excludedFields)) {
+                continue;
+            }
+            
+            $filtered[$field] = $change;
+        }
+
+        return $filtered;
+    }
+
+    /**
      * Helper method untuk memformat nilai field untuk tampilan
      */
     private function formatFieldValue($value)
@@ -134,6 +172,9 @@ class ActivitylogController extends Controller
             $changes = $log->changes;
         }
 
+        // Filter field yang tidak diinginkan
+        $changes = $this->filterExcludedFields($changes);
+
         $formattedChanges = [];
         
         foreach ($changes as $field => $change) {
@@ -150,5 +191,31 @@ class ActivitylogController extends Controller
             'model_type' => class_basename($log->model_type),
             'created_at' => $log->created_at->format('d M Y H:i')
         ]);
+    }
+
+    /**
+     * Method untuk menambah field yang dikecualikan (opsional)
+     */
+    public function addExcludedField($field)
+    {
+        if (!in_array($field, $this->excludedFields)) {
+            $this->excludedFields[] = $field;
+        }
+    }
+
+    /**
+     * Method untuk menghapus field dari daftar yang dikecualikan (opsional)
+     */
+    public function removeExcludedField($field)
+    {
+        $this->excludedFields = array_diff($this->excludedFields, [$field]);
+    }
+
+    /**
+     * Method untuk mendapatkan daftar field yang dikecualikan (opsional)
+     */
+    public function getExcludedFields()
+    {
+        return $this->excludedFields;
     }
 }
