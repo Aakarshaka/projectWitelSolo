@@ -4,33 +4,41 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use App\Models\User;
-use Spatie\Activitylog\Models\Activity;
 
 class NewdashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // 1. Total Users
-        $total_users = User::count();
+        // Get active users (users who currently have active sessions)
+        $active_user_ids = DB::table('sessions')
+            ->whereNotNull('user_id')
+            ->where('last_activity', '>=', now()->subMinutes(5)->timestamp) // Active dalam 5 menit terakhir
+            ->pluck('user_id')
+            ->unique();
 
-        // 2. Total Activity Logs (Total Perubahan)
-        $total_activity_logs = 0;
-        
-        // Cek apakah menggunakan spatie/laravel-activitylog
-        if (class_exists(\Spatie\Activitylog\Models\Activity::class)) {
-            $total_activity_logs = Activity::count();
-        } else {
-            // Jika ada tabel activity_logs custom
-            if (Schema::hasTable('activity_logs')) {
-                $total_activity_logs = DB::table('activity_logs')->count();
-            }
-        }
+        $active_users = User::select('id', 'name', 'email', 'role', 'updated_at')
+            ->whereIn('id', $active_user_ids)
+            ->orderBy('name', 'asc')
+            ->get();
+
+        // Get inactive users (users who don't have active sessions)
+        $inactive_users = User::select('id', 'name', 'email', 'role', 'updated_at')
+            ->whereNotIn('id', $active_user_ids)
+            ->orderBy('name', 'asc')
+            ->get();
+
+        // Count totals
+        $total_active = $active_users->count();
+        $total_inactive = $inactive_users->count();
+        $total_users = $total_active + $total_inactive;
 
         return view('dashboard.newdashboard', compact(
-            'total_users', 
-            'total_activity_logs'
+            'active_users',
+            'inactive_users', 
+            'total_active',
+            'total_inactive',
+            'total_users'
         ));
     }
 }
