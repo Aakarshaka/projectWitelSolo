@@ -465,20 +465,16 @@
     letter-spacing: 0.3px;
 }
 
-.dash-user-role.admin {
-    background: #fef3c7;
+.dash-user-role.intern {
+    background: #fef9c3;
     color: #92400e;
 }
 
-.dash-user-role.user {
+.dash-user-role:not(.intern) {
     background: #e0f2fe;
     color: #0369a1;
 }
 
-.dash-user-role.manager {
-    background: #f3e8ff;
-    color: #7c3aed;
-}
 
 .dash-user-status {
     font-size: 10px;

@@ -29,7 +29,7 @@
 
             <div class="regis-form-group">
                 <select class="regis-form-select" name="role" id="role" required>
-                    <option value="">Pilih Unit/Role</option>
+                    <option disabled selected value="">Unit</option>
                 </select>
                 <div class="regis-error-message" id="roleError"></div>
                 <div class="regis-success-message" id="roleSuccess"></div>

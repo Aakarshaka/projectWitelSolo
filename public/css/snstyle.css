@@ -212,7 +212,7 @@ body {
     width: 100%;
     overflow-x: auto;
     overflow-y: visible;
-    max-height: calc(100vh - 280px);
+    max-height: calc(100vh - 300px);
     position: relative;
     flex: 1;
 }

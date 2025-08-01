@@ -89,13 +89,13 @@ function validateRole() {
     const roleSuccess = document.getElementById("roleSuccess");
 
     if (!role || role === "") {
-        showError(roleSelect, roleError, "Unit/Role is required");
+        showError(roleSelect, roleError, "Unit is required");
         clearSuccess(roleSuccess);
         return false;
     }
 
     clearError(roleSelect, roleError);
-    showSuccess(roleSelect, roleSuccess, "Unit/Role selected!");
+    showSuccess(roleSelect, roleSuccess, "Unit selected!");
     return true;
 }
 
@@ -566,18 +566,12 @@ const unitList = [
     'TELDA BLORA', 'TELDA BOYOLALI', 'TELDA JEPARA', 'TELDA KLATEN', 
     'TELDA KUDUS', 'MEA SOLO', 'TELDA PATI', 'TELDA PURWODADI', 
     'TELDA REMBANG', 'TELDA SRAGEN', 'TELDA WONOGIRI', 'BS', 
-    'GS', 'PRQ', 'SSGS', 'LESA V', 'RSO WITEL','Magang'
+    'GS', 'PRQ', 'SSGS', 'LESA V', 'RSO WITEL','INTERN'
 ];
 
 // Populate role dropdown
 function populateRoleDropdown() {
     const roleSelect = document.getElementById('role');
-    
-    // Tambahkan default option
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = 'Pilih Unit/Role';
-    roleSelect.appendChild(defaultOption);
     
     unitList.forEach(unit => {
         const option = document.createElement('option');

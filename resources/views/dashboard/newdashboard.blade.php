@@ -10,7 +10,7 @@
             <h1 class="dash-title">DASHBOARD</h1>
             <div class="dash-header-info">
                 <div class="dash-user-info">
-                    <span class="dash-welcome-text">Welcome, {{ auth()->user()->name ?? 'User' }}</span>
+                    <span class="dash-welcome-text">Welcome, {{ auth()->user()->name ?? 'User' }} {{ auth()->user()->role ?? 'User' }}</span>
                     <div class="dash-datetime-info">
                         <span id="current-datetime"></span>
                     </div>

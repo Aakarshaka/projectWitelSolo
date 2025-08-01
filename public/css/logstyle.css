@@ -266,6 +266,13 @@ body {
     max-width: 150px;
 }
 
+.log-table th.log-col-role,
+.log-table td.log-col-role {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+}
+
 .log-table th.log-col-action,
 .log-table td.log-col-action {
     width: 100px;
@@ -326,6 +333,7 @@ body {
 .log-table td.log-col-no,
 .log-table td.log-col-time,
 .log-table td.log-col-user,
+.log-table td.log-col-role,
 .log-table td.log-col-action,
 .log-table td.log-col-data,
 .log-table td.log-col-changes {

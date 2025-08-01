@@ -119,7 +119,7 @@ class AuthController extends Controller
             'TELDA BLORA', 'TELDA BOYOLALI', 'TELDA JEPARA', 'TELDA KLATEN', 
             'TELDA KUDUS', 'MEA SOLO', 'TELDA PATI', 'TELDA PURWODADI', 
             'TELDA REMBANG', 'TELDA SRAGEN', 'TELDA WONOGIRI', 'BS', 
-            'GS', 'PRQ', 'SSGS', 'LESA V', 'RSO WITEL','Magang'
+            'GS', 'PRQ', 'SSGS', 'LESA V', 'RSO WITEL','INTERN'
         ];
 
         $validator = Validator::make($request->all(), [
@@ -141,8 +141,8 @@ class AuthController extends Controller
             'email.required' => 'Email is required',
             'email.email' => 'Please enter a valid email address',
             'email.unique' => 'Email already exists',
-            'role.required' => 'Unit/Role is required',
-            'role.in' => 'Selected unit/role is not valid',
+            'role.required' => 'Unit is required',
+            'role.in' => 'Selected unit is not valid',
             'password.required' => 'Password is required',
             'password.min' => 'Password must be at least 6 characters long',
             'password.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, and one number',

@@ -141,7 +141,7 @@
                                 </th>
                                 <th class="log-col-role">
                                     <i class="fas fa-building me-1"></i>
-                                    Unit / Role
+                                    Unit
                                 </th>
                                 <th class="log-col-action">
                                     <i class="fas fa-cog me-1"></i>
