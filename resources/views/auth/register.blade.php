@@ -28,6 +28,14 @@
             </div>
 
             <div class="regis-form-group">
+                <select class="regis-form-select" name="role" id="role" required>
+                    <option value="">Pilih Unit/Role</option>
+                </select>
+                <div class="regis-error-message" id="roleError"></div>
+                <div class="regis-success-message" id="roleSuccess"></div>
+            </div>
+
+            <div class="regis-form-group">
                 <div class="email-verification-group">
                     <div class="email-input-container">
                         <input type="email" class="regis-form-input" placeholder="Email Address" name="email" id="email"

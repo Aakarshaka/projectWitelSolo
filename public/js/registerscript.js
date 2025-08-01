@@ -2,6 +2,7 @@
 const form = document.getElementById("registrationForm");
 const usernameInput = document.getElementById("username");
 const emailInput = document.getElementById("email");
+const roleSelect = document.getElementById("role"); // Tambahkan ini
 const passwordInput = document.getElementById("password");
 const confirmPasswordInput = document.getElementById("confirmPassword");
 const otpModal = document.getElementById("otpModal");
@@ -78,6 +79,23 @@ function validateEmail() {
 
     clearError(emailInput, emailError);
     showSuccess(emailInput, emailSuccess, "Email format is valid!");
+    return true;
+}
+
+// Tambahkan fungsi validasi role
+function validateRole() {
+    const role = roleSelect.value;
+    const roleError = document.getElementById("roleError");
+    const roleSuccess = document.getElementById("roleSuccess");
+
+    if (!role || role === "") {
+        showError(roleSelect, roleError, "Unit/Role is required");
+        clearSuccess(roleSuccess);
+        return false;
+    }
+
+    clearError(roleSelect, roleError);
+    showSuccess(roleSelect, roleSuccess, "Unit/Role selected!");
     return true;
 }
 
@@ -207,6 +225,10 @@ emailInput.addEventListener("input", function () {
         validateEmail();
     }
 });
+
+// Tambahkan event listener untuk role
+roleSelect.addEventListener("change", validateRole);
+roleSelect.addEventListener("blur", validateRole);
 
 passwordInput.addEventListener("blur", validatePassword);
 passwordInput.addEventListener("input", function () {
@@ -364,10 +386,7 @@ document.getElementById("resendLink").addEventListener("click", function (e) {
                 .getAttribute("content"),
         },
         body: JSON.stringify({
-            username: usernameInput.value,
             email: emailInput.value,
-            password: passwordInput.value,
-            confirmPassword: confirmPasswordInput.value,
         }),
     })
         .then((response) => response.json())
@@ -420,12 +439,13 @@ document.getElementById("cancelBtn").addEventListener("click", function (e) {
     closeOTPModal();
 });
 
-// Form submission
+// Form submission - PERBAIKAN UTAMA DI SINI
 form.addEventListener("submit", function (e) {
     e.preventDefault();
 
     const isUsernameValid = validateUsername();
     const isEmailValid = validateEmail();
+    const isRoleValid = validateRole(); // Tambahkan validasi role
     const isPasswordValid = validatePassword();
     const isConfirmPasswordValid = validateConfirmPassword();
 
@@ -434,9 +454,11 @@ form.addEventListener("submit", function (e) {
         return;
     }
 
+    // Tambahkan isRoleValid ke dalam kondisi
     if (
         isUsernameValid &&
         isEmailValid &&
+        isRoleValid &&
         isPasswordValid &&
         isConfirmPasswordValid
     ) {
@@ -445,6 +467,7 @@ form.addEventListener("submit", function (e) {
         registerBtn.textContent = "Creating Account...";
         registerBtn.disabled = true;
 
+        // PERBAIKAN: Tambahkan role ke dalam data yang dikirim
         fetch("/register", {
             method: "POST",
             headers: {
@@ -456,6 +479,7 @@ form.addEventListener("submit", function (e) {
             body: JSON.stringify({
                 username: usernameInput.value,
                 email: emailInput.value,
+                role: roleSelect.value, // TAMBAHKAN INI - field role yang hilang
                 password: passwordInput.value,
                 confirmPassword: confirmPasswordInput.value,
             }),
@@ -535,4 +559,35 @@ form.addEventListener("submit", function (e) {
 // Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
     setupOTPNavigation();
+});
+
+// Unit list array
+const unitList = [
+    'TELDA BLORA', 'TELDA BOYOLALI', 'TELDA JEPARA', 'TELDA KLATEN', 
+    'TELDA KUDUS', 'MEA SOLO', 'TELDA PATI', 'TELDA PURWODADI', 
+    'TELDA REMBANG', 'TELDA SRAGEN', 'TELDA WONOGIRI', 'BS', 
+    'GS', 'PRQ', 'SSGS', 'LESA V', 'RSO WITEL','Magang'
+];
+
+// Populate role dropdown
+function populateRoleDropdown() {
+    const roleSelect = document.getElementById('role');
+    
+    // Tambahkan default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Pilih Unit/Role';
+    roleSelect.appendChild(defaultOption);
+    
+    unitList.forEach(unit => {
+        const option = document.createElement('option');
+        option.value = unit;
+        option.textContent = unit;
+        roleSelect.appendChild(option);
+    });
+}
+
+// Initialize dropdown when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    populateRoleDropdown();
 });
