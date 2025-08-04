@@ -16,8 +16,8 @@
             <div class="hero-content">
                 <div class="slides-container">
                     <div class="slide">
-                        <h1 class="hero-title">Capturing Moments,<br>Creating Memories</h1>
-                        <p class="hero-subtitle">Access your GIAT CORE account and continue your collaboration journey with powerful tools designed for seamless teamwork.</p>
+                        <h1 class="hero-title">GROW</h1>
+                        <p class="hero-subtitle">Continuously grow without stagnation — always striving for growth wherever you are.</p>
                     </div>
                     <div class="slide">
                         <h1 class="hero-title">Collaborate with<br>Your Team</h1>
@@ -31,14 +31,9 @@
                         <h1 class="hero-title">Analytics &<br>Insights</h1>
                         <p class="hero-subtitle">Track your project progress with detailed analytics and gain valuable insights to optimize your workflow.</p>
                     </div>
-                    <div class="slide">
-                        <h1 class="hero-title">24/7 Support<br>Always Ready</h1>
-                        <p class="hero-subtitle">Our dedicated support team is available around the clock to help you make the most of GIAT CORE.</p>
-                    </div>
                 </div>
                 <div class="pagination-dots">
                     <div class="dot active"></div>
-                    <div class="dot"></div>
                     <div class="dot"></div>
                     <div class="dot"></div>
                     <div class="dot"></div>
