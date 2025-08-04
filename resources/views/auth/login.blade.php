@@ -10,64 +10,162 @@
 </head>
 
 <body>
-    <!-- Logo Section -->
-    <div class="login-logo-section">
-        <div class="login-logo-container">
-            <img src="{{ asset('images/giatlogo.png') }}" class="login-logo-img" alt="GIAT Logo">
-            <div class="login-logo-text-container">
-                <div class="login-logo-text">CORE</div>
-                <div class="login-logo-subtitle">(Collaboration Needed' Request)</div>
+    <div class="main-container">
+        <!-- Hero Card - LEFT SIDE -->
+        <div class="hero-card">
+            <div class="hero-content">
+                <div class="slides-container">
+                    <div class="slide">
+                        <h1 class="hero-title">Capturing Moments,<br>Creating Memories</h1>
+                        <p class="hero-subtitle">Access your GIAT CORE account and continue your collaboration journey with powerful tools designed for seamless teamwork.</p>
+                    </div>
+                    <div class="slide">
+                        <h1 class="hero-title">Collaborate with<br>Your Team</h1>
+                        <p class="hero-subtitle">Unite your team's creativity with advanced project management tools and real-time collaboration features.</p>
+                    </div>
+                    <div class="slide">
+                        <h1 class="hero-title">Secure & Reliable<br>Platform</h1>
+                        <p class="hero-subtitle">Your data is protected with enterprise-grade security while maintaining easy access to all your important files.</p>
+                    </div>
+                    <div class="slide">
+                        <h1 class="hero-title">Analytics &<br>Insights</h1>
+                        <p class="hero-subtitle">Track your project progress with detailed analytics and gain valuable insights to optimize your workflow.</p>
+                    </div>
+                    <div class="slide">
+                        <h1 class="hero-title">24/7 Support<br>Always Ready</h1>
+                        <p class="hero-subtitle">Our dedicated support team is available around the clock to help you make the most of GIAT CORE.</p>
+                    </div>
+                </div>
+                <div class="pagination-dots">
+                    <div class="dot active"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Section - RIGHT SIDE -->
+        <div class="login-section">
+            <!-- Top Navigation -->
+            <div class="top-nav">
+                <div class="logo-container">
+                    <img src="{{ asset('images/giatlogo.png') }}" alt="GIAT" class="logo-img">
+                    <div class="logo-text-container">
+                        <span class="logo-text">CORE</span>
+                        <div class="login-logo-subtitle">(Collaboration Needed Request)</div>
+                    </div>
+                </div>
+                <a href="#" class="back-link">
+                    Back to website →
+                </a>
+            </div>
+
+            <!-- Login Content -->
+            <div class="login-content">
+                <div class="login-header">
+                    <h2 class="login-title">Sign in to your account</h2>
+                    <p class="login-subtitle">Don't have an account? <a href="{{ url('/register') }}">Create account</a></p>
+                </div>
+
+                @if(session('message'))
+                <div class="alert alert-success">
+                    {{ session('message') }}
+                </div>
+                @endif
+
+                @if($errors->any())
+                <div class="alert alert-error">
+                    @foreach($errors->all() as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
+
+                <form action="{{ route('login.post') }}" method="POST">
+                    @csrf
+                    <div class="form-container">
+                        <div class="form-group">
+                            <input
+                                type="text"
+                                class="form-input"
+                                placeholder="Username or Email"
+                                name="username"
+                                value="{{ old('username') }}"
+                                required>
+                        </div>
+
+                        <div class="password-group">
+                            <input
+                                type="password"
+                                class="password-input"
+                                placeholder="Enter your password"
+                                name="password"
+                                required>
+                            <button type="button" class="password-toggle">👁</button>
+                        </div>
+
+                        <button type="submit" class="login-button">
+                            Sign In
+                        </button>
+                    </div>
+                </form>
+
+                <div class="additional-links">
+                    <p>Forgot your password? <a href="{{ url('/forgetpass') }}">Reset Password</a></p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                Powered by <strong>GIAT CORE</strong>
             </div>
         </div>
     </div>
 
-    @if(session('message'))
-    <div class="alert alert-success text-center" style="margin: 20px auto; max-width: 400px;">
-        {{ session('message') }}
-    </div>
-    @endif
+    <script>
+        // Password toggle functionality
+        document.querySelector('.password-toggle').addEventListener('click', function() {
+            const input = document.querySelector('.password-input');
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁' : '🙈';
+        });
 
-    <!-- Login Form -->
-    <div class="login-container">
-        <form class="login-form" action="{{ route('login.post') }}" method="POST">
-            @csrf
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Username or Email" name="username" value="{{ old('username') }}" required>
-            </div>
+        // Auto-sliding carousel animation
+        let currentSlide = 0;
+        const dots = document.querySelectorAll('.dot');
+        const slidesContainer = document.querySelector('.slides-container');
+        const totalSlides = dots.length;
 
-            <div class="form-group">
-                <input type="password" class="form-input" placeholder="Password" name="password" required>
-            </div>
+        function slideToNext() {
+            // Remove active class from all dots
+            dots.forEach(dot => dot.classList.remove('active'));
 
-            <div class="form-group">
-                <button type="submit" class="login-button">
-                    Login
-                </button>
-            </div>
-        </form>
+            // Add active class to current dot
+            dots[currentSlide].classList.add('active');
 
-        <!-- Register Section -->
-        <div class="register-section">
-            <span class="register-text">Don't have an account?</span>
-            <a href="{{ url('/register') }}" class="register-link">Sign up here</a>
-        </div>
+            // Slide to current position
+            const translateX = -currentSlide * (100 / totalSlides);
+            slidesContainer.style.transform = `translateX(${translateX}%)`;
 
-        <div class="register-section" style="margin-top: 5px;">
-            <span class="register-text">Forgot your password?</span>
-            <a href="{{ url('/forgetpass') }}" class="register-link">Forget Password</a>
-        </div>
-    </div>
+            // Move to next slide
+            currentSlide = (currentSlide + 1) % totalSlides;
+        }
 
-    @if($errors->any())
-    <div class="error-message">
-        @foreach($errors->all() as $error)
-        {{ $error }}
-        @endforeach
-    </div>
-    @endif
+        // Start animation immediately and repeat every 3.5 seconds
+        slideToNext();
+        setInterval(slideToNext, 3500);
 
-    <!-- Footer -->
-    <div class="footer">Powered by <strong>GIAT CORE</strong></div>
+        // Add click functionality to dots
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                slideToNext();
+            });
+        });
+    </script>
 </body>
 
 </html>
