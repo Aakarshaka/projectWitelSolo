@@ -365,6 +365,45 @@ body {
     font-size: 12px;
 }
 
+.log-user-role {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border: 1px solid transparent; /* default, akan diubah per role */
+}
+
+/* Intern */
+.log-user-role.intern {
+    background: #fef9c3;
+    color: #92400e;
+    border-color: #fde047; /* kuning cerah */
+}
+
+/* Developer */
+.log-user-role.dev {
+    background: #ede9fe;
+    color: #5b21b6;
+    border-color: #c4b5fd; /* ungu terang */
+}
+
+/* Default (non-intern, non-dev, non-empty) */
+.log-user-role:not(.intern):not(.dev):not(.empty-role) {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-color: #7dd3fc; /* biru muda */
+}
+
+/* Empty / null role */
+.log-user-role.empty-role {
+    background: #e5e7eb;
+    color: #6b7280;
+    border-color: #d1d5db; /* abu-abu soft */
+}
+
+
 .log-time-info {
     display: flex;
     flex-direction: column;
