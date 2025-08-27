@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class NewwarroomController extends Controller
 {
-    /**
-     * ✅ Helper filter UIC - supaya GS tidak ikut RLEGS, RSO WITEL tidak ikut RSO REGIONAL
-     */
     private function filterByUic($query, $uic)
     {
         return $query->where(function ($q) use ($uic) {
@@ -21,15 +18,12 @@ class NewwarroomController extends Controller
         });
     }
 
-    /**
-     * Apply filters to query - PURE dari request saja
-     */
     private function applyFilters($query, Request $request)
     {
         $bulan = $request->get('bulan');
         $tahun = $request->get('tahun');
         $uic = $request->get('uic');
-        $search = $request->get('search'); // ✅ Tambahkan search
+        $search = $request->get('search'); 
 
 
         if (!empty($bulan) && $bulan !== 'all') {

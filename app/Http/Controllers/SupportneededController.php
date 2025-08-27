@@ -21,7 +21,6 @@ class SupportneededController extends Controller
 
         $items = $query->get();
 
-        // ✅ PERBAIKAN: Kirim query yang sudah difilter ke calculateStatistics
         // Buat query baru dengan filter yang sama untuk statistik
         $statsQuery = Supportneeded::query();
         $this->applyFilters($statsQuery, $request);
@@ -107,8 +106,6 @@ class SupportneededController extends Controller
         // Sync with warroom
         $this->syncToWarroom($support);
 
-        // ✅ PERBAIKAN: Gunakan getOriginalFilterParams() yang sama dengan update
-        // untuk memastikan filter yang dipertahankan adalah filter dari URL, bukan dari form
         $filterParams = $this->getOriginalFilterParams($request);
 
         return redirect()->route('supportneeded.index', $filterParams)

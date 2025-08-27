@@ -37,7 +37,6 @@ class SumController extends Controller
 
             $query = Supportneeded::query();
 
-            // ✅ FILTER TYPE
             if ($type === 'uic') {
                 $this->filterByUic($query, $value);
             } elseif ($type === 'agenda') {
